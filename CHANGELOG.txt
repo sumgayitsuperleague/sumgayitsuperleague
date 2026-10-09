@@ -1,0 +1,17 @@
+SSL PRO 2026 v2.0
+-----------------
++ Tam yenilənmiş responsive vizual dizayn (css/pro.css)
++ Yenidən qurulmuş ilk ekran / matç günü paneli / nəticə tickeri
++ Ana səhifədə media və xəbər kartları
++ SSL TV video bölməsi və sosial media linkləri
++ Liqa haqqında səhifə
++ Matç mərkəzi: qol, kart, MVP, video, oyun məlumatları
++ Futbolçular kataloqu və fərdi profil səhifələri
++ Qlobal axtarış: komanda, futbolçu, matç (Ctrl+K / ESC)
++ Profil bağlantıları komanda heyətlərinə əlavə edildi
++ Dərin oyun keçidləri yeniləndi
++ SEO: sitemap, OG cover, canonical, robots, manifest
++ Dizayn araşdırması və quraşdırma təlimatı
+= Orijinal data.js, parser.js və bütün orijinal logolar SAXLANILDI
+! Admin hələ də fayl endirmə ilə işləyən offline alətdir
+! Media və xəbərlər js/content.js-də əl ilə yenilənir
