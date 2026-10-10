@@ -1,0 +1,1 @@
+const link=document.getElementById('admin-link');try{const u=new URL(window.SITE.adminUrl);if(u.protocol==='https:'){link.href=u.href;link.hidden=false;document.getElementById('admin-help').hidden=true;}}catch{}
