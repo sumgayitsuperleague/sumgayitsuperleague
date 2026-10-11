@@ -1957,10 +1957,10 @@ window.CONTENT={
         "time": "14:00",
         "home": "siy",
         "away": "kmn",
-        "hs": 0,
-        "as": 4,
+        "hs": null,
+        "as": null,
         "venue": "Azfar",
-        "status": "done",
+        "status": "planned",
         "goals": [],
         "cards": [],
         "mvp": null
