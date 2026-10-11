@@ -2005,10 +2005,10 @@ window.CONTENT={
         "time": "17:00",
         "home": "agt",
         "away": "fvs",
-        "hs": 0,
-        "as": 3,
+        "hs": null,
+        "as": null,
         "venue": "Azfar",
-        "status": "done",
+        "status": "planned",
         "goals": [],
         "cards": [],
         "mvp": null
