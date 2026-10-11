@@ -4,7 +4,7 @@ window.CONTENT={
   "league": {
     "season": "2026",
     "name": "Sumqayıt Super Liqa",
-    "updated": "2026-10-09",
+    "updated": "2026-10-11",
     "teams": [
       {
         "id": "agt",
@@ -2005,10 +2005,10 @@ window.CONTENT={
         "time": "17:00",
         "home": "agt",
         "away": "fvs",
-        "hs": null,
-        "as": null,
+        "hs": 0,
+        "as": 3,
         "venue": "Azfar",
-        "status": "planned",
+        "status": "done",
         "goals": [],
         "cards": [],
         "mvp": null
