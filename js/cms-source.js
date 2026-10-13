@@ -3,6 +3,7 @@ import {PAGE_ROUTES} from './routes-source.js';
 import {defaultGuide} from './guide-source.js';
 import {defaultCommunity,instagramPostURL} from './community-source.js';
 import {defaultEditor,validateEditor,editorLinkOK} from './site-edit-source.js';
+import {defaultMatchCenter,MATCH_STAGES} from './home-source.js';
 export const NAV_ITEMS = [
   ['home','Ana səhifə','index.html'],['games','Oyunlar','oyunlar.html'],['table','Cədvəl','cedvel.html'],
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
@@ -20,9 +21,9 @@ export function buttonText(color) {
 export function getCMS(data) {
   const site=data.site||{},cms=data.cms||{};
   const defaults={
-    home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
+    home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',leadType:'news',featuredMatch:'',featuredTitle:'Əsas oyun',featuredText:'',showSideNews:true,showGuidePromo:true,showEntryLinks:true,blocks:[],blockPosition:'afterLead',matchCenter:defaultMatchCenter(),newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
     guide:defaultGuide(),community:defaultCommunity(),editor:defaultEditor(),
-    about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
+    about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',showFacts:true,showClubs:true,showJourney:true,showContact:true,blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
     appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'system',headingFont:'system',radius:18,width:1320},
     branding:{logo:'/assets/logo.png',footerText:'Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.',copyright:'Bütün hüquqlar qorunur.'},
     seo:{title:site.name||'',description:(site.hero||'').slice(0,500),image:''},
@@ -30,6 +31,8 @@ export function getCMS(data) {
   };
   for(const key of ['home','about','guide','community','editor','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
   defaults.community.poll={...defaultCommunity().poll,...(cms.community?.poll||{})};
+  defaults.community.featured={...defaultCommunity().featured,...(cms.community?.featured||{})};
+  defaults.home.matchCenter={...defaultMatchCenter(),...(cms.home?.matchCenter||{})};
   for(const key of ['navigation','pages','media'])if(Array.isArray(cms[key]))defaults[key]=cms[key];
   if(Array.isArray(cms.navigation))defaults.navigation=[...cms.navigation,...NAV_ITEMS.filter(([id])=>!cms.navigation.some(n=>n.id===id)).map(([id,label])=>({id,label,visible:true}))];
   return defaults;
@@ -53,13 +56,24 @@ export function validateCMS(cms) {
   if(!check(keys(cms,['home','about','guide','community','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
   if(cms.editor!==undefined)errors.push(...validateEditor(cms.editor,{imagePath,linkOK:value=>editorLinkOK(value,safeLink)}));
   const H=cms.home,A=cms.about,T=cms.appearance,B=cms.branding,S=cms.seo;
-  if(check(keys(H,['title','highlight','buttonLabel','buttonUrl','image','announcement','announcementUrl','sections','layout','featuredNews','newsLimit','videoLimit','showClubStrip','showScoreStrip']),'Ana səhifə ayarları düzgün deyil.')) {
+  if(check(keys(H,['title','highlight','buttonLabel','buttonUrl','image','announcement','announcementUrl','sections','layout','featuredNews','newsLimit','videoLimit','showClubStrip','showScoreStrip','matchCenter','leadType','featuredMatch','featuredTitle','featuredText','showSideNews','showGuidePromo','showEntryLinks','blocks','blockPosition']),'Ana səhifə ayarları düzgün deyil.')) {
     check(text(H.title,100)&&text(H.highlight,100)&&text(H.buttonLabel,80,true)&&safeLink(H.buttonUrl)&&!!H.buttonUrl&&imagePath(H.image)&&text(H.announcement,300)&&safeLink(H.announcementUrl),'Ana səhifədə mətn və ya keçid düzgün deyil.');
     check(Array.isArray(H.sections)&&H.sections.length===HOME_SECTIONS.length&&new Set(H.sections.map(s=>s?.id)).size===HOME_SECTIONS.length&&H.sections.every(s=>keys(s,['id','visible'])&&HOME_SECTIONS.some(([id])=>id===s.id)&&typeof s.visible==='boolean'),'Ana səhifənin bölmələri düzgün deyil.');
     check(H.layout===undefined||['league','editorial','classic'].includes(H.layout),'Giriş düzülüşü düzgün deyil.');
     check(H.featuredNews===undefined||H.featuredNews===''||ident(H.featuredNews),'Əsas xəbər seçimi düzgün deyil.');
     for(const k of ['newsLimit','videoLimit'])check(H[k]===undefined||Number.isInteger(H[k])&&H[k]>=0&&H[k]<=6,'Material sayı 0–6 olmalıdır.');
     for(const k of ['showClubStrip','showScoreStrip'])check(H[k]===undefined||typeof H[k]==='boolean','Üst zolaq ayarı düzgün deyil.');
+    check(H.leadType===undefined||['news','match','custom','none'].includes(H.leadType),'Əsas hissənin növü düzgün deyil.');
+    check(H.featuredMatch===undefined||H.featuredMatch===''||ident(H.featuredMatch),'Əsas oyun seçimi düzgün deyil.');
+    check(H.featuredTitle===undefined||text(H.featuredTitle,160,true),'Əsas oyun başlığı düzgün deyil.');
+    check(H.featuredText===undefined||text(H.featuredText,600),'Əsas oyun təqdimatı düzgün deyil.');
+    for(const k of ['showSideNews','showGuidePromo','showEntryLinks'])check(H[k]===undefined||typeof H[k]==='boolean','Ana səhifə hissəsinin görünməsi düzgün deyil.');
+    check(H.blockPosition===undefined||['beforeLead','afterLead','bottom'].includes(H.blockPosition),'Ana səhifə bloklarının yeri düzgün deyil.');
+    const c=H.matchCenter;
+    if(c!==undefined&&check(keys(c,['title','mode','round','stage','matches','limit','showSelector']),'Matç mərkəzi ayarları düzgün deyil.')){
+      check(text(c.title,160,true)&&['automatic','round','stage','manual'].includes(c.mode)&&Number.isInteger(c.round)&&c.round>=1&&c.round<=99&&MATCH_STAGES.some(([s])=>s===c.stage)&&Number.isInteger(c.limit)&&c.limit>=1&&c.limit<=8&&typeof c.showSelector==='boolean','Matç mərkəzinin başlığı, mərhələsi və ya sayı düzgün deyil.');
+      check(Array.isArray(c.matches)&&c.matches.length<=8&&new Set(c.matches).size===c.matches.length&&c.matches.every(ident)&&!(c.mode==='manual'&&!c.matches.length),'Ən çox səkkiz fərqli oyun seçin.');
+    }
   }
   const blocks=(items,label)=>{
     if(!check(Array.isArray(items)&&items.length<=80,label+': ən çox 80 blok olmalıdır.'))return;
@@ -70,15 +84,18 @@ export function validateCMS(cms) {
       check(b.type==='image'?imagePath(b.url)&&!!b.url:b.type==='button'?safeLink(b.url)&&!!b.url:b.url==='',label+': blokun keçidi düzgün deyil.');
     });
   };
-  if(check(keys(A,['title','subtitle','heading','image','blocks']),'Haqqımızda ayarları düzgün deyil.')){check(text(A.title,160,true)&&text(A.subtitle,500)&&text(A.heading,200,true)&&imagePath(A.image),'Haqqımızda başlığı və ya şəkli düzgün deyil.');blocks(A.blocks,'Haqqımızda');}
+  if(H?.blocks!==undefined)blocks(H.blocks,'Ana səhifə');
+  if(check(keys(A,['title','subtitle','heading','image','blocks','showFacts','showClubs','showJourney','showContact']),'Haqqımızda ayarları düzgün deyil.')){check(text(A.title,160,true)&&text(A.subtitle,500)&&text(A.heading,200,true)&&imagePath(A.image),'Haqqımızda başlığı və ya şəkli düzgün deyil.');blocks(A.blocks,'Haqqımızda');for(const k of ['showFacts','showClubs','showJourney','showContact'])check(A[k]===undefined||typeof A[k]==='boolean','Haqqımızda hissəsinin görünməsi düzgün deyil.');}
   if(cms.guide!==undefined&&check(keys(cms.guide,['title','subtitle','blocks']),'Minifutbol bələdçisi düzgün deyil.')){check(text(cms.guide.title,160,true)&&text(cms.guide.subtitle,500),'Bələdçi başlığı düzgün deyil.');blocks(cms.guide.blocks,'Minifutbol');}
-  if(cms.community!==undefined&&check(keys(cms.community,['enabled','title','homeLimit','posts','poll']),'İcma ayarları düzgün deyil.')){
+  if(cms.community!==undefined&&check(keys(cms.community,['enabled','title','homeLimit','posts','poll','homeFeature','featured']),'İcma ayarları düzgün deyil.')){
     const c=cms.community;check(typeof c.enabled==='boolean'&&text(c.title,160,true)&&Number.isInteger(c.homeLimit)&&c.homeLimit>=0&&c.homeLimit<=4,'İcma başlığı və ya paylaşım sayı düzgün deyil.');
     if(check(Array.isArray(c.posts)&&c.posts.length<=60,'Instagram bölməsində ən çox 60 paylaşım ola bilər.')){
       const ids=new Set(),urls=new Set();for(const p of c.posts){if(!check(keys(p,['id','url','title','text','date','published','kind']),'Instagram paylaşımı düzgün deyil.'))continue;
         check(ident(p.id)&&!ids.has(p.id)&&instagramPostURL(p.url)&&!urls.has(p.url)&&text(p.title,160,true)&&text(p.text,600)&&date(p.date)&&typeof p.published==='boolean'&&['post','reel'].includes(p.kind),'Instagram keçidi, tarix və ya mətn düzgün deyil.');ids.add(p.id);urls.add(p.url);}
     }
     if(check(keys(c.poll,['enabled','round','question']),'Səsvermə ayarları düzgün deyil.'))check(typeof c.poll.enabled==='boolean'&&Number.isInteger(c.poll.round)&&c.poll.round>=1&&c.poll.round<=99&&text(c.poll.question,200,true),'Səsvermə sualı və ya tur düzgün deyil.');
+    check(c.homeFeature===undefined||['poll','match','off'].includes(c.homeFeature),'Ana səhifənin seçilmiş oyun hissəsi düzgün deyil.');
+    if(c.featured!==undefined&&check(keys(c.featured,['match','title','text','showVideo']),'Seçilmiş oyun ayarları düzgün deyil.'))check((c.featured.match===''||ident(c.featured.match))&&text(c.featured.title,160,true)&&text(c.featured.text,600)&&typeof c.featured.showVideo==='boolean','Seçilmiş oyunun başlığı, mətni və ya keçidi düzgün deyil.');
   }
   if(check(keys(T,['background','surface','text','muted','font','headingFont','radius','width']),'Dizayn ayarları düzgün deyil.'))check(['background','surface','text','muted'].every(k=>color(T[k]))&&['manrope','montserrat','system','georgia'].includes(T.font)&&['barlow','montserrat','system','georgia'].includes(T.headingFont)&&Number.isInteger(T.radius)&&T.radius>=0&&T.radius<=32&&Number.isInteger(T.width)&&T.width>=960&&T.width<=1600,'Dizayn rəngləri, şrift və ya ölçülər düzgün deyil.');
   if(check(keys(B,['logo','footerText','copyright']),'Loqo və alt hissə ayarları düzgün deyil.'))check(imagePath(B.logo)&&!!B.logo&&text(B.footerText,1500)&&text(B.copyright,300),'Loqo və alt hissə mətnləri düzgün deyil.');

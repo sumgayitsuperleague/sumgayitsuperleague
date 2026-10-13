@@ -9,13 +9,16 @@ export function localizationTargets(data) {
  for(const key of ['city','venue','mission'])add(data.about,key,'about.'+key,'Haqqımızda · '+key,'about');
  const cms=data.cms;
  if(cms){
-  for(const [section,fields] of Object.entries({home:['title','highlight','buttonLabel','announcement'],about:['title','subtitle','heading'],guide:['title','subtitle'],branding:['footerText','copyright'],seo:['title','description']}))for(const key of fields)add(cms[section],key,'cms.'+section+'.'+key,section+' · '+key,['about','guide'].includes(section)?section:'site');
+  for(const [section,fields] of Object.entries({home:['title','highlight','buttonLabel','announcement','featuredTitle','featuredText'],about:['title','subtitle','heading'],guide:['title','subtitle'],branding:['footerText','copyright'],seo:['title','description']}))for(const key of fields)add(cms[section],key,'cms.'+section+'.'+key,section+' · '+key,['about','guide'].includes(section)?section:'site');
+  add(cms.home?.matchCenter,'title','home.matchCenter.title','Matç mərkəzinin başlığı','site');
   for(const n of list(cms.navigation))if(n)add(n,'label','navigation.'+n.id,n.label,'menu');
   const blocks=(items,prefix,group)=>{for(const b of list(items))if(b)for(const key of ['text','alt'])add(b,key,prefix+'.'+b.id+'.'+key,typeof b.text==='string'?b.text.slice(0,55):b.alt,group);};
   blocks(cms.about?.blocks,'aboutBlocks','about');
+  blocks(cms.home?.blocks,'homeBlocks','site');
   blocks(cms.guide?.blocks,'guideBlocks','guide');
   add(cms.community,'title','community.title','İcma başlığı','community');
   add(cms.community?.poll,'question','community.poll.question','Səsvermə sualı','community');
+  for(const key of ['title','text'])add(cms.community?.featured,key,'community.featured.'+key,'Turun oyunu · '+key,'community');
   for(const p of list(cms.community?.posts))if(p)for(const key of ['title','text'])add(p,key,'social.'+p.id+'.'+key,p.title+' · '+key,'community');
   for(const p of list(cms.pages))if(p){for(const key of ['title','description','menuLabel'])add(p,key,'page.'+p.id+'.'+key,p.title+' · '+key,'pages');blocks(p.blocks,'pageBlocks.'+p.id,'pages');}
  }
