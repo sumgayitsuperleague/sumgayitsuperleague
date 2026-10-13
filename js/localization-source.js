@@ -14,6 +14,9 @@ export function localizationTargets(data) {
   const blocks=(items,prefix,group)=>{for(const b of list(items))if(b)for(const key of ['text','alt'])add(b,key,prefix+'.'+b.id+'.'+key,typeof b.text==='string'?b.text.slice(0,55):b.alt,group);};
   blocks(cms.about?.blocks,'aboutBlocks','about');
   blocks(cms.guide?.blocks,'guideBlocks','guide');
+  add(cms.community,'title','community.title','İcma başlığı','community');
+  add(cms.community?.poll,'question','community.poll.question','Səsvermə sualı','community');
+  for(const p of list(cms.community?.posts))if(p)for(const key of ['title','text'])add(p,key,'social.'+p.id+'.'+key,p.title+' · '+key,'community');
   for(const p of list(cms.pages))if(p){for(const key of ['title','description','menuLabel'])add(p,key,'page.'+p.id+'.'+key,p.title+' · '+key,'pages');blocks(p.blocks,'pageBlocks.'+p.id,'pages');}
  }
  for(const kind of ['news','videos'])for(const n of list(data[kind]))if(n)for(const key of kind==='news'?['title','text','category','source']:['title','text'])add(n,key,kind+'.'+n.id+'.'+key,n.title+' · '+key,kind);

@@ -2239,7 +2239,7 @@ window.CONTENT={
       "published": true,
       "match": "r1-agt-omn",
       "text": "Sumqayıt Super Liqanın ilk mövsümü şəhərin 77-ci ilinə həsr olunub. Səkkiz komanda, iki qrup və hər turda yeni futbol hekayəsi.\n\nQrup oyunları 5 sentyabrda Agrotam — Old Men qarşılaşması ilə başladı. Açılış oyununda Agrotam 4–3 hesabı ilə qalib gəldi.\n\nAltı turun sonunda 24 qarşılaşma tamamlandı, 161 qol qeydə alındı. Siyəzən, Gənclərbirliyi, Five Star və Agrotam növbəti mərhələyə keçdi. Mövsümün oyunları, cədvəlləri və futbolçu statistikası saytın müvafiq bölmələrində toplanıb.",
-      "image": "/assets/editorial/league-gb.jpg"
+      "image": ""
     },
     {
       "id": "ssl-round6-2026",
@@ -2874,9 +2874,9 @@ window.CONTENT={
       "image": "",
       "announcement": "",
       "announcementUrl": "",
-      "layout": "editorial",
+      "layout": "league",
       "featuredNews": "ssl-round6-2026",
-      "newsLimit": 3,
+      "newsLimit": 0,
       "videoLimit": 3,
       "showClubStrip": false,
       "showScoreStrip": true,
@@ -2887,7 +2887,7 @@ window.CONTENT={
         },
         {
           "id": "news",
-          "visible": true
+          "visible": false
         },
         {
           "id": "table",
@@ -3037,6 +3037,54 @@ window.CONTENT={
         }
       ]
     },
+    "community": {
+      "enabled": true,
+      "title": "Liqanın içindən",
+      "homeLimit": 2,
+      "posts": [
+        {
+          "id": "ig-oct11",
+          "url": "https://www.instagram.com/sumqayitsuperliqa/p/DeW8j2suDfI/",
+          "title": "Liqanın Instagram gündəmi",
+          "text": "Rəsmi Instagram hesabımızdan paylaşım.",
+          "date": "2026-10-11",
+          "published": true,
+          "kind": "post"
+        },
+        {
+          "id": "ig-groups",
+          "url": "https://www.instagram.com/sumqayitsuperliqa/p/DeRNkdcDsCO/",
+          "title": "Qrup cədvəlləri",
+          "text": "Rəsmi Instagram hesabımızdan paylaşım.",
+          "date": "2026-10-09",
+          "published": true,
+          "kind": "post"
+        },
+        {
+          "id": "ig-pitch",
+          "url": "https://www.instagram.com/sumqayitsuperliqa/reel/DePXnZ5O9La/",
+          "title": "Meydandan görüntülər",
+          "text": "Rəsmi Instagram hesabımızdan paylaşım.",
+          "date": "2026-10-08",
+          "published": true,
+          "kind": "reel"
+        },
+        {
+          "id": "ig-moment",
+          "url": "https://www.instagram.com/sumqayitsuperliqa/reel/DeO8mDCuSE7/",
+          "title": "Liqadan qısa video",
+          "text": "Rəsmi Instagram hesabımızdan paylaşım.",
+          "date": "2026-10-08",
+          "published": true,
+          "kind": "reel"
+        }
+      ],
+      "poll": {
+        "enabled": true,
+        "round": 6,
+        "question": "Turun ən yadda qalan oyunu hansıdır?"
+      }
+    },
     "about": {
       "title": "Haqqımızda",
       "subtitle": "Sumqayıtın mini futbol hekayəsi.",
@@ -3098,8 +3146,8 @@ window.CONTENT={
       "surface": "#ffffff",
       "text": "#172640",
       "muted": "#627189",
-      "font": "manrope",
-      "headingFont": "barlow",
+      "font": "system",
+      "headingFont": "system",
       "radius": 18,
       "width": 1320
     },
@@ -3183,707 +3231,17 @@ window.CONTENT={
         "id": "contact",
         "label": "Əlaqə",
         "visible": true
+      },
+      {
+        "id": "fans",
+        "label": "Azarkeş mərkəzi",
+        "visible": true
       }
     ],
     "pages": [],
-    "media": [
-      {
-        "url": "/assets/editorial/league-gb.jpg",
-        "title": "Gənclərbirliyi · liqa fotosu",
-        "alt": "Gənclərbirliyi formasında futbolçu",
-        "date": "2026-10-13"
-      },
-      {
-        "url": "/assets/editorial/league-qrt.jpg",
-        "title": "Qurtuluş · liqa fotosu",
-        "alt": "Qurtuluş formasında futbolçu",
-        "date": "2026-10-13"
-      }
-    ]
+    "media": []
   },
   "locales": {
-    "en": [
-      {
-        "key": "site.name",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "site.tagline",
-        "source": "Mini futbol · şəhərin liqası",
-        "text": "Mini football · the city’s league"
-      },
-      {
-        "key": "site.address",
-        "source": "Sumqayıt, Azərbaycan",
-        "text": "Sumgayit, Azerbaijan"
-      },
-      {
-        "key": "league.name",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "about.city",
-        "source": "Sumqayıt",
-        "text": "Sumgayit"
-      },
-      {
-        "key": "about.venue",
-        "source": "Azfar Arena",
-        "text": "Azfar Arena"
-      },
-      {
-        "key": "about.mission",
-        "source": "Sumqayıt Super Liqa şəhərin mini futbol komandalarını bir yarışda bir araya gətirir. Liqanın ilk mövsümü 2026-cı ildə, Sumqayıt şəhərinin 77-ci ilinə həsr olunub.\n\nBizim üçün liqa yalnız hesabdan ibarət deyil. Hər turda komanda ruhu, rəqabət və şəhərin futbol sevgisi bir araya gəlir. Qarşılaşmalar Azfar Arenada keçirilir, oyunlar və onların yadda qalan anları SSL TV-də paylaşılır.",
-        "text": "Sumgayit Super League brings the city’s mini football clubs together in one competition. The inaugural 2026 season is dedicated to the city’s 77th anniversary.\n\nFor us, the league is about more than the score. Every matchweek brings together team spirit, competition and the city’s passion for football. Matches take place at Azfar Arena, while full games and memorable moments are shared on SSL TV."
-      },
-      {
-        "key": "cms.home.buttonLabel",
-        "source": "Oyunlar və nəticələr",
-        "text": "Fixtures and results"
-      },
-      {
-        "key": "cms.about.title",
-        "source": "Haqqımızda",
-        "text": "About us"
-      },
-      {
-        "key": "cms.about.subtitle",
-        "source": "Sumqayıtın mini futbol hekayəsi.",
-        "text": "The mini football story of Sumgayit."
-      },
-      {
-        "key": "cms.about.heading",
-        "source": "Bir şəhər.\nBir futbol hekayəsi.",
-        "text": "One city.\nOne football story."
-      },
-      {
-        "key": "cms.branding.footerText",
-        "source": "Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.",
-        "text": "Sumgayit’s mini football home. Matches, statistics, clubs and media in one place."
-      },
-      {
-        "key": "cms.branding.copyright",
-        "source": "Bütün hüquqlar qorunur.",
-        "text": "All rights reserved."
-      },
-      {
-        "key": "cms.seo.title",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "cms.seo.description",
-        "source": "2026 mövsümü, ilk sezon. Komandalar, qarşılaşmalar, xəbərlər və oyunun yadda qalan anları — Sumqayıtın mini futbol hekayəsi burada davam edir.",
-        "text": "The 2026 season. Our first chapter. Clubs, matches, news and unforgettable moments — Sumgayit’s mini football story continues here."
-      },
-      {
-        "key": "navigation.home",
-        "source": "Ana səhifə",
-        "text": "Home"
-      },
-      {
-        "key": "navigation.games",
-        "source": "Oyunlar",
-        "text": "Matches"
-      },
-      {
-        "key": "navigation.table",
-        "source": "Cədvəl",
-        "text": "Standings"
-      },
-      {
-        "key": "navigation.teams",
-        "source": "Komandalar",
-        "text": "Clubs"
-      },
-      {
-        "key": "navigation.players",
-        "source": "Futbolçular",
-        "text": "Players"
-      },
-      {
-        "key": "navigation.scorers",
-        "source": "Bombardirlər",
-        "text": "Top scorers"
-      },
-      {
-        "key": "navigation.stats",
-        "source": "Statistika",
-        "text": "Statistics"
-      },
-      {
-        "key": "navigation.media",
-        "source": "Media",
-        "text": "Media"
-      },
-      {
-        "key": "navigation.news",
-        "source": "Xəbərlər",
-        "text": "News"
-      },
-      {
-        "key": "navigation.about",
-        "source": "Haqqımızda",
-        "text": "About us"
-      },
-      {
-        "key": "navigation.playoffs",
-        "source": "Mövsüm",
-        "text": "Season"
-      },
-      {
-        "key": "navigation.compare",
-        "source": "Müqayisə",
-        "text": "Compare"
-      },
-      {
-        "key": "aboutBlocks.league-purpose-title.text",
-        "source": "Liqanın məqsədi",
-        "text": "Our purpose"
-      },
-      {
-        "key": "aboutBlocks.league-purpose-copy.text",
-        "source": "Şəhərdə mini futbolun inkişafına töhfə vermək, komandalar üçün davamlı yarış mühiti yaratmaq və azarkeşləri oyunun ətrafında birləşdirmək.",
-        "text": "To support mini football in the city, create a lasting competition for clubs and bring supporters together around the game."
-      },
-      {
-        "key": "aboutBlocks.league-format-title.text",
-        "source": "2026 mövsümünün formatı",
-        "text": "The 2026 competition format"
-      },
-      {
-        "key": "aboutBlocks.league-format-copy.text",
-        "source": "İlk sezonda səkkiz komanda iki qrupda mübarizə aparır. Qrup mərhələsində komandalar rəqibləri ilə iki dəfə qarşılaşır. Qələbə üç, heç-heçə bir xal qazandırır. Hər qrupun ilk iki komandası növbəti mərhələyə keçir.",
-        "text": "Eight clubs compete in two groups in the first season. Each club meets its group opponents twice. A win earns three points and a draw earns one. The top two clubs in each group progress to the next stage."
-      },
-      {
-        "key": "aboutBlocks.league-community-title.text",
-        "source": "Komandalar, azarkeşlər və media",
-        "text": "Clubs, supporters and media"
-      },
-      {
-        "key": "aboutBlocks.league-community-copy.text",
-        "source": "Bu sayt liqanın oyun təqvimini, nəticələrini, komanda heyətlərini və futbolçu statistikasını bir araya gətirir. Xəbərlər bölməsində mövsümün gündəmini, media arxivində isə tam oyunları, icmalları və qısa videoları izləyə bilərsən.",
-        "text": "This website brings together fixtures, results, squads and player statistics. Follow the season’s stories in News and revisit full matches, highlights and short videos in the media archive."
-      },
-      {
-        "key": "news.ssl-season-2026.title",
-        "source": "2026: Sumqayıtın ilk mini futbol mövsümü",
-        "text": "2026: Sumgayit’s first mini football season"
-      },
-      {
-        "key": "news.ssl-season-2026.text",
-        "source": "Sumqayıt Super Liqanın ilk mövsümü şəhərin 77-ci ilinə həsr olunub. Səkkiz komanda, iki qrup və hər turda yeni futbol hekayəsi.\n\nQrup oyunları 5 sentyabrda Agrotam — Old Men qarşılaşması ilə başladı. Açılış oyununda Agrotam 4–3 hesabı ilə qalib gəldi.\n\nAltı turun sonunda 24 qarşılaşma tamamlandı, 161 qol qeydə alındı. Siyəzən, Gənclərbirliyi, Five Star və Agrotam növbəti mərhələyə keçdi. Mövsümün oyunları, cədvəlləri və futbolçu statistikası saytın müvafiq bölmələrində toplanıb.",
-        "text": "The inaugural season of Sumgayit Super League is dedicated to the city’s 77th anniversary. Eight clubs, two groups and a new football story every matchweek.\n\nThe group fixtures began on 5 September with Agrotam against Old Men. Agrotam won the opening match 4–3.\n\nAfter six matchweeks, 24 matches have been completed and 161 goals recorded. Siyəzən, Gənclərbirliyi, Five Star and Agrotam progressed to the next stage. Fixtures, standings and player statistics are available throughout the website."
-      },
-      {
-        "key": "news.ssl-season-2026.category",
-        "source": "LİQA",
-        "text": "LEAGUE"
-      },
-      {
-        "key": "news.ssl-round6-2026.title",
-        "source": "VI tur: dörd qarşılaşmada 28 qol",
-        "text": "Matchweek VI: 28 goals in four matches"
-      },
-      {
-        "key": "news.ssl-round6-2026.text",
-        "source": "11 oktyabrda keçirilən VI tur qrup oyunlarını tamamladı. Dörd görüşdə ümumilikdə 28 qol vuruldu.\n\nSiyəzən — Komando Sumqayıt: 4–0\nƏrtoğrul — Old Men: 8–4\nQurtuluş — Gənclərbirliyi: 2–7\nAgrotam — Five Star: 2–1\n\nTurun ən məhsuldar oyunu Ərtoğrul — Old Men görüşü oldu: bu qarşılaşmada 12 qol qeydə alındı. Gənclərbirliyi səfərdə yeddi qol vurdu, Agrotam isə Five Star üzərində qələbə qazandı. Hər oyunun qol və kart məlumatı matç səhifəsində, tam yayımı isə media arxivində yer alır.",
-        "text": "Matchweek VI on 11 October completed the group fixtures. The four meetings produced 28 goals.\n\nSiyəzən — Komando Sumqayıt: 4–0\nƏrtoğrul — Old Men: 8–4\nQurtuluş — Gənclərbirliyi: 2–7\nAgrotam — Five Star: 2–1\n\nƏrtoğrul against Old Men was the highest-scoring match of the round, with 12 goals. Gənclərbirliyi scored seven away from home, while Agrotam defeated Five Star. Goals and cards are recorded on each match page, and full broadcasts are in the media archive."
-      },
-      {
-        "key": "news.ssl-round6-2026.category",
-        "source": "TUR İCMALI",
-        "text": "MATCHWEEK REPORT"
-      },
-      {
-        "key": "news.ssl-scorers-2026.title",
-        "source": "Bombardirlər: Elnur Hüseynov 10 qolla öndə",
-        "text": "Top scorers: Elnur Hüseynov leads with 10 goals"
-      },
-      {
-        "key": "news.ssl-scorers-2026.text",
-        "source": "Qrup oyunlarının sonunda Gənclərbirliyinin futbolçusu Elnur Hüseynov 10 qolla bombardirlər siyahısına başçılıq edir. Siyəzəndən Rövşən Ələsgərov 9, Qurtuluşdan Ramiz Hacıyev isə 6 qol vurub.\n\nStatistika matçlarda qeyd edilmiş qol müəllifləri əsasında hesablanır. Öz qapısına vurulan qollar komandanın yekun hesabına daxil edilir, futbolçunun bombardir göstəricisinə əlavə olunmur.\n\nTam siyahını Bombardirlər bölməsində, futbolçunun qol vurduğu oyunları isə onun şəxsi səhifəsində görə bilərsən.",
-        "text": "At the end of the group fixtures, Gənclərbirliyi player Elnur Hüseynov leads the scoring chart with 10 goals. Rövşən Ələsgərov of Siyəzən has nine, and Ramiz Hacıyev of Qurtuluş has six.\n\nThe statistics are calculated from recorded match scorers. Own goals count towards the team’s final score but are excluded from individual scoring totals.\n\nExplore the full list in Top scorers and find each player’s scoring matches on their profile."
-      },
-      {
-        "key": "news.ssl-scorers-2026.category",
-        "source": "STATİSTİKA",
-        "text": "STATISTICS"
-      },
-      {
-        "key": "news.ssl-tv-2026.title",
-        "source": "SSL TV: mövsümün oyunları bir arxivdə",
-        "text": "SSL TV: the season’s matches in one archive"
-      },
-      {
-        "key": "news.ssl-tv-2026.text",
-        "source": "Liqanın YouTube kanalında yayımlanmış 24 tam oyun və 7 oyun icmalı media arxivində bir araya gətirilib. Arxivə qısa videolar, püşkatma yayımı və birinci dövrənin yekunu barədə müzakirə də daxildir.\n\nVideoları növünə, komandaya və tura görə seçə bilərsən. Matça bağlı materialdan birbaşa həmin oyunun nəticəsinə və statistikasına keçmək mümkündür.\n\nYeni yayımlar və paylaşımlar üçün liqanın rəsmi YouTube kanalını və sosial hesablarını izləyə bilərsən.",
-        "text": "The league’s 24 full match broadcasts and seven highlights videos are now together in the media archive. It also includes short videos, the draw broadcast and a discussion of the first round of fixtures.\n\nFilter videos by type, club or matchweek. From a match video you can open the game’s result and statistics directly.\n\nFollow the official YouTube channel and the league’s social accounts for new broadcasts and posts."
-      },
-      {
-        "key": "news.ssl-tv-2026.category",
-        "source": "MEDIA",
-        "text": "MEDIA"
-      },
-      {
-        "key": "news.tur3.title",
-        "source": "III turun nəticələri: dörd oyunda 26 qol",
-        "text": "Matchweek III results: 26 goals in four games"
-      },
-      {
-        "key": "news.tur3.text",
-        "source": "Komando Sumqayıt — Siyəzən və Five Star — Agrotam oyunları yüksək məhsuldarlıqla yadda qaldı.",
-        "text": "The Komando Sumqayıt — Siyəzən and Five Star — Agrotam matches produced plenty of goals."
-      },
-      {
-        "key": "news.tur3.category",
-        "source": "TUR İCMALI",
-        "text": "MATCHWEEK REPORT"
-      },
-      {
-        "key": "news.federasiya.title",
-        "source": "Sumqayıtda yeni mini futbol həyəcanı",
-        "text": "A new mini football chapter in Sumgayit"
-      },
-      {
-        "key": "news.federasiya.text",
-        "source": "Sumqayıt Super Liqanın yaradılma məqsədi və şəhərin futbol həyatı barədə məlumatlar.",
-        "text": "The purpose of Sumgayit Super League and the city’s football community."
-      },
-      {
-        "key": "news.federasiya.category",
-        "source": "LİQA HAQQINDA",
-        "text": "ABOUT THE LEAGUE"
-      },
-      {
-        "key": "news.mini.category",
-        "source": "AZƏRBAYCAN MİNİ FUTBOLU",
-        "text": "AZERBAIJAN MINI FOOTBALL"
-      },
-      {
-        "key": "videos.qurtulus-komando.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.five-ertogrul.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.five-agrotam.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-t6rgvwkvq8c.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt-aboi8qdbi3g.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt-19ogliih29a.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt-4d_xgcaimzm.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt-hg-tgg9c93o.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt--ojtureyjjs.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt-tljnompwuio.text",
-        "source": "Oyunun video icmalı.",
-        "text": "Match highlights."
-      },
-      {
-        "key": "videos.yt-yrqwbgr8x50.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-jecavldiiek.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-fsxjproyhug.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-pc6tql1uptw.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-helbhkfk9a8.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-iov_izljqim.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-j5frpq_wta0.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-ray1r4q-grw.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-dymwkkftf1c.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-1_wngtk5hoq.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-asxmfmy_t24.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-fi76mvjeqao.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-sfadevtb8jy.title",
-        "source": "Birinci dövrənin yekunu · müzakirə",
-        "text": "First round review · discussion"
-      },
-      {
-        "key": "videos.yt-sfadevtb8jy.text",
-        "source": "Liqanın YouTube kanalından yayım.",
-        "text": "A broadcast from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-fqnmslf6hgi.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-pdtgnp5owjs.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-sfgksxrl0xw.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-be-4edvxk3k.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-db_evj5iyns.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-f4oz_za9ox8.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-fsqhqoimxd0.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-jyy6xgbgsuy.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-nwhwgkjbj60.text",
-        "source": "Tam oyun yayımı.",
-        "text": "Full match broadcast."
-      },
-      {
-        "key": "videos.yt-ut7bnni0ozk.title",
-        "source": "2026 mövsümünün püşkatması",
-        "text": "The 2026 season draw"
-      },
-      {
-        "key": "videos.yt-ut7bnni0ozk.text",
-        "source": "Liqanın YouTube kanalından yayım.",
-        "text": "A broadcast from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-qec4b-ncy2a.title",
-        "source": "Emildən Ərtoğrula gözəl qol",
-        "text": "Emil’s stunning goal against Ərtoğrul"
-      },
-      {
-        "key": "videos.yt-qec4b-ncy2a.text",
-        "source": "Liqanın YouTube kanalından qısa video.",
-        "text": "A short video from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-9_sedidfti0.title",
-        "source": "Yusif Kərimovdan qol",
-        "text": "A goal from Yusif Kərimov"
-      },
-      {
-        "key": "videos.yt-9_sedidfti0.text",
-        "source": "Liqanın YouTube kanalından qısa video.",
-        "text": "A short video from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-ln3hqfi6wzi.title",
-        "source": "Natiq İsmayılzadədən oyun anı",
-        "text": "A moment with Natiq İsmayılzadə"
-      },
-      {
-        "key": "videos.yt-ln3hqfi6wzi.text",
-        "source": "Liqanın YouTube kanalından qısa video.",
-        "text": "A short video from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-92ksvxcr9li.title",
-        "source": "Məhəmmədin oyun anı",
-        "text": "Məhəmməd in action"
-      },
-      {
-        "key": "videos.yt-92ksvxcr9li.text",
-        "source": "Liqanın YouTube kanalından qısa video.",
-        "text": "A short video from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-zm7faquvzr4.title",
-        "source": "Anar Muradovdan oyun anı",
-        "text": "A moment with Anar Muradov"
-      },
-      {
-        "key": "videos.yt-zm7faquvzr4.text",
-        "source": "Liqanın YouTube kanalından qısa video.",
-        "text": "A short video from the league’s YouTube channel."
-      },
-      {
-        "key": "videos.yt-6rt9aiattgm.title",
-        "source": "Sezona qeydiyyat elanı",
-        "text": "Season registration announcement"
-      },
-      {
-        "key": "videos.yt-6rt9aiattgm.text",
-        "source": "Liqanın YouTube kanalından qısa video.",
-        "text": "A short video from the league’s YouTube channel."
-      },
-      {
-        "key": "rule.0",
-        "source": "Ümumi xal",
-        "text": "Total points"
-      },
-      {
-        "key": "rule.1",
-        "source": "Ümumi top fərqi",
-        "text": "Overall goal difference"
-      },
-      {
-        "key": "rule.2",
-        "source": "Ümumi vurulan qol",
-        "text": "Total goals scored"
-      },
-      {
-        "key": "rule.3",
-        "source": "Az buraxılan qol",
-        "text": "Fewest goals conceded"
-      },
-      {
-        "key": "rule.4",
-        "source": "Qələbə sayı",
-        "text": "Number of wins"
-      },
-      {
-        "key": "rule.5",
-        "source": "Qarşılıqlı oyunun nəticəsi",
-        "text": "Head-to-head result"
-      },
-      {
-        "key": "rule.6",
-        "source": "Qarşılıqlı oyunda top fərqi",
-        "text": "Head-to-head goal difference"
-      },
-      {
-        "key": "rule.7",
-        "source": "Qarşılıqlı oyunda vurulan qol",
-        "text": "Head-to-head goals scored"
-      },
-      {
-        "key": "rule.8",
-        "source": "Fair-play xalları",
-        "text": "Fair-play points"
-      },
-      {
-        "key": "rule.9",
-        "source": "Püşk",
-        "text": "Drawing of lots"
-      },
-      {
-        "key": "news.ssl-season-2026.source",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "news.ssl-round6-2026.source",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "news.ssl-scorers-2026.source",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "news.ssl-tv-2026.source",
-        "source": "Sumqayıt Super Liqa",
-        "text": "Sumgayit Super League"
-      },
-      {
-        "key": "site.hero",
-        "source": "Meydanda rəqabət. Tribunada birlik. Sumqayıt Super Liqanın rəsmi platforması.",
-        "text": "Competition on the pitch. Community around it. The official home of Sumgayit Super League."
-      },
-      {
-        "key": "cms.home.title",
-        "source": "Şəhərin oyunu.",
-        "text": "The city’s game."
-      },
-      {
-        "key": "cms.home.highlight",
-        "source": "Bizim liqa.",
-        "text": "Our league."
-      },
-      {
-        "key": "cms.guide.title",
-        "source": "Minifutbol bələdçisi",
-        "text": "Minifootball guide"
-      },
-      {
-        "key": "cms.guide.subtitle",
-        "source": "Oyunu tanı. Liqanı daha yaxından izlə.",
-        "text": "Understand the game. Get closer to the league."
-      },
-      {
-        "key": "navigation.guide",
-        "source": "Minifutbol",
-        "text": "Minifootball"
-      },
-      {
-        "key": "navigation.contact",
-        "source": "Əlaqə",
-        "text": "Contact"
-      },
-      {
-        "key": "guideBlocks.guide-intro-heading.text",
-        "source": "Kiçik meydan, böyük oyun",
-        "text": "A smaller pitch, a bigger connection"
-      },
-      {
-        "key": "guideBlocks.guide-intro-text.text",
-        "source": "Minifutbol daha kiçik meydan, qapı və heyətlə oynanır. Dünyada 5, 6, 7 və 8 nəfərlik formatları var; süni və təbii ot örtüklərində keçirilir. Konkret yarışın formatını onun əsasnaməsi müəyyən edir.",
-        "text": "Minifootball uses a smaller pitch, goals and teams. Five-, six-, seven- and eight-a-side versions are played on artificial and natural grass. Each competition defines its own format."
-      },
-      {
-        "key": "guideBlocks.guide-respect-heading.text",
-        "source": "Rəqabətin yanında hörmət",
-        "text": "Respect belongs alongside competition"
-      },
-      {
-        "key": "guideBlocks.guide-respect-text.text",
-        "source": "EMF minifutbolun əsas dəyərləri arasında komanda işini, oyunçu inkişafını, fair-play və iştirakçılar arasında hörməti göstərir. Rəqibə və hakimə hörmət, birlikdə məsuliyyət daşımaq oyunun bir hissəsidir.",
-        "text": "EMF highlights teamwork, player development, fair play and mutual respect. Respect for opponents and referees, and shared responsibility, are part of the game."
-      },
-      {
-        "key": "guideBlocks.guide-table-heading.text",
-        "source": "Bizim liqada rəqəmlər necə oxunur?",
-        "text": "Reading our league statistics"
-      },
-      {
-        "key": "guideBlocks.guide-table-text.text",
-        "source": "Qələbə 3, heç-heçə 1 xal gətirir. Qrup cədvəlində O oyun, Q qələbə, H heç-heçə, M məğlubiyyət, VQ vurulan qol, BQ buraxılan qol, TF top fərqi, X isə xaldır. Tam sıralama meyarları Cədvəl səhifəsindədir.",
-        "text": "A win earns three points and a draw one. The table shows played, wins, draws, losses, goals for and against, goal difference and points. Full ranking criteria are on the Standings page."
-      },
-      {
-        "key": "guideBlocks.guide-og-heading.text",
-        "source": "Avtoqol və bombardir statistikası",
-        "text": "Own goals and the scorers chart"
-      },
-      {
-        "key": "guideBlocks.guide-og-text.text",
-        "source": "Öz qapısına vurulan qol rəqib komandanın hesabına yazılır. Futbolçunun bombardir göstəricisinə əlavə edilmir. Müəllifi bilinməyən qol yekun nəticədə qalır; statistikada başqa oyunçuya aid edilmir.",
-        "text": "An own goal counts for the opposing team, not for the player in the scorers chart. A goal with no recorded scorer stays in the result and is not assigned to another player."
-      },
-      {
-        "key": "guideBlocks.guide-watch-heading.text",
-        "source": "Oyunu izləmək üçün",
-        "text": "Follow the match"
-      },
-      {
-        "key": "guideBlocks.guide-watch-text.text",
-        "source": "Matç mərkəzində nəticəni, qol müəlliflərini, kartları və qeydə alınmış MVP-ni görürsən. Media arxivindən tam yayımı və mövcud icmalları seçə bilərsən. Komandaları müqayisə edərkən onların hücum, müdafiə və qarşılıqlı oyun göstəricilərinə bax.",
-        "text": "The match centre lists the result, scorers, cards and recorded player of the match. The media archive has full broadcasts and available highlights. Compare teams through attack, defence and head-to-head results."
-      },
-      {
-        "key": "guideBlocks.guide-sources-heading.text",
-        "source": "Mənbələr və əlavə oxu",
-        "text": "Sources and further reading"
-      },
-      {
-        "key": "guideBlocks.guide-source-emf.text",
-        "source": "EMF · Minifutbol nədir?",
-        "text": "EMF · What is minifootball?"
-      },
-      {
-        "key": "guideBlocks.guide-source-ethics.text",
-        "source": "EMF · Fair-play və etik prinsiplər",
-        "text": "EMF · Fair play and ethics"
-      },
-      {
-        "key": "guideBlocks.guide-source-amf.text",
-        "source": "Azərbaycan Minifutbol Federasiyası",
-        "text": "Azerbaijan Minifootball Federation"
-      },
-      {
-        "key": "news.mini.title",
-        "source": "“Buxar” Sumqayıtın Avropa Kuboku yolu",
-        "text": "Buxar Sumgayit’s European Cup campaign"
-      },
-      {
-        "key": "news.mini.text",
-        "source": "Azərbaycan Minifutbol Federasiyasının məlumatına görə, “Buxar” Sumqayıt EMF Avropa Kubokundakı üçüncü qarşılaşmada Bosniya və Hersoqovinanın “Delinqs İkon” komandasına 0–3 hesabı ilə uduzaraq çıxışını başa vurub. Sumqayıt təmsilçisi əvvəlki oyunda Çexiyanın “Abus Kastro” klubunu 2–1 məğlub etmişdi.\n\nŞəhərin beynəlxalq minifutbol iştirakından bu xəbərin tam mətnini rəsmi mənbədə oxuya bilərsən.",
-        "text": "According to the Azerbaijan Minifootball Federation, Buxar Sumgayit ended its EMF European Cup campaign with a 0–3 defeat to Bosnia and Herzegovina’s Delinqs Ikon in its third match. The Sumgayit side had beaten Czech club Abus Kastro 2–1 in the previous game.\n\nRead the full report on the federation’s official website."
-      }
-    ],
     "ru": [
       {
         "key": "site.name",
@@ -4564,6 +3922,798 @@ window.CONTENT={
         "key": "news.mini.text",
         "source": "Azərbaycan Minifutbol Federasiyasının məlumatına görə, “Buxar” Sumqayıt EMF Avropa Kubokundakı üçüncü qarşılaşmada Bosniya və Hersoqovinanın “Delinqs İkon” komandasına 0–3 hesabı ilə uduzaraq çıxışını başa vurub. Sumqayıt təmsilçisi əvvəlki oyunda Çexiyanın “Abus Kastro” klubunu 2–1 məğlub etmişdi.\n\nŞəhərin beynəlxalq minifutbol iştirakından bu xəbərin tam mətnini rəsmi mənbədə oxuya bilərsən.",
         "text": "По данным Федерации мини-футбола Азербайджана, Buxar Sumgayit завершил выступление в Кубке Европы EMF, уступив Delinqs Ikon из Боснии и Герцеговины 0:3 в третьем матче. В предыдущей встрече сумгаитская команда победила чешский Abus Kastro 2:1.\n\nПолный материал о международном выступлении команды доступен на официальном сайте федерации."
+      },
+      {
+        "key": "navigation.fans",
+        "source": "Azarkeş mərkəzi",
+        "text": "Центр болельщиков"
+      },
+      {
+        "key": "community.title",
+        "source": "Liqanın içindən",
+        "text": "Вокруг лиги"
+      },
+      {
+        "key": "community.poll.question",
+        "source": "Turun ən yadda qalan oyunu hansıdır?",
+        "text": "Какой матч тура запомнился вам больше всего?"
+      },
+      {
+        "key": "social.ig-oct11.title",
+        "source": "Liqanın Instagram gündəmi",
+        "text": "Лига в Instagram"
+      },
+      {
+        "key": "social.ig-oct11.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "Публикация нашего официального аккаунта Instagram."
+      },
+      {
+        "key": "social.ig-groups.title",
+        "source": "Qrup cədvəlləri",
+        "text": "Таблицы групп"
+      },
+      {
+        "key": "social.ig-groups.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "Публикация нашего официального аккаунта Instagram."
+      },
+      {
+        "key": "social.ig-pitch.title",
+        "source": "Meydandan görüntülər",
+        "text": "На поле"
+      },
+      {
+        "key": "social.ig-pitch.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "Публикация нашего официального аккаунта Instagram."
+      },
+      {
+        "key": "social.ig-moment.title",
+        "source": "Liqadan qısa video",
+        "text": "Короткое видео из лиги"
+      },
+      {
+        "key": "social.ig-moment.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "Публикация нашего официального аккаунта Instagram."
+      }
+    ],
+    "en": [
+      {
+        "key": "site.name",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "site.tagline",
+        "source": "Mini futbol · şəhərin liqası",
+        "text": "Mini football · the city’s league"
+      },
+      {
+        "key": "site.address",
+        "source": "Sumqayıt, Azərbaycan",
+        "text": "Sumgayit, Azerbaijan"
+      },
+      {
+        "key": "league.name",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "about.city",
+        "source": "Sumqayıt",
+        "text": "Sumgayit"
+      },
+      {
+        "key": "about.venue",
+        "source": "Azfar Arena",
+        "text": "Azfar Arena"
+      },
+      {
+        "key": "about.mission",
+        "source": "Sumqayıt Super Liqa şəhərin mini futbol komandalarını bir yarışda bir araya gətirir. Liqanın ilk mövsümü 2026-cı ildə, Sumqayıt şəhərinin 77-ci ilinə həsr olunub.\n\nBizim üçün liqa yalnız hesabdan ibarət deyil. Hər turda komanda ruhu, rəqabət və şəhərin futbol sevgisi bir araya gəlir. Qarşılaşmalar Azfar Arenada keçirilir, oyunlar və onların yadda qalan anları SSL TV-də paylaşılır.",
+        "text": "Sumgayit Super League brings the city’s mini football clubs together in one competition. The inaugural 2026 season is dedicated to the city’s 77th anniversary.\n\nFor us, the league is about more than the score. Every matchweek brings together team spirit, competition and the city’s passion for football. Matches take place at Azfar Arena, while full games and memorable moments are shared on SSL TV."
+      },
+      {
+        "key": "cms.home.buttonLabel",
+        "source": "Oyunlar və nəticələr",
+        "text": "Fixtures and results"
+      },
+      {
+        "key": "cms.about.title",
+        "source": "Haqqımızda",
+        "text": "About us"
+      },
+      {
+        "key": "cms.about.subtitle",
+        "source": "Sumqayıtın mini futbol hekayəsi.",
+        "text": "The mini football story of Sumgayit."
+      },
+      {
+        "key": "cms.about.heading",
+        "source": "Bir şəhər.\nBir futbol hekayəsi.",
+        "text": "One city.\nOne football story."
+      },
+      {
+        "key": "cms.branding.footerText",
+        "source": "Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.",
+        "text": "Sumgayit’s mini football home. Matches, statistics, clubs and media in one place."
+      },
+      {
+        "key": "cms.branding.copyright",
+        "source": "Bütün hüquqlar qorunur.",
+        "text": "All rights reserved."
+      },
+      {
+        "key": "cms.seo.title",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "cms.seo.description",
+        "source": "2026 mövsümü, ilk sezon. Komandalar, qarşılaşmalar, xəbərlər və oyunun yadda qalan anları — Sumqayıtın mini futbol hekayəsi burada davam edir.",
+        "text": "The 2026 season. Our first chapter. Clubs, matches, news and unforgettable moments — Sumgayit’s mini football story continues here."
+      },
+      {
+        "key": "navigation.home",
+        "source": "Ana səhifə",
+        "text": "Home"
+      },
+      {
+        "key": "navigation.games",
+        "source": "Oyunlar",
+        "text": "Matches"
+      },
+      {
+        "key": "navigation.table",
+        "source": "Cədvəl",
+        "text": "Standings"
+      },
+      {
+        "key": "navigation.teams",
+        "source": "Komandalar",
+        "text": "Clubs"
+      },
+      {
+        "key": "navigation.players",
+        "source": "Futbolçular",
+        "text": "Players"
+      },
+      {
+        "key": "navigation.scorers",
+        "source": "Bombardirlər",
+        "text": "Top scorers"
+      },
+      {
+        "key": "navigation.stats",
+        "source": "Statistika",
+        "text": "Statistics"
+      },
+      {
+        "key": "navigation.media",
+        "source": "Media",
+        "text": "Media"
+      },
+      {
+        "key": "navigation.news",
+        "source": "Xəbərlər",
+        "text": "News"
+      },
+      {
+        "key": "navigation.about",
+        "source": "Haqqımızda",
+        "text": "About us"
+      },
+      {
+        "key": "navigation.playoffs",
+        "source": "Mövsüm",
+        "text": "Season"
+      },
+      {
+        "key": "navigation.compare",
+        "source": "Müqayisə",
+        "text": "Compare"
+      },
+      {
+        "key": "aboutBlocks.league-purpose-title.text",
+        "source": "Liqanın məqsədi",
+        "text": "Our purpose"
+      },
+      {
+        "key": "aboutBlocks.league-purpose-copy.text",
+        "source": "Şəhərdə mini futbolun inkişafına töhfə vermək, komandalar üçün davamlı yarış mühiti yaratmaq və azarkeşləri oyunun ətrafında birləşdirmək.",
+        "text": "To support mini football in the city, create a lasting competition for clubs and bring supporters together around the game."
+      },
+      {
+        "key": "aboutBlocks.league-format-title.text",
+        "source": "2026 mövsümünün formatı",
+        "text": "The 2026 competition format"
+      },
+      {
+        "key": "aboutBlocks.league-format-copy.text",
+        "source": "İlk sezonda səkkiz komanda iki qrupda mübarizə aparır. Qrup mərhələsində komandalar rəqibləri ilə iki dəfə qarşılaşır. Qələbə üç, heç-heçə bir xal qazandırır. Hər qrupun ilk iki komandası növbəti mərhələyə keçir.",
+        "text": "Eight clubs compete in two groups in the first season. Each club meets its group opponents twice. A win earns three points and a draw earns one. The top two clubs in each group progress to the next stage."
+      },
+      {
+        "key": "aboutBlocks.league-community-title.text",
+        "source": "Komandalar, azarkeşlər və media",
+        "text": "Clubs, supporters and media"
+      },
+      {
+        "key": "aboutBlocks.league-community-copy.text",
+        "source": "Bu sayt liqanın oyun təqvimini, nəticələrini, komanda heyətlərini və futbolçu statistikasını bir araya gətirir. Xəbərlər bölməsində mövsümün gündəmini, media arxivində isə tam oyunları, icmalları və qısa videoları izləyə bilərsən.",
+        "text": "This website brings together fixtures, results, squads and player statistics. Follow the season’s stories in News and revisit full matches, highlights and short videos in the media archive."
+      },
+      {
+        "key": "news.ssl-season-2026.title",
+        "source": "2026: Sumqayıtın ilk mini futbol mövsümü",
+        "text": "2026: Sumgayit’s first mini football season"
+      },
+      {
+        "key": "news.ssl-season-2026.text",
+        "source": "Sumqayıt Super Liqanın ilk mövsümü şəhərin 77-ci ilinə həsr olunub. Səkkiz komanda, iki qrup və hər turda yeni futbol hekayəsi.\n\nQrup oyunları 5 sentyabrda Agrotam — Old Men qarşılaşması ilə başladı. Açılış oyununda Agrotam 4–3 hesabı ilə qalib gəldi.\n\nAltı turun sonunda 24 qarşılaşma tamamlandı, 161 qol qeydə alındı. Siyəzən, Gənclərbirliyi, Five Star və Agrotam növbəti mərhələyə keçdi. Mövsümün oyunları, cədvəlləri və futbolçu statistikası saytın müvafiq bölmələrində toplanıb.",
+        "text": "The inaugural season of Sumgayit Super League is dedicated to the city’s 77th anniversary. Eight clubs, two groups and a new football story every matchweek.\n\nThe group fixtures began on 5 September with Agrotam against Old Men. Agrotam won the opening match 4–3.\n\nAfter six matchweeks, 24 matches have been completed and 161 goals recorded. Siyəzən, Gənclərbirliyi, Five Star and Agrotam progressed to the next stage. Fixtures, standings and player statistics are available throughout the website."
+      },
+      {
+        "key": "news.ssl-season-2026.category",
+        "source": "LİQA",
+        "text": "LEAGUE"
+      },
+      {
+        "key": "news.ssl-round6-2026.title",
+        "source": "VI tur: dörd qarşılaşmada 28 qol",
+        "text": "Matchweek VI: 28 goals in four matches"
+      },
+      {
+        "key": "news.ssl-round6-2026.text",
+        "source": "11 oktyabrda keçirilən VI tur qrup oyunlarını tamamladı. Dörd görüşdə ümumilikdə 28 qol vuruldu.\n\nSiyəzən — Komando Sumqayıt: 4–0\nƏrtoğrul — Old Men: 8–4\nQurtuluş — Gənclərbirliyi: 2–7\nAgrotam — Five Star: 2–1\n\nTurun ən məhsuldar oyunu Ərtoğrul — Old Men görüşü oldu: bu qarşılaşmada 12 qol qeydə alındı. Gənclərbirliyi səfərdə yeddi qol vurdu, Agrotam isə Five Star üzərində qələbə qazandı. Hər oyunun qol və kart məlumatı matç səhifəsində, tam yayımı isə media arxivində yer alır.",
+        "text": "Matchweek VI on 11 October completed the group fixtures. The four meetings produced 28 goals.\n\nSiyəzən — Komando Sumqayıt: 4–0\nƏrtoğrul — Old Men: 8–4\nQurtuluş — Gənclərbirliyi: 2–7\nAgrotam — Five Star: 2–1\n\nƏrtoğrul against Old Men was the highest-scoring match of the round, with 12 goals. Gənclərbirliyi scored seven away from home, while Agrotam defeated Five Star. Goals and cards are recorded on each match page, and full broadcasts are in the media archive."
+      },
+      {
+        "key": "news.ssl-round6-2026.category",
+        "source": "TUR İCMALI",
+        "text": "MATCHWEEK REPORT"
+      },
+      {
+        "key": "news.ssl-scorers-2026.title",
+        "source": "Bombardirlər: Elnur Hüseynov 10 qolla öndə",
+        "text": "Top scorers: Elnur Hüseynov leads with 10 goals"
+      },
+      {
+        "key": "news.ssl-scorers-2026.text",
+        "source": "Qrup oyunlarının sonunda Gənclərbirliyinin futbolçusu Elnur Hüseynov 10 qolla bombardirlər siyahısına başçılıq edir. Siyəzəndən Rövşən Ələsgərov 9, Qurtuluşdan Ramiz Hacıyev isə 6 qol vurub.\n\nStatistika matçlarda qeyd edilmiş qol müəllifləri əsasında hesablanır. Öz qapısına vurulan qollar komandanın yekun hesabına daxil edilir, futbolçunun bombardir göstəricisinə əlavə olunmur.\n\nTam siyahını Bombardirlər bölməsində, futbolçunun qol vurduğu oyunları isə onun şəxsi səhifəsində görə bilərsən.",
+        "text": "At the end of the group fixtures, Gənclərbirliyi player Elnur Hüseynov leads the scoring chart with 10 goals. Rövşən Ələsgərov of Siyəzən has nine, and Ramiz Hacıyev of Qurtuluş has six.\n\nThe statistics are calculated from recorded match scorers. Own goals count towards the team’s final score but are excluded from individual scoring totals.\n\nExplore the full list in Top scorers and find each player’s scoring matches on their profile."
+      },
+      {
+        "key": "news.ssl-scorers-2026.category",
+        "source": "STATİSTİKA",
+        "text": "STATISTICS"
+      },
+      {
+        "key": "news.ssl-tv-2026.title",
+        "source": "SSL TV: mövsümün oyunları bir arxivdə",
+        "text": "SSL TV: the season’s matches in one archive"
+      },
+      {
+        "key": "news.ssl-tv-2026.text",
+        "source": "Liqanın YouTube kanalında yayımlanmış 24 tam oyun və 7 oyun icmalı media arxivində bir araya gətirilib. Arxivə qısa videolar, püşkatma yayımı və birinci dövrənin yekunu barədə müzakirə də daxildir.\n\nVideoları növünə, komandaya və tura görə seçə bilərsən. Matça bağlı materialdan birbaşa həmin oyunun nəticəsinə və statistikasına keçmək mümkündür.\n\nYeni yayımlar və paylaşımlar üçün liqanın rəsmi YouTube kanalını və sosial hesablarını izləyə bilərsən.",
+        "text": "The league’s 24 full match broadcasts and seven highlights videos are now together in the media archive. It also includes short videos, the draw broadcast and a discussion of the first round of fixtures.\n\nFilter videos by type, club or matchweek. From a match video you can open the game’s result and statistics directly.\n\nFollow the official YouTube channel and the league’s social accounts for new broadcasts and posts."
+      },
+      {
+        "key": "news.ssl-tv-2026.category",
+        "source": "MEDIA",
+        "text": "MEDIA"
+      },
+      {
+        "key": "news.tur3.title",
+        "source": "III turun nəticələri: dörd oyunda 26 qol",
+        "text": "Matchweek III results: 26 goals in four games"
+      },
+      {
+        "key": "news.tur3.text",
+        "source": "Komando Sumqayıt — Siyəzən və Five Star — Agrotam oyunları yüksək məhsuldarlıqla yadda qaldı.",
+        "text": "The Komando Sumqayıt — Siyəzən and Five Star — Agrotam matches produced plenty of goals."
+      },
+      {
+        "key": "news.tur3.category",
+        "source": "TUR İCMALI",
+        "text": "MATCHWEEK REPORT"
+      },
+      {
+        "key": "news.federasiya.title",
+        "source": "Sumqayıtda yeni mini futbol həyəcanı",
+        "text": "A new mini football chapter in Sumgayit"
+      },
+      {
+        "key": "news.federasiya.text",
+        "source": "Sumqayıt Super Liqanın yaradılma məqsədi və şəhərin futbol həyatı barədə məlumatlar.",
+        "text": "The purpose of Sumgayit Super League and the city’s football community."
+      },
+      {
+        "key": "news.federasiya.category",
+        "source": "LİQA HAQQINDA",
+        "text": "ABOUT THE LEAGUE"
+      },
+      {
+        "key": "news.mini.category",
+        "source": "AZƏRBAYCAN MİNİ FUTBOLU",
+        "text": "AZERBAIJAN MINI FOOTBALL"
+      },
+      {
+        "key": "videos.qurtulus-komando.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.five-ertogrul.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.five-agrotam.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-t6rgvwkvq8c.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt-aboi8qdbi3g.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt-19ogliih29a.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt-4d_xgcaimzm.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt-hg-tgg9c93o.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt--ojtureyjjs.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt-tljnompwuio.text",
+        "source": "Oyunun video icmalı.",
+        "text": "Match highlights."
+      },
+      {
+        "key": "videos.yt-yrqwbgr8x50.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-jecavldiiek.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-fsxjproyhug.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-pc6tql1uptw.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-helbhkfk9a8.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-iov_izljqim.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-j5frpq_wta0.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-ray1r4q-grw.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-dymwkkftf1c.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-1_wngtk5hoq.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-asxmfmy_t24.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-fi76mvjeqao.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-sfadevtb8jy.title",
+        "source": "Birinci dövrənin yekunu · müzakirə",
+        "text": "First round review · discussion"
+      },
+      {
+        "key": "videos.yt-sfadevtb8jy.text",
+        "source": "Liqanın YouTube kanalından yayım.",
+        "text": "A broadcast from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-fqnmslf6hgi.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-pdtgnp5owjs.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-sfgksxrl0xw.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-be-4edvxk3k.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-db_evj5iyns.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-f4oz_za9ox8.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-fsqhqoimxd0.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-jyy6xgbgsuy.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-nwhwgkjbj60.text",
+        "source": "Tam oyun yayımı.",
+        "text": "Full match broadcast."
+      },
+      {
+        "key": "videos.yt-ut7bnni0ozk.title",
+        "source": "2026 mövsümünün püşkatması",
+        "text": "The 2026 season draw"
+      },
+      {
+        "key": "videos.yt-ut7bnni0ozk.text",
+        "source": "Liqanın YouTube kanalından yayım.",
+        "text": "A broadcast from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-qec4b-ncy2a.title",
+        "source": "Emildən Ərtoğrula gözəl qol",
+        "text": "Emil’s stunning goal against Ərtoğrul"
+      },
+      {
+        "key": "videos.yt-qec4b-ncy2a.text",
+        "source": "Liqanın YouTube kanalından qısa video.",
+        "text": "A short video from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-9_sedidfti0.title",
+        "source": "Yusif Kərimovdan qol",
+        "text": "A goal from Yusif Kərimov"
+      },
+      {
+        "key": "videos.yt-9_sedidfti0.text",
+        "source": "Liqanın YouTube kanalından qısa video.",
+        "text": "A short video from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-ln3hqfi6wzi.title",
+        "source": "Natiq İsmayılzadədən oyun anı",
+        "text": "A moment with Natiq İsmayılzadə"
+      },
+      {
+        "key": "videos.yt-ln3hqfi6wzi.text",
+        "source": "Liqanın YouTube kanalından qısa video.",
+        "text": "A short video from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-92ksvxcr9li.title",
+        "source": "Məhəmmədin oyun anı",
+        "text": "Məhəmməd in action"
+      },
+      {
+        "key": "videos.yt-92ksvxcr9li.text",
+        "source": "Liqanın YouTube kanalından qısa video.",
+        "text": "A short video from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-zm7faquvzr4.title",
+        "source": "Anar Muradovdan oyun anı",
+        "text": "A moment with Anar Muradov"
+      },
+      {
+        "key": "videos.yt-zm7faquvzr4.text",
+        "source": "Liqanın YouTube kanalından qısa video.",
+        "text": "A short video from the league’s YouTube channel."
+      },
+      {
+        "key": "videos.yt-6rt9aiattgm.title",
+        "source": "Sezona qeydiyyat elanı",
+        "text": "Season registration announcement"
+      },
+      {
+        "key": "videos.yt-6rt9aiattgm.text",
+        "source": "Liqanın YouTube kanalından qısa video.",
+        "text": "A short video from the league’s YouTube channel."
+      },
+      {
+        "key": "rule.0",
+        "source": "Ümumi xal",
+        "text": "Total points"
+      },
+      {
+        "key": "rule.1",
+        "source": "Ümumi top fərqi",
+        "text": "Overall goal difference"
+      },
+      {
+        "key": "rule.2",
+        "source": "Ümumi vurulan qol",
+        "text": "Total goals scored"
+      },
+      {
+        "key": "rule.3",
+        "source": "Az buraxılan qol",
+        "text": "Fewest goals conceded"
+      },
+      {
+        "key": "rule.4",
+        "source": "Qələbə sayı",
+        "text": "Number of wins"
+      },
+      {
+        "key": "rule.5",
+        "source": "Qarşılıqlı oyunun nəticəsi",
+        "text": "Head-to-head result"
+      },
+      {
+        "key": "rule.6",
+        "source": "Qarşılıqlı oyunda top fərqi",
+        "text": "Head-to-head goal difference"
+      },
+      {
+        "key": "rule.7",
+        "source": "Qarşılıqlı oyunda vurulan qol",
+        "text": "Head-to-head goals scored"
+      },
+      {
+        "key": "rule.8",
+        "source": "Fair-play xalları",
+        "text": "Fair-play points"
+      },
+      {
+        "key": "rule.9",
+        "source": "Püşk",
+        "text": "Drawing of lots"
+      },
+      {
+        "key": "news.ssl-season-2026.source",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "news.ssl-round6-2026.source",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "news.ssl-scorers-2026.source",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "news.ssl-tv-2026.source",
+        "source": "Sumqayıt Super Liqa",
+        "text": "Sumgayit Super League"
+      },
+      {
+        "key": "site.hero",
+        "source": "Meydanda rəqabət. Tribunada birlik. Sumqayıt Super Liqanın rəsmi platforması.",
+        "text": "Competition on the pitch. Community around it. The official home of Sumgayit Super League."
+      },
+      {
+        "key": "cms.home.title",
+        "source": "Şəhərin oyunu.",
+        "text": "The city’s game."
+      },
+      {
+        "key": "cms.home.highlight",
+        "source": "Bizim liqa.",
+        "text": "Our league."
+      },
+      {
+        "key": "cms.guide.title",
+        "source": "Minifutbol bələdçisi",
+        "text": "Minifootball guide"
+      },
+      {
+        "key": "cms.guide.subtitle",
+        "source": "Oyunu tanı. Liqanı daha yaxından izlə.",
+        "text": "Understand the game. Get closer to the league."
+      },
+      {
+        "key": "navigation.guide",
+        "source": "Minifutbol",
+        "text": "Minifootball"
+      },
+      {
+        "key": "navigation.contact",
+        "source": "Əlaqə",
+        "text": "Contact"
+      },
+      {
+        "key": "guideBlocks.guide-intro-heading.text",
+        "source": "Kiçik meydan, böyük oyun",
+        "text": "A smaller pitch, a bigger connection"
+      },
+      {
+        "key": "guideBlocks.guide-intro-text.text",
+        "source": "Minifutbol daha kiçik meydan, qapı və heyətlə oynanır. Dünyada 5, 6, 7 və 8 nəfərlik formatları var; süni və təbii ot örtüklərində keçirilir. Konkret yarışın formatını onun əsasnaməsi müəyyən edir.",
+        "text": "Minifootball uses a smaller pitch, goals and teams. Five-, six-, seven- and eight-a-side versions are played on artificial and natural grass. Each competition defines its own format."
+      },
+      {
+        "key": "guideBlocks.guide-respect-heading.text",
+        "source": "Rəqabətin yanında hörmət",
+        "text": "Respect belongs alongside competition"
+      },
+      {
+        "key": "guideBlocks.guide-respect-text.text",
+        "source": "EMF minifutbolun əsas dəyərləri arasında komanda işini, oyunçu inkişafını, fair-play və iştirakçılar arasında hörməti göstərir. Rəqibə və hakimə hörmət, birlikdə məsuliyyət daşımaq oyunun bir hissəsidir.",
+        "text": "EMF highlights teamwork, player development, fair play and mutual respect. Respect for opponents and referees, and shared responsibility, are part of the game."
+      },
+      {
+        "key": "guideBlocks.guide-table-heading.text",
+        "source": "Bizim liqada rəqəmlər necə oxunur?",
+        "text": "Reading our league statistics"
+      },
+      {
+        "key": "guideBlocks.guide-table-text.text",
+        "source": "Qələbə 3, heç-heçə 1 xal gətirir. Qrup cədvəlində O oyun, Q qələbə, H heç-heçə, M məğlubiyyət, VQ vurulan qol, BQ buraxılan qol, TF top fərqi, X isə xaldır. Tam sıralama meyarları Cədvəl səhifəsindədir.",
+        "text": "A win earns three points and a draw one. The table shows played, wins, draws, losses, goals for and against, goal difference and points. Full ranking criteria are on the Standings page."
+      },
+      {
+        "key": "guideBlocks.guide-og-heading.text",
+        "source": "Avtoqol və bombardir statistikası",
+        "text": "Own goals and the scorers chart"
+      },
+      {
+        "key": "guideBlocks.guide-og-text.text",
+        "source": "Öz qapısına vurulan qol rəqib komandanın hesabına yazılır. Futbolçunun bombardir göstəricisinə əlavə edilmir. Müəllifi bilinməyən qol yekun nəticədə qalır; statistikada başqa oyunçuya aid edilmir.",
+        "text": "An own goal counts for the opposing team, not for the player in the scorers chart. A goal with no recorded scorer stays in the result and is not assigned to another player."
+      },
+      {
+        "key": "guideBlocks.guide-watch-heading.text",
+        "source": "Oyunu izləmək üçün",
+        "text": "Follow the match"
+      },
+      {
+        "key": "guideBlocks.guide-watch-text.text",
+        "source": "Matç mərkəzində nəticəni, qol müəlliflərini, kartları və qeydə alınmış MVP-ni görürsən. Media arxivindən tam yayımı və mövcud icmalları seçə bilərsən. Komandaları müqayisə edərkən onların hücum, müdafiə və qarşılıqlı oyun göstəricilərinə bax.",
+        "text": "The match centre lists the result, scorers, cards and recorded player of the match. The media archive has full broadcasts and available highlights. Compare teams through attack, defence and head-to-head results."
+      },
+      {
+        "key": "guideBlocks.guide-sources-heading.text",
+        "source": "Mənbələr və əlavə oxu",
+        "text": "Sources and further reading"
+      },
+      {
+        "key": "guideBlocks.guide-source-emf.text",
+        "source": "EMF · Minifutbol nədir?",
+        "text": "EMF · What is minifootball?"
+      },
+      {
+        "key": "guideBlocks.guide-source-ethics.text",
+        "source": "EMF · Fair-play və etik prinsiplər",
+        "text": "EMF · Fair play and ethics"
+      },
+      {
+        "key": "guideBlocks.guide-source-amf.text",
+        "source": "Azərbaycan Minifutbol Federasiyası",
+        "text": "Azerbaijan Minifootball Federation"
+      },
+      {
+        "key": "news.mini.title",
+        "source": "“Buxar” Sumqayıtın Avropa Kuboku yolu",
+        "text": "Buxar Sumgayit’s European Cup campaign"
+      },
+      {
+        "key": "news.mini.text",
+        "source": "Azərbaycan Minifutbol Federasiyasının məlumatına görə, “Buxar” Sumqayıt EMF Avropa Kubokundakı üçüncü qarşılaşmada Bosniya və Hersoqovinanın “Delinqs İkon” komandasına 0–3 hesabı ilə uduzaraq çıxışını başa vurub. Sumqayıt təmsilçisi əvvəlki oyunda Çexiyanın “Abus Kastro” klubunu 2–1 məğlub etmişdi.\n\nŞəhərin beynəlxalq minifutbol iştirakından bu xəbərin tam mətnini rəsmi mənbədə oxuya bilərsən.",
+        "text": "According to the Azerbaijan Minifootball Federation, Buxar Sumgayit ended its EMF European Cup campaign with a 0–3 defeat to Bosnia and Herzegovina’s Delinqs Ikon in its third match. The Sumgayit side had beaten Czech club Abus Kastro 2–1 in the previous game.\n\nRead the full report on the federation’s official website."
+      },
+      {
+        "key": "navigation.fans",
+        "source": "Azarkeş mərkəzi",
+        "text": "Fan centre"
+      },
+      {
+        "key": "community.title",
+        "source": "Liqanın içindən",
+        "text": "Around the league"
+      },
+      {
+        "key": "community.poll.question",
+        "source": "Turun ən yadda qalan oyunu hansıdır?",
+        "text": "Which match stood out this matchweek?"
+      },
+      {
+        "key": "social.ig-oct11.title",
+        "source": "Liqanın Instagram gündəmi",
+        "text": "The league on Instagram"
+      },
+      {
+        "key": "social.ig-oct11.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "A post from our official Instagram account."
+      },
+      {
+        "key": "social.ig-groups.title",
+        "source": "Qrup cədvəlləri",
+        "text": "Group standings"
+      },
+      {
+        "key": "social.ig-groups.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "A post from our official Instagram account."
+      },
+      {
+        "key": "social.ig-pitch.title",
+        "source": "Meydandan görüntülər",
+        "text": "From the pitch"
+      },
+      {
+        "key": "social.ig-pitch.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "A post from our official Instagram account."
+      },
+      {
+        "key": "social.ig-moment.title",
+        "source": "Liqadan qısa video",
+        "text": "A moment from the league"
+      },
+      {
+        "key": "social.ig-moment.text",
+        "source": "Rəsmi Instagram hesabımızdan paylaşım.",
+        "text": "A post from our official Instagram account."
       }
     ]
   }
