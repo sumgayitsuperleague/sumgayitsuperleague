@@ -4,7 +4,7 @@ window.CONTENT={
   "league": {
     "season": "2026",
     "name": "Sumqayıt Super Liqa",
-    "updated": "2026-10-11",
+    "updated": "2026-10-13",
     "teams": [
       {
         "id": "agt",
@@ -105,7 +105,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 12
       },
       {
         "id": "ert",
@@ -206,7 +207,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 12
       },
       {
         "id": "fvs",
@@ -307,7 +309,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 12
       },
       {
         "id": "gb",
@@ -402,7 +405,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 14
       },
       {
         "id": "kmn",
@@ -429,7 +433,7 @@ window.CONTENT={
             "n": "3",
             "name": "Tahirov İbrahim",
             "gk": false,
-            "cap": "C"
+            "cap": ""
           },
           {
             "n": "4",
@@ -441,7 +445,7 @@ window.CONTENT={
             "n": "5",
             "name": "Babayev Kamran",
             "gk": false,
-            "cap": ""
+            "cap": "C"
           },
           {
             "n": "6",
@@ -497,7 +501,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 15
       },
       {
         "id": "omn",
@@ -598,7 +603,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 15
       },
       {
         "id": "qrt",
@@ -693,7 +699,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 14
       },
       {
         "id": "siy",
@@ -794,7 +801,8 @@ window.CONTENT={
             "gk": false,
             "cap": ""
           }
-        ]
+        ],
+        "registeredPlayers": 15
       }
     ],
     "matches": [
@@ -1048,7 +1056,8 @@ window.CONTENT={
         "mvp": {
           "p": "Məhəmməd Alıyev",
           "t": "gb"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r2-siy-qrt",
@@ -1214,7 +1223,8 @@ window.CONTENT={
         "mvp": {
           "p": "Elnur Hüseynov",
           "t": "gb"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r2-ert-agt",
@@ -1264,7 +1274,8 @@ window.CONTENT={
         "mvp": {
           "p": "Alim Qafarlı",
           "t": "ert"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r3-kmn-siy",
@@ -1305,7 +1316,8 @@ window.CONTENT={
           },
           {
             "p": "",
-            "t": "siy",
+            "t": "kmn",
+            "og": true,
             "unk": true
           }
         ],
@@ -1313,7 +1325,8 @@ window.CONTENT={
         "mvp": {
           "p": "Rövşən Ələsgərov",
           "t": "siy"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r3-fvs-agt",
@@ -1354,7 +1367,8 @@ window.CONTENT={
           },
           {
             "p": "",
-            "t": "agt",
+            "t": "fvs",
+            "og": true,
             "unk": true
           }
         ],
@@ -1393,7 +1407,8 @@ window.CONTENT={
         "mvp": {
           "p": "Fərid Salahov",
           "t": "agt"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r3-gb-qrt",
@@ -1452,7 +1467,8 @@ window.CONTENT={
         "mvp": {
           "p": "Məhəmməd Xəlilov",
           "t": "qrt"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r3-omn-ert",
@@ -1472,7 +1488,7 @@ window.CONTENT={
             "t": "omn"
           },
           {
-            "p": "Kənan İbişov",
+            "p": "Kənan İbişov (kapitan)",
             "t": "omn"
           },
           {
@@ -1495,7 +1511,7 @@ window.CONTENT={
             "c": "y"
           },
           {
-            "p": "Kənan İbişov",
+            "p": "Kənan İbişov (kapitan)",
             "t": "omn",
             "c": "y"
           }
@@ -1503,7 +1519,8 @@ window.CONTENT={
         "mvp": {
           "p": "David Əhmədov",
           "t": "omn"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r4-siy-gb",
@@ -1565,7 +1582,8 @@ window.CONTENT={
         "mvp": {
           "p": "Rövşən Ələsgərov",
           "t": "siy"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r4-omn-agt",
@@ -1609,7 +1627,7 @@ window.CONTENT={
             "t": "omn"
           },
           {
-            "p": "Kənan İbişov",
+            "p": "Kənan İbişov (kapitan)",
             "t": "omn"
           }
         ],
@@ -1628,7 +1646,8 @@ window.CONTENT={
         "mvp": {
           "p": "Məhəmməd Hacıyev",
           "t": "agt"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r4-kmn-qrt",
@@ -1688,7 +1707,8 @@ window.CONTENT={
         "mvp": {
           "p": "Yusif Rufullazadə",
           "t": "qrt"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r4-ert-fvs",
@@ -1712,7 +1732,7 @@ window.CONTENT={
             "t": "ert"
           },
           {
-            "p": "Zakir Rəşidov",
+            "p": "Zakir Rəşidov (QK)",
             "t": "ert",
             "og": true
           },
@@ -1737,7 +1757,8 @@ window.CONTENT={
         "mvp": {
           "p": "Səxavət Pirmuradov",
           "t": "fvs"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r5-qrt-siy",
@@ -1796,7 +1817,8 @@ window.CONTENT={
         "mvp": {
           "p": "Cavad Həsənov",
           "t": "siy"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r5-agt-ert",
@@ -1849,7 +1871,8 @@ window.CONTENT={
             "c": "y"
           }
         ],
-        "mvp": null
+        "mvp": null,
+        "stage": "group"
       },
       {
         "id": "r5-kmn-gb",
@@ -1900,7 +1923,8 @@ window.CONTENT={
         "mvp": {
           "p": "Məhmməd Nəsibov",
           "t": "gb"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r5-omn-fvs",
@@ -1916,7 +1940,7 @@ window.CONTENT={
         "status": "done",
         "goals": [
           {
-            "p": "Mirzəxan Bəyalızadə",
+            "p": "Mirzəxan Bəyalızadə(v/k)",
             "t": "omn"
           },
           {
@@ -1939,7 +1963,7 @@ window.CONTENT={
         ],
         "cards": [
           {
-            "p": "Kənan İbişov",
+            "p": "Kənan İbişov (kapitan)",
             "t": "omn",
             "c": "y"
           }
@@ -1947,7 +1971,8 @@ window.CONTENT={
         "mvp": {
           "p": "Emil Abbaszadə",
           "t": "fvs"
-        }
+        },
+        "stage": "group"
       },
       {
         "id": "r6-siy-kmn",
@@ -1957,13 +1982,31 @@ window.CONTENT={
         "time": "14:00",
         "home": "siy",
         "away": "kmn",
-        "hs": null,
-        "as": null,
+        "hs": 4,
+        "as": 0,
         "venue": "Azfar",
-        "status": "planned",
-        "goals": [],
+        "status": "done",
+        "goals": [
+          {
+            "p": "Rövşən Ələsgərov",
+            "t": "siy"
+          },
+          {
+            "p": "Rövşən Ələsgərov",
+            "t": "siy"
+          },
+          {
+            "p": "Şükür Cəfərov",
+            "t": "siy"
+          },
+          {
+            "p": "Təbriz Yahyayev",
+            "t": "siy"
+          }
+        ],
         "cards": [],
-        "mvp": null
+        "mvp": null,
+        "stage": "group"
       },
       {
         "id": "r6-ert-omn",
@@ -1973,13 +2016,71 @@ window.CONTENT={
         "time": "15:00",
         "home": "ert",
         "away": "omn",
-        "hs": null,
-        "as": null,
+        "hs": 8,
+        "as": 4,
         "venue": "Azfar",
-        "status": "planned",
-        "goals": [],
-        "cards": [],
-        "mvp": null
+        "status": "done",
+        "goals": [
+          {
+            "p": "Elnur Soltanlı",
+            "t": "ert"
+          },
+          {
+            "p": "Mirzəxan Bəyalızadə(v/k)",
+            "t": "omn"
+          },
+          {
+            "p": "Mətin Mehtiyev",
+            "t": "ert"
+          },
+          {
+            "p": "Nicat Məmmədov",
+            "t": "ert"
+          },
+          {
+            "p": "Anar Muradov",
+            "t": "omn"
+          },
+          {
+            "p": "Mirzəxan Bəyalızadə(v/k)",
+            "t": "omn"
+          },
+          {
+            "p": "Elnur Soltanlı",
+            "t": "ert"
+          },
+          {
+            "p": "Alim Qafarlı",
+            "t": "ert"
+          },
+          {
+            "p": "Kamran Hüseynov",
+            "t": "ert"
+          },
+          {
+            "p": "Mətin Mehtiyev",
+            "t": "ert"
+          },
+          {
+            "p": "Məhəmməd Əliyev (QK)",
+            "t": "omn"
+          },
+          {
+            "p": "",
+            "t": "omn",
+            "og": true,
+            "unk": true
+          }
+        ],
+        "cards": [
+          {
+            "p": "Alim Qafarlı",
+            "t": "ert",
+            "c": "y"
+          }
+        ],
+        "mvp": null,
+        "stage": "group"
       },
       {
         "id": "r6-qrt-gb",
@@ -1989,13 +2090,57 @@ window.CONTENT={
         "time": "16:00",
         "home": "qrt",
         "away": "gb",
-        "hs": null,
-        "as": null,
+        "hs": 2,
+        "as": 7,
         "venue": "Azfar",
-        "status": "planned",
-        "goals": [],
-        "cards": [],
-        "mvp": null
+        "status": "done",
+        "goals": [
+          {
+            "p": "Murad Hüseynov",
+            "t": "gb"
+          },
+          {
+            "p": "Elnur Hüseynov",
+            "t": "gb"
+          },
+          {
+            "p": "Cavid Həşimov",
+            "t": "gb"
+          },
+          {
+            "p": "Vüsal Nəbiyev",
+            "t": "gb"
+          },
+          {
+            "p": "Məhəmməd Xəlilov",
+            "t": "qrt"
+          },
+          {
+            "p": "Murad Hüseynov",
+            "t": "gb"
+          },
+          {
+            "p": "Cavid Həşimov",
+            "t": "gb"
+          },
+          {
+            "p": "Elnur Hüseynov",
+            "t": "gb"
+          },
+          {
+            "p": "Yusif Rufullazadə",
+            "t": "qrt"
+          }
+        ],
+        "cards": [
+          {
+            "p": "Rauf İbrahimli",
+            "t": "qrt",
+            "c": "y"
+          }
+        ],
+        "mvp": null,
+        "stage": "group"
       },
       {
         "id": "r6-agt-fvs",
@@ -2005,13 +2150,43 @@ window.CONTENT={
         "time": "17:00",
         "home": "agt",
         "away": "fvs",
-        "hs": null,
-        "as": null,
+        "hs": 2,
+        "as": 1,
         "venue": "Azfar",
-        "status": "planned",
-        "goals": [],
-        "cards": [],
-        "mvp": null
+        "status": "done",
+        "goals": [
+          {
+            "p": "Ədalət Qafarlı",
+            "t": "agt"
+          },
+          {
+            "p": "Cəlil Cəlilov",
+            "t": "agt"
+          },
+          {
+            "p": "Əsgər Abbasov",
+            "t": "fvs"
+          }
+        ],
+        "cards": [
+          {
+            "p": "Fərid Salahov",
+            "t": "agt",
+            "c": "y"
+          },
+          {
+            "p": "Məhəmməd Hacıyev",
+            "t": "agt",
+            "c": "y"
+          },
+          {
+            "p": "Sahil Əsgərli",
+            "t": "agt",
+            "c": "y"
+          }
+        ],
+        "mvp": null,
+        "stage": "group"
       }
     ],
     "rules": [
@@ -2025,7 +2200,16 @@ window.CONTENT={
       "Qarşılıqlı oyunda vurulan qol",
       "Fair-play xalları",
       "Püşk"
-    ]
+    ],
+    "competition": {
+      "phase": "semifinal",
+      "qualified": [
+        "siy",
+        "gb",
+        "fvs",
+        "agt"
+      ]
+    }
   },
   "site": {
     "name": "Sumqayıt Super Liqa",
@@ -2037,7 +2221,7 @@ window.CONTENT={
     "phone": "",
     "email": "",
     "address": "Sumqayıt, Azərbaycan",
-    "hero": "Şəhərin ən güclü mini futbol komandaları bir turnirdə. Canlı nəticələr, turnir cədvəli, bombardirlər və hər komandanın heyəti — bir saytda.",
+    "hero": "24 qarşılaşma, 161 qol və dörd yarımfinalçı. Sumqayıt Super Liqada indi növbəti mərhələnin həyəcanı başlayır.",
     "primary": "#215adc",
     "accent": "#fc344b",
     "adminUrl": ""
@@ -2120,6 +2304,163 @@ window.CONTENT={
     "season": "2026",
     "venue": "Azfar Arena",
     "mission": "Sumqayıtda mini futbolun inkişafına töhfə vermək, komandaları bir araya gətirmək və şəhərin futbol həyəcanını yaşatmaq."
+  },
+  "cms": {
+    "home": {
+      "title": "Qrup mərhələsi",
+      "highlight": "yekunlaşdı.",
+      "buttonLabel": "Oyunlar və nəticələr",
+      "buttonUrl": "/oyunlar.html",
+      "image": "",
+      "announcement": "",
+      "announcementUrl": "",
+      "sections": [
+        {
+          "id": "pulse",
+          "visible": true
+        },
+        {
+          "id": "results",
+          "visible": true
+        },
+        {
+          "id": "fixtures",
+          "visible": true
+        },
+        {
+          "id": "table",
+          "visible": true
+        },
+        {
+          "id": "videos",
+          "visible": true
+        },
+        {
+          "id": "scorers",
+          "visible": true
+        },
+        {
+          "id": "teams",
+          "visible": true
+        },
+        {
+          "id": "news",
+          "visible": true
+        },
+        {
+          "id": "mvp",
+          "visible": true
+        }
+      ]
+    },
+    "about": {
+      "title": "Liqa haqqında",
+      "subtitle": "Sumqayıtdan başlayan mini futbol hekayəsi.",
+      "heading": "BU ŞƏHƏRDƏ OYUN BİTMİR.",
+      "image": "",
+      "blocks": [
+        {
+          "id": "about-note-heading",
+          "type": "heading",
+          "text": "Rəqəmlər, rəqabət və icma",
+          "url": "",
+          "alt": "",
+          "level": 2
+        },
+        {
+          "id": "about-note-text",
+          "type": "paragraph",
+          "text": "Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.",
+          "url": "",
+          "alt": "",
+          "level": 2
+        }
+      ]
+    },
+    "appearance": {
+      "background": "#f4f6fa",
+      "surface": "#ffffff",
+      "text": "#172640",
+      "muted": "#627189",
+      "font": "manrope",
+      "headingFont": "barlow",
+      "radius": 18,
+      "width": 1320
+    },
+    "branding": {
+      "logo": "/assets/logo.png",
+      "footerText": "Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.",
+      "copyright": "Bütün hüquqlar qorunur."
+    },
+    "seo": {
+      "title": "Sumqayıt Super Liqa",
+      "description": "Şəhərin ən güclü mini futbol komandaları bir turnirdə. Canlı nəticələr, turnir cədvəli, bombardirlər və hər komandanın heyəti — bir saytda.",
+      "image": ""
+    },
+    "navigation": [
+      {
+        "id": "home",
+        "label": "Ana səhifə",
+        "visible": true
+      },
+      {
+        "id": "games",
+        "label": "Oyunlar",
+        "visible": true
+      },
+      {
+        "id": "table",
+        "label": "Cədvəl",
+        "visible": true
+      },
+      {
+        "id": "teams",
+        "label": "Komandalar",
+        "visible": true
+      },
+      {
+        "id": "players",
+        "label": "Futbolçular",
+        "visible": true
+      },
+      {
+        "id": "scorers",
+        "label": "Bombardirlər",
+        "visible": true
+      },
+      {
+        "id": "stats",
+        "label": "Statistika",
+        "visible": true
+      },
+      {
+        "id": "media",
+        "label": "Media",
+        "visible": true
+      },
+      {
+        "id": "news",
+        "label": "Xəbərlər",
+        "visible": true
+      },
+      {
+        "id": "about",
+        "label": "Haqqımızda",
+        "visible": true
+      },
+      {
+        "id": "playoffs",
+        "label": "Yarımfinal",
+        "visible": true
+      },
+      {
+        "id": "compare",
+        "label": "Müqayisə",
+        "visible": true
+      }
+    ],
+    "pages": [],
+    "media": []
   }
 };
 window.LEAGUE=window.CONTENT.league;

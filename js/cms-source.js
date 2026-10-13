@@ -1,0 +1,91 @@
+// Structured site editing shared by the admin and public renderer.
+export const NAV_ITEMS = [
+  ['home','Ana səhifə','index.html'],['games','Oyunlar','oyunlar.html'],['table','Cədvəl','cedvel.html'],
+  ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
+  ['scorers','Bombardirlər','bombardirler.html'],['stats','Statistika','statistika.html'],
+  ['media','Media','media.html'],['news','Xəbərlər','xeberler.html'],['about','Haqqımızda','haqqimizda.html'],
+  ['playoffs','Yarımfinal','merhele.html'],['compare','Müqayisə','muqayise.html']
+];
+export const HOME_SECTIONS = [['pulse','Liqa rəqəmləri'],['results','Son nəticələr'],['fixtures','Növbəti oyunlar'],['table','Turnir cədvəli'],['videos','Videolar'],['scorers','Bombardirlər'],['teams','Komandalar'],['news','Xəbərlər'],['mvp','Ən yaxşı oyunçular']];
+export const BLOCK_TYPES = [['heading','Başlıq'],['paragraph','Mətn'],['image','Şəkil'],['quote','Sitat'],['list','Siyahı'],['button','Düymə / keçid'],['divider','Ayırıcı']];
+export function buttonText(color) {
+  const c=color.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+  const luminance=.2126*c[0]+.7152*c[1]+.0722*c[2];
+  return 1.05/(luminance+.05)>(luminance+.05)/.05?'#ffffff':'#071128';
+}
+export function getCMS(data) {
+  const site=data.site||{},cms=data.cms||{};
+  const defaults={
+    home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar.html',image:'',announcement:'',announcementUrl:'',sections:HOME_SECTIONS.map(([id])=>({id,visible:true}))},
+    about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
+    appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'manrope',headingFont:'barlow',radius:18,width:1320},
+    branding:{logo:'/assets/logo.png',footerText:'Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.',copyright:'Bütün hüquqlar qorunur.'},
+    seo:{title:site.name||'',description:(site.hero||'').slice(0,500),image:''},
+    navigation:NAV_ITEMS.map(([id,label])=>({id,label,visible:true})),pages:[],media:[]
+  };
+  for(const key of ['home','about','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
+  for(const key of ['navigation','pages','media'])if(Array.isArray(cms[key]))defaults[key]=cms[key];
+  if(Array.isArray(cms.navigation))defaults.navigation=[...cms.navigation,...NAV_ITEMS.filter(([id])=>!cms.navigation.some(n=>n.id===id)).map(([id,label])=>({id,label,visible:true}))];
+  return defaults;
+}
+const object=x=>x&&typeof x==='object'&&!Array.isArray(x);
+const keys=(x,names)=>object(x)&&Object.keys(x).every(k=>names.includes(k));
+const text=(x,max=300,required=false)=>typeof x==='string'&&x.length<=max&&(!required||x.trim())&&!/[<>\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(x);
+const ident=x=>typeof x==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(x);
+const color=x=>typeof x==='string'&&/^#[a-fA-F0-9]{6}$/.test(x);
+const date=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&Number.isFinite(Date.parse(x+'T00:00:00Z'))&&new Date(x+'T00:00:00Z').toISOString().slice(0,10)===x;
+export const imagePath=x=>x===''||typeof x==='string'&&/^\/assets\/(?:logo\.png|logos\/[a-zA-Z0-9_-]+\.(?:png|jpg|jpeg|webp))$/.test(x);
+export function safeLink(x) {
+  if(x==='')return true;
+  if(typeof x!=='string'||!text(x,1000))return false;
+  if(/^\/(?:[a-z0-9_-]+\.html(?:\?[a-zA-Z0-9_%=&.-]*)?|sehife\/[a-z0-9][a-z0-9-]{0,79})$/.test(x)||x==='/')return true;
+  try{const u=new URL(x);return u.protocol==='https:'&&!u.username&&!u.password;}catch{return false;}
+}
+export function validateCMS(cms) {
+  const errors=[],check=(ok,msg)=>{if(!ok&&errors.length<30)errors.push(msg);return ok;};
+  if(!check(keys(cms,['home','about','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  const H=cms.home,A=cms.about,T=cms.appearance,B=cms.branding,S=cms.seo;
+  if(check(keys(H,['title','highlight','buttonLabel','buttonUrl','image','announcement','announcementUrl','sections']),'Ana səhifə ayarları düzgün deyil.')) {
+    check(text(H.title,100)&&text(H.highlight,100)&&text(H.buttonLabel,80,true)&&safeLink(H.buttonUrl)&&!!H.buttonUrl&&imagePath(H.image)&&text(H.announcement,300)&&safeLink(H.announcementUrl),'Ana səhifədə mətn və ya keçid düzgün deyil.');
+    check(Array.isArray(H.sections)&&H.sections.length===HOME_SECTIONS.length&&new Set(H.sections.map(s=>s?.id)).size===HOME_SECTIONS.length&&H.sections.every(s=>keys(s,['id','visible'])&&HOME_SECTIONS.some(([id])=>id===s.id)&&typeof s.visible==='boolean'),'Ana səhifənin bölmələri düzgün deyil.');
+  }
+  const blocks=(items,label)=>{
+    if(!check(Array.isArray(items)&&items.length<=80,label+': ən çox 80 blok olmalıdır.'))return;
+    const ids=new Set();
+    items.forEach(b=>{
+      if(!check(keys(b,['id','type','text','url','alt','level']),label+': blok düzgün deyil.'))return;
+      check(ident(b.id)&&!ids.has(b.id)&&BLOCK_TYPES.some(([type])=>type===b.type)&&text(b.text,12000)&&text(b.alt,300)&&[2,3,4].includes(b.level),label+': blokun mətni və ya növü düzgün deyil.');ids.add(b.id);
+      check(b.type==='image'?imagePath(b.url)&&!!b.url:b.type==='button'?safeLink(b.url)&&!!b.url:b.url==='',label+': blokun keçidi düzgün deyil.');
+    });
+  };
+  if(check(keys(A,['title','subtitle','heading','image','blocks']),'Haqqımızda ayarları düzgün deyil.')){check(text(A.title,160,true)&&text(A.subtitle,500)&&text(A.heading,200,true)&&imagePath(A.image),'Haqqımızda başlığı və ya şəkli düzgün deyil.');blocks(A.blocks,'Haqqımızda');}
+  if(check(keys(T,['background','surface','text','muted','font','headingFont','radius','width']),'Dizayn ayarları düzgün deyil.'))check(['background','surface','text','muted'].every(k=>color(T[k]))&&['manrope','montserrat','system','georgia'].includes(T.font)&&['barlow','montserrat','system','georgia'].includes(T.headingFont)&&Number.isInteger(T.radius)&&T.radius>=0&&T.radius<=32&&Number.isInteger(T.width)&&T.width>=960&&T.width<=1600,'Dizayn rəngləri, şrift və ya ölçülər düzgün deyil.');
+  if(check(keys(B,['logo','footerText','copyright']),'Loqo və alt hissə ayarları düzgün deyil.'))check(imagePath(B.logo)&&!!B.logo&&text(B.footerText,1500)&&text(B.copyright,300),'Loqo və alt hissə mətnləri düzgün deyil.');
+  if(check(keys(S,['title','description','image']),'Axtarış ayarları düzgün deyil.'))check(text(S.title,160)&&text(S.description,500)&&imagePath(S.image),'Axtarış başlığı, təsviri və ya şəkli düzgün deyil.');
+  check(Array.isArray(cms.navigation)&&cms.navigation.length>=10&&cms.navigation.length<=NAV_ITEMS.length&&new Set(cms.navigation.map(n=>n?.id)).size===cms.navigation.length&&NAV_ITEMS.slice(0,10).every(([id])=>cms.navigation.some(n=>n?.id===id))&&cms.navigation.every(n=>keys(n,['id','label','visible'])&&NAV_ITEMS.some(([id])=>id===n.id)&&text(n.label,50,true)&&typeof n.visible==='boolean'),'Sayt menyusu düzgün deyil.');
+  if(check(Array.isArray(cms.pages)&&cms.pages.length<=50,'Ən çox 50 əlavə səhifə olmalıdır.')){
+    const ids=new Set(),slugs=new Set();
+    cms.pages.forEach(p=>{
+      if(!check(keys(p,['id','slug','title','description','published','showInMenu','menuLabel','blocks']),'Səhifənin quruluşu düzgün deyil.'))return;
+      check(ident(p.id)&&!ids.has(p.id)&&typeof p.slug==='string'&&/^[a-z0-9][a-z0-9-]{0,79}$/.test(p.slug)&&!slugs.has(p.slug)&&text(p.title,160,true)&&text(p.description,500)&&typeof p.published==='boolean'&&typeof p.showInMenu==='boolean'&&text(p.menuLabel,50,true),'Səhifənin ünvanı, adı və ya statusu düzgün deyil.');ids.add(p.id);slugs.add(p.slug);blocks(p.blocks,'Səhifə');
+    });
+  }
+  if(check(Array.isArray(cms.media)&&cms.media.length<=200,'Media kitabxanasında ən çox 200 şəkil ola bilər.')){
+    const urls=new Set();
+    cms.media.forEach(m=>{check(keys(m,['url','title','alt','date'])&&imagePath(m.url)&&!!m.url&&!urls.has(m.url)&&text(m.title,160,true)&&text(m.alt,300)&&date(m.date),'Media şəkli və ya məlumatı düzgün deyil.');urls.add(m?.url);});
+  }
+  return errors;
+}
+const escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function renderBlocks(blocks) {
+  return (blocks||[]).map(b=>{
+    const t=escape(b.text).replace(/\n/g,'<br>');
+    if(b.type==='heading')return `<h${b.level}>${t}</h${b.level}>`;
+    if(b.type==='paragraph')return `<p>${t}</p>`;
+    if(b.type==='quote')return `<blockquote>${t}</blockquote>`;
+    if(b.type==='list')return `<ul>${b.text.split('\n').filter(x=>x.trim()).map(x=>`<li>${escape(x)}</li>`).join('')}</ul>`;
+    if(b.type==='image')return imagePath(b.url)?`<figure><img src="${escape(b.url)}" alt="${escape(b.alt)}" loading="lazy">${b.text?`<figcaption>${t}</figcaption>`:''}</figure>`:'';
+    if(b.type==='button')return safeLink(b.url)?`<p><a class="btn pri" href="${escape(b.url)}" rel="noopener noreferrer">${t||'Keçid'}</a></p>`:'';
+    return b.type==='divider'?'<hr>':'';
+  }).join('');
+}
