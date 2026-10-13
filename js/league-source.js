@@ -1,5 +1,6 @@
 // Football calculations have one shared, deterministic source.
 export const playerName=s=>String(s||'').normalize('NFC').replace(/\s*\((?:kapitan|qk|v\s*\/\s*k)\)\s*/gi,' ').replace(/\s+/g,' ').trim();
+export const ordinal=value=>{const n=Number(value),last=n%10;const suffix=last?({1:'ci',2:'ci',3:'cü',4:'cü',5:'ci',6:'cı',7:'ci',8:'ci',9:'cu'})[last]:({10:'cu',20:'ci',30:'cu',40:'cı',50:'ci',60:'cı',70:'ci',80:'ci',90:'cı'})[n%100]||'cü';return n+'-'+suffix;};
 export const playerKey=s=>playerName(s).toLocaleLowerCase('az').split(' ').sort().join(' ');
 export function matchStage(m){return m.stage||(/yarımfinal/i.test(m.leg||'')?'semifinal':/\bfinal\b/i.test(m.leg||'')?'final':'group');}
 export const creditedTeam=(m,g)=>g.og?(g.t===m.home?m.away:m.home):g.t;
