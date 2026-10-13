@@ -22,3 +22,6 @@
 @media(prefers-reduced-motion:reduce){.season-site .remote-cover,.tactics-player{transition:none}}
 
 .guide-mini-link{background:var(--arena-bg,#f3f6fb)}.guide-tabs{background:var(--arena-bg,#e9eff7)}.guide-tabs>button{color:var(--arena-muted,#536782)}.guide-tabs>button[aria-selected=true]{background:var(--arena-surface,#fff);color:var(--arena-text,#132e51)}.glossary-search input,.season-site .media-controls input,.season-site .media-controls select,.season-site .news-toolbar input,.season-site .news-toolbar select{background:var(--arena-surface,#fff);color:var(--arena-text,#172640)}.contact-details b,.contact-details a{color:var(--arena-text,#28405f)}
+
+/* Override inherited light-theme first-line color and legacy dark home panels. */
+.season-site .editorial-lead .entry-copy h1.big,.season-site .editorial-lead .entry-copy h1.big::first-line,.season-site .editorial-lead .entry-copy h1.big em{color:#fff;text-shadow:none}.season-site .editorial-home,.season-site .pro-media-home{background:var(--arena-bg,#f4f6fa);border-color:#e1e7f0}.season-site .editorial-home .sec-h h2,.season-site .pro-media-home .sec-h h2{color:var(--arena-text,#172640)}
