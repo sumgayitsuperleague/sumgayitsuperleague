@@ -2,6 +2,7 @@
 import {PAGE_ROUTES} from './routes-source.js';
 import {defaultGuide} from './guide-source.js';
 import {defaultCommunity,instagramPostURL} from './community-source.js';
+import {defaultEditor,validateEditor,editorLinkOK} from './site-edit-source.js';
 export const NAV_ITEMS = [
   ['home','Ana səhifə','index.html'],['games','Oyunlar','oyunlar.html'],['table','Cədvəl','cedvel.html'],
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
@@ -20,14 +21,14 @@ export function getCMS(data) {
   const site=data.site||{},cms=data.cms||{};
   const defaults={
     home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
-    guide:defaultGuide(),community:defaultCommunity(),
+    guide:defaultGuide(),community:defaultCommunity(),editor:defaultEditor(),
     about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
     appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'system',headingFont:'system',radius:18,width:1320},
     branding:{logo:'/assets/logo.png',footerText:'Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.',copyright:'Bütün hüquqlar qorunur.'},
     seo:{title:site.name||'',description:(site.hero||'').slice(0,500),image:''},
     navigation:NAV_ITEMS.map(([id,label])=>({id,label,visible:true})),pages:[],media:[]
   };
-  for(const key of ['home','about','guide','community','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
+  for(const key of ['home','about','guide','community','editor','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
   defaults.community.poll={...defaultCommunity().poll,...(cms.community?.poll||{})};
   for(const key of ['navigation','pages','media'])if(Array.isArray(cms[key]))defaults[key]=cms[key];
   if(Array.isArray(cms.navigation))defaults.navigation=[...cms.navigation,...NAV_ITEMS.filter(([id])=>!cms.navigation.some(n=>n.id===id)).map(([id,label])=>({id,label,visible:true}))];
@@ -49,7 +50,8 @@ export function safeLink(x) {
 }
 export function validateCMS(cms) {
   const errors=[],check=(ok,msg)=>{if(!ok&&errors.length<30)errors.push(msg);return ok;};
-  if(!check(keys(cms,['home','about','guide','community','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(!check(keys(cms,['home','about','guide','community','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(cms.editor!==undefined)errors.push(...validateEditor(cms.editor,{imagePath,linkOK:value=>editorLinkOK(value,safeLink)}));
   const H=cms.home,A=cms.about,T=cms.appearance,B=cms.branding,S=cms.seo;
   if(check(keys(H,['title','highlight','buttonLabel','buttonUrl','image','announcement','announcementUrl','sections','layout','featuredNews','newsLimit','videoLimit','showClubStrip','showScoreStrip']),'Ana səhifə ayarları düzgün deyil.')) {
     check(text(H.title,100)&&text(H.highlight,100)&&text(H.buttonLabel,80,true)&&safeLink(H.buttonUrl)&&!!H.buttonUrl&&imagePath(H.image)&&text(H.announcement,300)&&safeLink(H.announcementUrl),'Ana səhifədə mətn və ya keçid düzgün deyil.');
