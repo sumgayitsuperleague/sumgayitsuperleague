@@ -29,11 +29,11 @@ const originalCopy=value=>{const m=String(value).match(/^(\s*)(.*?)(\s*)$/s),ali
 export const sourceText=node=>(textMemory.get(node)?.source||originalCopy(node?.nodeValue||'')).trim();
 export function t(text,lang=LANG){
  const match=String(text).match(/^(\s*)(.*?)(\s*)$/s);let core=match[2],out=translatedDefaults.get(copyKey(core))??dictionaries[lang]?.get(core.toLocaleLowerCase('az'));
- const decorated=core.match(/^([☆★▶←]?\s*)(.*?)(\s*[↗→⌄▾:]?)$/s),original=copyOverrides.has(copyKey(core))?core:copyAliases.get(copyKey(core))||core,middle=copyAliases.get(copyKey(decorated[2]))||decorated[2],direct=copyOverrides.get(copyKey(original)),row=direct||copyOverrides.get(copyKey(middle));
+ const decorated=core.match(/^([☆★▶←]?\s*)(.*?)(\s*[↗→⌄▾:+]?)$/s),original=copyOverrides.has(copyKey(core))?core:copyAliases.get(copyKey(core))||core,middle=copyAliases.get(copyKey(decorated[2]))||decorated[2],direct=copyOverrides.get(copyKey(original)),row=direct||copyOverrides.get(copyKey(middle));
  if(row&&(lang==='az'||row[lang]?.trim()))return match[1]+(direct?'':decorated[1])+row[lang]+(direct?'':decorated[3])+match[3];
  if(lang==='az')return text;
  if(out===undefined){
-  const ornament=core.match(/^([☆★▶←]?\s*)(.*?)(\s*[↗→⌄▾:]?)$/s);const middle=dictionaries[lang]?.get(ornament[2].toLocaleLowerCase('az'));if(middle!==undefined)out=ornament[1]+middle+ornament[3];
+  const ornament=core.match(/^([☆★▶←]?\s*)(.*?)(\s*[↗→⌄▾:+]?)$/s);const middle=dictionaries[lang]?.get(ornament[2].toLocaleLowerCase('az'));if(middle!==undefined)out=ornament[1]+middle+ornament[3];
  }
  if(out===undefined){
   const round=core.match(/^(\d+)-(?:ci|cı|cü|cu)\s+(tur(?: nəticələri)?|yer|sezon)(.*)$/i);
