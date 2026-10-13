@@ -7,6 +7,7 @@ export const EDITORIAL_COPY=[
  ['Heyətdə futbolçu','Players in squad','Игроков в составе'],['SİYAHIDA OLAN FUTBOLÇU','LISTED PLAYERS','ИГРОКОВ В СПИСКЕ'],['KOMANDA HEYƏTİ','CLUB SQUADS','СОСТАВЫ КОМАНД'],
  ['Seçilmiş oyunlar','Selected matches','Выбранные матчи'],['Əsas oyun','Featured match','Главный матч'],['REDAKSİYA SEÇİMİ','EDITORIAL CHOICE','ВЫБОР РЕДАКЦИИ'],
  ['Bu mərhələnin oyunları hələ əlavə edilməyib.','Matches for this stage have not been added yet.','Матчи этого этапа пока не добавлены.'],
+ ['Bu oyun üçün təsdiqlənmiş video linki hələ daxil edilməyib.','A verified video link has not been added for this match yet.','Ссылка на запись этого матча пока не добавлена.'],
  ['Oyunları seç','Choose matches','Выберите матчи'],['Seçilmiş oyun hələ əlavə edilməyib.','The featured match has not been selected yet.','Главный матч пока не выбран.'],
  ['Oyuna bax','Match details','Информация о матче'],['Təqvimə əlavə et','Add to calendar','Добавить в календарь'],['Oyun linkini kopyala','Copy match link','Скопировать ссылку на матч'],
  ['Oyun linki kopyalandı.','Match link copied.','Ссылка на матч скопирована.'],['Linki ünvan sətrindən kopyalaya bilərsən.','You can copy the link from the address bar.','Ссылку можно скопировать из адресной строки.'],
