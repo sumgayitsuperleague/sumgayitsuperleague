@@ -4,7 +4,7 @@ export const PAGE_ROUTES = Object.freeze({
  '/komandalar':'komandalar.html','/komanda':'komanda.html','/matc':'matc.html','/futbolcular':'futbolcular.html',
  '/futbolcu':'futbolcu.html','/bombardirler':'bombardirler.html','/statistika':'statistika.html',
  '/media':'media.html','/xeberler':'xeberler.html','/haqqimizda':'haqqimizda.html',
- '/movsum':'merhele.html','/muqayise':'muqayise.html','/admin':'admin.html','/404':'404.html'
+ '/movsum':'merhele.html','/muqayise':'muqayise.html','/minifutbol':'minifutbol.html','/elaqe':'elaqe.html','/admin':'admin.html','/404':'404.html'
 });
 export function canonicalPath(path) {
  if(path==='/index.html'||path==='/index'||path==='/index/')return '/';
