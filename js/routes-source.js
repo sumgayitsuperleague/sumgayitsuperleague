@@ -25,3 +25,14 @@ export function languageHref(value,lang) {
  if(lang==='az')u.searchParams.delete('lang');else u.searchParams.set('lang',lang);
  return u.pathname+u.search+u.hash;
 }
+// Generated page-file links belong to the site root; fragments belong to this document.
+export function siteAnchor(value,current,lang='az',clean=true){
+ if(typeof value!=='string'||!value||/^(?:mailto:|tel:|javascript:)/i.test(value))return value;
+ const base=new URL(current,'https://ssl.invalid');
+ const relativeFile=!/^(?:[a-z]+:|\/\/|\/|\?|#)/i.test(value);
+ const url=new URL(value,relativeFile?new URL('/',base):base);
+ if(url.origin!==base.origin)return value;
+ const path=clean?canonicalPath(url.pathname):url.pathname;
+ if(!value.startsWith('#')){if(lang==='ru'||lang==='en')url.searchParams.set('lang',lang);else url.searchParams.delete('lang');}
+ return path+url.search+url.hash;
+}

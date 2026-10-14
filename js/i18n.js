@@ -5,7 +5,7 @@ import {FAN_COPY} from './fan-copy.js';
 import {REFINEMENT_COPY} from './refinement-copy.js';
 import {GUIDE_TRANSLATIONS} from './guide-source.js';
 import {localizedContent} from './localization-source.js';
-import {canonicalPath,languageHref} from './routes-source.js';
+import {canonicalPath,languageHref,siteAnchor} from './routes-source.js';
 export const LANGUAGE_NAMES={az:'Azərbaycan dili',ru:'Русский',en:'English'};
 export function languageFrom(search,storage){const q=new URLSearchParams(search).get('lang');if(['az','ru','en'].includes(q))return q;try{const saved=storage?.getItem('ssl.language.v1');if(['az','ru','en'].includes(saved))return saved;}catch{}return 'az';}
 export const LANG=languageFrom(location.search,typeof localStorage==='undefined'?null:localStorage);
@@ -55,7 +55,7 @@ export function languageSelector(){return `<div class="language-picker" role="gr
 export function enhanceRoot(root=document.body,force=false){
  const walk=node=>{if(node.nodeType===3){if(node.parentElement?.closest('[contenteditable="true"],[contenteditable="plaintext-only"]'))return;const memory=textMemory.get(node),original=memory&&(force||node.nodeValue===memory.output)?memory.source:originalCopy(node.nodeValue),translated=t(original);textMemory.set(node,{source:original,output:translated});if(translated!==node.nodeValue)node.nodeValue=translated;return;}if(node.nodeType!==1||['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName))return;let attrs=attributeMemory.get(node);if(!attrs){attrs={};attributeMemory.set(node,attrs);}for(const key of ['aria-label','placeholder','title','alt'])if(node.hasAttribute(key)){const current=node.getAttribute(key),old=attrs[key],original=old&&(force||current===old.output)?old.source:originalCopy(current),translated=t(original);attrs[key]={source:original,output:translated};if(translated!==current)node.setAttribute(key,translated);}for(const child of [...node.childNodes])walk(child);};walk(root);
  const base=new URL(location.href||'https://sumgayitsuperleague.com/');
- for(const anchor of root.querySelectorAll('a[href]')){const value=anchor.getAttribute('href');if(!value||value.startsWith('#')||/^(?:mailto:|tel:|javascript:)/i.test(value))continue;try{const url=new URL(value,base);if(url.origin!==base.origin)continue;const path=document.body.dataset.cleanRoutes==='1'?canonicalPath(url.pathname):url.pathname;if(LANG!=='az')url.searchParams.set('lang',LANG);else url.searchParams.delete('lang');const href=path+url.search+url.hash;if(value!==href)anchor.setAttribute('href',href);}catch{}}
+ for(const anchor of root.querySelectorAll('a[href]')){const value=anchor.getAttribute('href');try{const href=siteAnchor(value,base.href,LANG,document.body.dataset.cleanRoutes==='1');if(value!==href)anchor.setAttribute('href',href);}catch{}}
 }
 export function installLanguage(){
  document.documentElement.lang=LANG;enhanceRoot();
