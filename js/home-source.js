@@ -19,8 +19,9 @@ export function selectHomeMatches(league,options={},choice=''){
  else if(config.mode==='stage')selected='stage:'+config.stage;
  else if(config.mode==='round')selected=String(config.round);
  else {
-  const phase=league.competition?.phase;
-  if(phase==='completed'&&all.some(m=>matchStage(m)==='final'))selected='stage:final';
+  const active=all.find(m=>m.status==='live'),phase=league.competition?.phase;
+  if(active)selected=matchStage(active)==='group'?String(active.round):'stage:'+matchStage(active)
+  else if(phase==='completed'&&all.some(m=>matchStage(m)==='final'))selected='stage:final';
   else if(['semifinal','final'].includes(phase)&&all.some(m=>matchStage(m)===phase))selected='stage:'+phase;
   else {const groups=sorted(all.filter(m=>matchStage(m)==='group')),done=groups.filter(m=>m.status==='done');selected=String((done.at(-1)||groups[0])?.round||1);}
  }

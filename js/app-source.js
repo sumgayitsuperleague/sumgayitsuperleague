@@ -1,3 +1,4 @@
+import {installMatchLive,liveClockHTML,liveStatusHTML} from './live-match-view.js';
 import {installSiteDesign} from './site-design.js';
 import * as CMSKit from './cms-source.js';
 import * as League from './league-source.js';
@@ -18,7 +19,7 @@ const MON=['yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentya
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fd=UI.fullDate,fs=d=>UI.fullDate(d).replace(/\s*\d{4}.*$/,'');
 const nrm=s=>UI.searchKey(s).replace(/\s+/g,' ').trim(),tok=League.playerKey;
-const M=L.matches.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),DONE=M.filter(m=>m.status==='done'),PLAN=M.filter(m=>m.status!=='done');
+const M=L.matches.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),DONE=M.filter(m=>m.status==='done'),PLAN=M.filter(m=>m.status==='planned');
 const ball=(id,sz='md')=>`<span class="ball ${sz}${id==='fvs'?' d':''}"><img src="assets/logos/${T[id].logo}" alt="${esc(T[id].name)}" loading="lazy"></span>`;
 const cr=League.creditedTeam;
 const matchLabel=m=>League.matchStage(m)==='group'?League.ordinal(m.round)+' tur':League.matchStage(m)==='semifinal'?'Yarımfinal':'Final';
@@ -58,8 +59,8 @@ function details(m){const side=id=>{const mp=new Map();m.goals.filter(g=>cr(m,g)
  cards=id=>m.cards.filter(c=>c.t===id).map(c=>`<li>${c.c==='r'?'🟥':'🟨'} ${esc(c.p)}</li>`).join('');
  const hc=cards(m.home),ac=cards(m.away);
  return`<div class="mc-det"><div class="dt2"><div><h5>${esc(T[m.home].name)}</h5><ul>${side(m.home)}</ul></div><div class="r"><h5>${esc(T[m.away].name)}</h5><ul>${side(m.away)}</ul></div></div>${hc||ac?`<div class="dt2 dt-row"><div><h5>KARTLAR</h5><ul>${hc||'<li class="mut">—</li>'}</ul></div><div class="r"><h5>KARTLAR</h5><ul>${ac||'<li class="mut">—</li>'}</ul></div></div>`:''}${m.mvp?`<div class="dt-row"><span class="mvp">★ Ən yaxşı oyunçu: ${esc(League.playerName(m.mvp.p))} <small>(${esc(T[m.mvp.t].name)})</small></span></div>`:''}</div>`}
-function mcard(m){const h=T[m.home],a=T[m.away],d=m.status==='done',has=d&&(m.goals.length||m.cards.length||m.mvp);
- return`<article class="mc card rv" id="${m.id}"><div class="mc-top"><span class="pill">${matchLabel(m)}</span><span>${fd(m.date)} · ${esc(m.time)}</span><span class="st ${d?'ok':'pl'}">${d?'Tamamlandı':'Planlaşdırılıb'}</span></div><div class="mc-main"><a class="mt" href="komanda.html?t=${h.id}">${ball(h.id)}<b>${esc(h.name)}</b></a><div class="mc-sc">${d?`<span>${m.hs}</span><i>:</i><span>${m.as}</span>`:'<em>VS</em>'}</div><a class="mt r" href="komanda.html?t=${a.id}">${ball(a.id)}<b>${esc(a.name)}</b></a></div><div class="mc-ft"><span>📍 ${esc(m.venue||'')}</span><a class="match-open" href="matc.html?id=${encodeURIComponent(m.id)}">Matç mərkəzi ↗</a>${has?'<button class="mc-more" aria-expanded="false">Qol / kartlar ▾</button>':''}</div>${has?details(m):''}</article>`}
+function mcard(m){const h=T[m.home],a=T[m.away],d=m.status!=='planned',has=d&&(m.goals.length||m.cards.length||m.mvp);
+ return`<article class="mc card rv" id="${m.id}" data-live-card="${m.id}"><div class="mc-top"><span class="pill">${matchLabel(m)}</span><span>${fd(m.date)} · ${esc(m.time)}</span>${liveStatusHTML(m)}${liveClockHTML(m)}</div><div class="mc-main"><a class="mt" href="komanda.html?t=${h.id}">${ball(h.id)}<b>${esc(h.name)}</b></a><div class="mc-sc">${d?`<span>${m.hs}</span><i>:</i><span>${m.as}</span>`:'<em>VS</em>'}</div><a class="mt r" href="komanda.html?t=${a.id}">${ball(a.id)}<b>${esc(a.name)}</b></a></div><div class="mc-ft"><span>📍 ${esc(m.venue||'')}</span><a class="match-open" href="matc.html?id=${encodeURIComponent(m.id)}">Matç mərkəzi ↗</a>${has?'<button class="mc-more" aria-expanded="false">Qol / kartlar ▾</button>':''}</div>${has?details(m):''}</article>`}
 function head(t,p){return`<section class="phead"><div class="wrap"><span class="eyebrow">SUMQAYIT SUPER LİQA</span><h1>${t}</h1><p>${p}</p></div></section>`}
 const sech=(t,p,l)=>`<div class="sec-h rv"><div><h2>${t}</h2>${p?`<p>${p}</p>`:''}</div>${l?`<a class="more-link" href="${l[0]}">${l[1]} →</a>`:''}</div>`;
 function tableHTML(g,ext){const R=ST[g];return`<div class="card rv"><div class="grp-h">Qrup ${g}<span>${DONE.length?esc(L.season)+' MÖVSÜMÜ':''}</span></div><div class="tw"><table class="t${ext?'':' sm'}"><thead><tr><th>#</th><th>Komanda</th><th>O</th><th>Q</th><th>H</th><th>M</th>${ext?'<th class="hm">VQ</th><th class="hm">BQ</th><th>TF</th>':''}<th>X</th>${ext?'<th class="hm">Forma</th>':''}</tr></thead><tbody>${R.map(r=>`<tr><td class="rk">${r.rank}</td><td class="tm"><a href="komanda.html?t=${r.id}">${ball(r.id,'sm')}<b>${esc(T[r.id].name)}</b></a></td><td>${r.o}</td><td>${r.q}</td><td>${r.h}</td><td>${r.m}</td>${ext?`<td class="hm">${r.vq}</td><td class="hm">${r.bq}</td><td class="${r.tf>0?'pos':r.tf<0?'neg':''}">${r.tf>0?'+':''}${r.tf}</td>`:''}<td class="x">${r.x}</td>${ext?`<td class="hm">${formHTML(r.id)}</td>`:''}</tr>`).join('')}</tbody></table></div></div>`}
@@ -154,7 +155,7 @@ P.stats=()=>{const rs=[...new Set(DONE.map(m=>m.round))].sort((a,b)=>a-b),pr=rs.
  <div class="g2" style="margin-top:22px"><div class="card rv"><div class="ch">ƏN BÖYÜK QƏLƏBƏLƏR</div><div class="lst">${big.map(mrow).join('')}</div></div><div class="card rv"><div class="ch">ƏN QOLLU OYUNLAR</div><div class="lst">${hi.map(mrow).join('')}</div></div></div></div></section>`};
 /* ---------- işə sal ---------- */
 const arena=installArena({P,L,S,C,CMS,H,B,T,M,DONE,PLAN,GROUPS,ST,STX,SC,PAGE,NAV,$,$$,esc,fd,fs,fmtShort,ball,mcard,tableHTML,head,sech,formHTML,homeMedia,homeNews,mvps,playerLink,NEWS,VIDEOS,newsCard,videoCard,thumb,videoForMatch,videoKind,coverFallback,newsArtwork,isVideoSaved,setSaveRefresh:fn=>{refreshVideoSaves=fn;}});
-chrome();const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}arena.bind();pageEnd();
+chrome();installMatchLive({P,M,T,ball,fd,videoForMatch,$,$$,mcard});const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}arena.bind();pageEnd();
 const titleLabels={fans:'Azarkeş mərkəzi',guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
 document.title=(titleLabels[PAGE]?UI.t(titleLabels[PAGE])+' · ':'')+(PAGE==='team'&&T[new URLSearchParams(location.search).get('t')]?T[new URLSearchParams(location.search).get('t')].name+' · ':'')+(S.name||L.name);
 if(PAGE==='home'&&CMS.seo?.title)document.title=CMS.seo.title;

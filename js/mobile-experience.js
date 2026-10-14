@@ -7,7 +7,7 @@ export function mobileNavigation(ctx){
  return `<nav class="mobile-dock" aria-label="${UI.t('Sürətli naviqasiya')}">${routes.map(([href,label,id])=>`<a href="${ctx.esc(href)}"${current===id?' aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[id]}</svg><span>${ctx.esc(id==='fans'?'Azarkeş':label)}</span></a>`).join('')}</nav>`;
 }
 export function kickoffText(match,now=Date.now()){
- if(!match||match.status==='done')return '';
+ if(!match||match.status!=='planned')return '';
  const instant=Date.parse(match.date+'T'+match.time+':00+04:00');if(!Number.isFinite(instant))return '';
  const remaining=Math.ceil((instant-now)/60000);if(remaining<=0)return UI.t('Başlama vaxtı çatıb');
  const days=Math.floor(remaining/1440),hours=Math.floor(remaining%1440/60),minutes=remaining%60;
