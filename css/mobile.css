@@ -1,0 +1,76 @@
+/* Clear crests and comfortable controls, including narrow phones. */
+.season-site .entry-match-team .ball{width:40px;height:40px;min-width:40px;padding:4px;border-radius:10px}
+.entry-match-team>b{min-width:0;overflow-wrap:anywhere}
+.entry-match-team>strong{flex-shrink:0}
+@media(max-width:760px){
+ .season-site .nav-in{height:auto;min-height:88px;gap:10px;position:relative}
+ .season-site .brand{min-width:0;max-width:none;margin-right:auto;gap:11px;flex:1 1 auto;font-size:20px;line-height:1.08}
+ .season-site .brand>img{width:64px;height:64px;padding:3px;object-fit:contain;border-radius:14px;flex:0 0 64px}
+ .season-site .brand>span{min-width:0;max-width:165px;overflow-wrap:anywhere}
+ .season-site .brand small{font-size:18px;line-height:1.1}
+ :lang(ru) .season-site .brand{font-size:16px}
+ :lang(ru) .season-site .brand small{font-size:15px}
+ .season-site .nav .header-live{display:none}
+ .season-site .global-search,.season-site .burger{width:44px;height:44px;min-width:44px;flex:0 0 44px;margin:0;border-radius:9px;display:inline-flex;align-items:center;justify-content:center}
+ .season-site .burger{font-size:23px}
+ .season-site .nav .links{position:absolute;left:-16px;right:-16px;top:100%;display:none;transform:none;align-items:stretch;padding:14px 20px 24px;max-height:calc(100svh - 88px);overflow-y:auto;background:#0b1933}
+ .season-site .nav .links.open{display:flex}
+ .season-site .nav .links a,.season-site .more-menu>summary{min-height:44px;padding:12px;font-size:14px}
+ .season-site .utility-bar>.wrap{height:44px;gap:8px}
+ .season-site .utility-season{font-size:9px;line-height:1.5;letter-spacing:.01em;max-width:48%}
+ .season-site .utility-tools{gap:5px;min-width:0;position:relative}
+ .season-site .language-option{min-height:40px;padding:4px 5px;font-size:8px}
+ .season-site .language-option img{width:24px;height:24px}
+ .season-site .favorite-menu{position:static}
+ .season-site .favorite-menu>summary{min-height:40px;min-width:24px;justify-content:center}
+ .season-site .favorite-options{top:calc(100% + 4px);width:min(280px,calc(100vw - 32px));right:0}
+ .season-site .league-matchbar{padding:22px 0}
+ .season-site .matchbar-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;align-items:center;margin-bottom:17px}
+ .season-site .matchbar-heading>div{min-width:0;margin:0}
+ .season-site .matchbar-heading h2{font-size:23px;line-height:1.2;margin-top:6px}
+ .season-site .matchbar-heading .eyebrow{font-size:10px;letter-spacing:.05em;line-height:1.6}
+ .season-site .matchbar-heading label{margin:0;justify-self:end}
+ .season-site .matchbar-heading select{font-size:16px;min-height:44px;width:122px;padding:9px}
+ .season-site .matchbar-heading>a{font-size:12px;grid-column:1/-1;justify-self:end;min-height:30px;display:inline-flex;align-items:center}
+ .season-site .entry-matches{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(260px,86%);gap:14px;padding-bottom:8px}
+ .season-site .entry-matches.few-matches{grid-auto-flow:row;grid-template-columns:1fr;grid-auto-columns:auto;gap:14px;padding-bottom:0}
+ .season-site .entry-match{padding:16px 18px;border-radius:12px;min-width:0}
+ .season-site .entry-match-date{font-size:12px;margin-bottom:13px;line-height:1.5}
+ .season-site .entry-match-team{gap:12px;margin:10px 0}
+ .season-site .entry-match-team .ball{width:52px;height:52px;min-width:52px;padding:4px;border-radius:12px}
+ .season-site .entry-match-team>b{font-size:15px;line-height:1.4}
+ .season-site .entry-match-team>strong{font-size:25px;padding-left:4px}
+ .season-site .entry-match-bottom{font-size:11px;padding-top:12px;margin-top:13px;gap:12px;line-height:1.5}
+ .season-site .entry-match-bottom>b{font-size:11px;text-align:right}
+ .season-site .round-art{padding:18px}
+ .season-site .round-art-results>div{gap:5px;padding:8px 6px}
+ .season-site .round-art-results .ball{width:36px;height:36px;min-width:36px;padding:3px;border-radius:8px}
+ .season-site .round-art-results b{font-size:18px;letter-spacing:-.5px}
+ .season-site .round-art-results b i{padding:0 1px}
+ .season-site .round-art-top{font-size:8px;gap:12px;line-height:1.6}
+ .season-site .poll-match-label .ball{width:34px;height:34px;min-width:34px;padding:3px;border-radius:8px}
+ .season-site .ribbon-clubs .ball.sm{width:48px;height:48px;padding:4px}
+ .season-site .ribbon-clubs{overflow-x:auto;flex-wrap:nowrap;min-width:0}
+ .season-site .ribbon-clubs>a{flex-shrink:0}
+ .season-site .league-entry-links{flex-wrap:wrap;gap:12px 0}
+ .season-site .league-entry-links a{font-size:12px;min-height:36px;align-items:center}
+ .season-site .league-news-glyph img{width:68px;height:68px;padding:7px}
+ .season-site .league-main-news>.league-news-glyph img{width:130px;height:130px;padding:15px}
+ .season-site .search-box input{font-size:16px}
+}
+@media(max-width:380px){
+ .season-site .nav-in{gap:8px;min-height:82px}
+ .season-site .brand{font-size:18px;gap:9px}
+ .season-site .brand>img{width:58px;height:58px;flex-basis:58px}
+ .season-site .brand small{font-size:16px}
+ :lang(ru) .season-site .brand{font-size:14px}
+ :lang(ru) .season-site .brand small{font-size:13px}
+ .season-site .utility-season{max-width:44%}
+ .season-site .language-option{width:40px;padding:4px;justify-content:center}
+ .season-site .language-option>span{display:none}
+ .season-site .matchbar-heading h2{font-size:21px}
+ .season-site .matchbar-heading select{width:110px}
+ .season-site .entry-match{padding:14px}
+ .season-site .round-art{padding:16px}
+ .season-site .round-art-top>span:last-child{max-width:47%;text-align:right}
+}
