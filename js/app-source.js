@@ -155,7 +155,7 @@ P.stats=()=>{const rs=[...new Set(DONE.map(m=>m.round))].sort((a,b)=>a-b),pr=rs.
 /* ---------- işə sal ---------- */
 const arena=installArena({P,L,S,C,CMS,H,B,T,M,DONE,PLAN,GROUPS,ST,STX,SC,PAGE,NAV,$,$$,esc,fd,fs,fmtShort,ball,mcard,tableHTML,head,sech,formHTML,homeMedia,homeNews,mvps,playerLink,NEWS,VIDEOS,newsCard,videoCard,thumb,videoForMatch,videoKind,coverFallback,newsArtwork,isVideoSaved,setSaveRefresh:fn=>{refreshVideoSaves=fn;}});
 chrome();const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}arena.bind();pageEnd();
-const titleLabels={guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
+const titleLabels={fans:'Azarkeş mərkəzi',guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
 document.title=(titleLabels[PAGE]?UI.t(titleLabels[PAGE])+' · ':'')+(PAGE==='team'&&T[new URLSearchParams(location.search).get('t')]?T[new URLSearchParams(location.search).get('t')].name+' · ':'')+(S.name||L.name);
 if(PAGE==='home'&&CMS.seo?.title)document.title=CMS.seo.title;
 if(PAGE==='about')document.title=(CMS.about?.title||UI.t('Haqqımızda'))+' · '+(S.name||L.name);

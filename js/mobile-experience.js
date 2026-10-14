@@ -11,7 +11,8 @@ export function kickoffText(match,now=Date.now()){
  const instant=Date.parse(match.date+'T'+match.time+':00+04:00');if(!Number.isFinite(instant))return '';
  const remaining=Math.ceil((instant-now)/60000);if(remaining<=0)return UI.t('Başlama vaxtı çatıb');
  const days=Math.floor(remaining/1440),hours=Math.floor(remaining%1440/60),minutes=remaining%60;
- return UI.t('Növbəti oyuna')+' '+(days?days+' '+UI.t('gün')+' · ':'')+(hours?hours+' '+UI.t('saat')+' · ':'')+minutes+' '+UI.t('dəqiqə');
+ const quantity=(n,key)=>{let unit=UI.t(key);if(UI.LANG==='en'&&n===1)unit=({days:'day',hours:'hour',minutes:'minute'})[unit]||unit;return n+' '+unit;};
+ return UI.t('Növbəti oyuna')+' '+(days?quantity(days,'gün')+' · ':'')+(hours?quantity(hours,'saat')+' · ':'')+quantity(minutes,'dəqiqə');
 }
 export function bindMobileExperience(ctx){
  if(document.querySelector('.mobile-dock'))document.body.classList.add('has-mobile-dock');

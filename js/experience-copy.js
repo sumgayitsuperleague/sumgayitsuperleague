@@ -26,6 +26,7 @@ export const EXPERIENCE_COPY=[
  ['Heç birinə','Neither team','Ни одной команде'],
  ['Qol rəqibin hesabına əlavə olunur; bombardir siyahısına daxil edilmir.','The goal is added to the opponent’s score and is excluded from the top-scorer list.','Гол добавляется к счёту соперника и не включается в список бомбардиров.'],
  ['Sual','Question','Вопрос'],['Düzgün cavab','Correct answer','Правильный ответ'],
+ ['Düzgün cavablar','Correct answers','Правильные ответы'],
  ['Seçimin','Your answer','Ваш ответ'],['Növbəti sual','Next question','Следующий вопрос'],
  ['Nəticəyə bax','See your result','Показать результат'],['Test tamamlandı','Quiz complete','Викторина завершена'],
  ['Yenidən başla','Start again','Начать заново'],
