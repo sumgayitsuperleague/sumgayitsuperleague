@@ -9,13 +9,13 @@ export const SPONSOR_COPY=[
  ['Azərbaycan Minifutbol Federasiyası','Azerbaijan Minifootball Federation','Федерация мини-футбола Азербайджана']
 ];
 export const INITIAL_SPONSORS=[
- {id:'partner-amf',name:'AMF',logo:'/assets/logos/partner-amf.png',url:'https://www.instagram.com/minifootball.az/',alt:'Azərbaycan Minifutbol Federasiyası',visible:true,tone:'navy',fit:'contain',position:'center',scale:100},
- {id:'partner-tvn',name:'TVN.AZ',logo:'/assets/logos/partner-tvn.png',url:'https://www.instagram.com/tvn.az/',alt:'TVN.AZ',visible:true,tone:'blue',fit:'contain',position:'center',scale:175},
- {id:'partner-butaverse',name:'Butaverse',logo:'/assets/logos/partner-butaverse.png',url:'https://www.instagram.com/bv.creators/',alt:'Butaverse',visible:true,tone:'red',fit:'contain',position:'center',scale:100},
- {id:'partner-sfc-volunteers',name:'Sumqayıt FK Könüllüləri',logo:'/assets/logos/partner-sfc-volunteers.png',url:'https://www.instagram.com/sfcvolunteers/',alt:'Sumqayıt FK Könüllüləri',visible:true,tone:'purple',fit:'contain',position:'center',scale:100},
- {id:'partner-ms-liya',name:'Ms. Liya',logo:'/assets/logos/partner-ms-liya.png',url:'https://www.instagram.com/msliyachocolate/',alt:'Ms. Liya',visible:true,tone:'navy',fit:'contain',position:'center',scale:250}
+ {id:'partner-amf',name:'AMF',logo:'/assets/logos/partner-amf-transparent.png',url:'https://www.instagram.com/minifootball.az/',alt:'Azərbaycan Minifutbol Federasiyası',visible:true,tone:'navy',fit:'contain',position:'center',scale:100},
+ {id:'partner-tvn',name:'TVN.AZ',logo:'/assets/logos/partner-tvn-transparent.png',url:'https://www.instagram.com/tvn.az/',alt:'TVN.AZ',visible:true,tone:'blue',fit:'contain',position:'center',scale:100},
+ {id:'partner-butaverse',name:'Butaverse',logo:'/assets/logos/partner-butaverse-transparent.png',url:'https://www.instagram.com/bv.creators/',alt:'Butaverse',visible:true,tone:'red',fit:'contain',position:'center',scale:100},
+ {id:'partner-sfc-volunteers',name:'Sumqayıt FK Könüllüləri',logo:'/assets/logos/partner-sfc-volunteers-transparent.png',url:'https://www.instagram.com/sfcvolunteers/',alt:'Sumqayıt FK Könüllüləri',visible:true,tone:'purple',fit:'contain',position:'center',scale:100},
+ {id:'partner-ms-liya',name:'Ms. Liya',logo:'/assets/logos/partner-ms-liya-transparent.png',url:'https://www.instagram.com/msliyachocolate/',alt:'Ms. Liya',visible:true,tone:'navy',fit:'contain',position:'center',scale:100}
 ];
-export const defaultSponsors=()=>({enabled:true,title:'Tərəfdaşlarımız',subtitle:'',showOnHome:true,showOnAbout:true,showOnOtherPages:true,items:[]});
+export const defaultSponsors=()=>({enabled:true,title:'Tərəfdaşlarımız',subtitle:'',layout:'cards',showOnHome:true,showOnAbout:true,showOnOtherPages:true,items:[]});
 export function sponsorLinkOK(value){
  if(value==='')return true;
  if(typeof value!=='string'||value.length>1000||/[<>\\\u0000-\u0020]/.test(value))return false;
@@ -25,7 +25,8 @@ export function validateSponsors(section,imagePath){
  const errors=[],check=(ok,message)=>{if(!ok&&errors.length<20)errors.push(message);return ok;};
  const plain=(value,max,required=false)=>typeof value==='string'&&value.length<=max&&(!required||value.trim())&&!/[<>\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value);
  const keys=(value,allowed)=>value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(key=>allowed.includes(key));
- if(!check(keys(section,['enabled','title','subtitle','showOnHome','showOnAbout','showOnOtherPages','items']),'Tərəfdaşlar bölməsinin quruluşu düzgün deyil.'))return errors;
+ if(!check(keys(section,['enabled','title','subtitle','layout','showOnHome','showOnAbout','showOnOtherPages','items']),'Tərəfdaşlar bölməsinin quruluşu düzgün deyil.'))return errors;
+ check(section.layout===undefined||['strip','cards'].includes(section.layout),'Tərəfdaşların düzülüşü düzgün deyil.');
  check(['enabled','showOnHome','showOnAbout','showOnOtherPages'].every(key=>typeof section[key]==='boolean')&&plain(section.title,160,true)&&plain(section.subtitle,500),'Tərəfdaşlar bölməsinin başlığı və görünməsi düzgün deyil.');
  if(check(Array.isArray(section.items)&&section.items.length<=30,'Ən çox 30 tərəfdaş əlavə edilə bilər.')){
   const ids=new Set();

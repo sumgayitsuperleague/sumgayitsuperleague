@@ -3116,6 +3116,7 @@ window.CONTENT={
       "enabled": true,
       "title": "Tərəfdaşlarımız",
       "subtitle": "",
+      "layout": "strip",
       "showOnHome": true,
       "showOnAbout": true,
       "showOnOtherPages": true,
@@ -3123,7 +3124,7 @@ window.CONTENT={
         {
           "id": "partner-amf",
           "name": "AMF",
-          "logo": "/assets/logos/partner-amf.png",
+          "logo": "/assets/logos/partner-amf-transparent.png",
           "url": "https://www.instagram.com/minifootball.az/",
           "alt": "Azərbaycan Minifutbol Federasiyası",
           "visible": true,
@@ -3135,19 +3136,19 @@ window.CONTENT={
         {
           "id": "partner-tvn",
           "name": "TVN.AZ",
-          "logo": "/assets/logos/partner-tvn.png",
+          "logo": "/assets/logos/partner-tvn-transparent.png",
           "url": "https://www.instagram.com/tvn.az/",
           "alt": "TVN.AZ",
           "visible": true,
           "tone": "blue",
           "fit": "contain",
           "position": "center",
-          "scale": 175
+          "scale": 100
         },
         {
           "id": "partner-butaverse",
           "name": "Butaverse",
-          "logo": "/assets/logos/partner-butaverse.png",
+          "logo": "/assets/logos/partner-butaverse-transparent.png",
           "url": "https://www.instagram.com/bv.creators/",
           "alt": "Butaverse",
           "visible": true,
@@ -3159,7 +3160,7 @@ window.CONTENT={
         {
           "id": "partner-sfc-volunteers",
           "name": "Sumqayıt FK Könüllüləri",
-          "logo": "/assets/logos/partner-sfc-volunteers.png",
+          "logo": "/assets/logos/partner-sfc-volunteers-transparent.png",
           "url": "https://www.instagram.com/sfcvolunteers/",
           "alt": "Sumqayıt FK Könüllüləri",
           "visible": true,
@@ -3171,14 +3172,14 @@ window.CONTENT={
         {
           "id": "partner-ms-liya",
           "name": "Ms. Liya",
-          "logo": "/assets/logos/partner-ms-liya.png",
+          "logo": "/assets/logos/partner-ms-liya-transparent.png",
           "url": "https://www.instagram.com/msliyachocolate/",
           "alt": "Ms. Liya",
           "visible": true,
           "tone": "navy",
           "fit": "contain",
           "position": "center",
-          "scale": 250
+          "scale": 100
         }
       ]
     },
@@ -3638,31 +3639,31 @@ window.CONTENT={
     ],
     "media": [
       {
-        "url": "/assets/logos/partner-amf.png",
+        "url": "/assets/logos/partner-amf-transparent.png",
         "title": "AMF",
         "alt": "Azərbaycan Minifutbol Federasiyası",
         "date": "2026-10-14"
       },
       {
-        "url": "/assets/logos/partner-tvn.png",
+        "url": "/assets/logos/partner-tvn-transparent.png",
         "title": "TVN.AZ",
         "alt": "TVN.AZ",
         "date": "2026-10-14"
       },
       {
-        "url": "/assets/logos/partner-butaverse.png",
+        "url": "/assets/logos/partner-butaverse-transparent.png",
         "title": "Butaverse",
         "alt": "Butaverse",
         "date": "2026-10-14"
       },
       {
-        "url": "/assets/logos/partner-sfc-volunteers.png",
+        "url": "/assets/logos/partner-sfc-volunteers-transparent.png",
         "title": "Sumqayıt FK Könüllüləri",
         "alt": "Sumqayıt FK Könüllüləri",
         "date": "2026-10-14"
       },
       {
-        "url": "/assets/logos/partner-ms-liya.png",
+        "url": "/assets/logos/partner-ms-liya-transparent.png",
         "title": "Ms. Liya",
         "alt": "Ms. Liya",
         "date": "2026-10-14"

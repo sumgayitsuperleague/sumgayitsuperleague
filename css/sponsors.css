@@ -30,7 +30,20 @@ a.partner-card:focus-visible{outline:3px solid var(--accent,#377cf6);outline-off
 .sponsor-admin-preview .partner-caption h3{font-size:13px}
 .sponsor-admin-preview .partners-grid>.partner-card:last-child:nth-child(2n+1){grid-column:1/-1;justify-self:center;width:calc((100% - 12px)/2)}
 .sponsor-admin-preview.partner-mobile-preview{max-width:340px;margin-inline:auto}
+.sponsors-strip{background:#07172f;border-top-color:rgba(255,255,255,.1)}
+.sponsors-strip .partners-heading h2{color:#fff}
+.sponsors-strip .partners-heading p{color:#b8c7dc}
+.sponsors-strip .partners-heading-line{background:rgba(255,255,255,.16)}
+.sponsors-strip .partner-card{padding:0 8px;background:transparent;border:0;border-radius:0;color:#fff;overflow:visible}
+.sponsors-strip .partner-logo{height:164px;padding:12px 8px;background:transparent;border-radius:0}
+.sponsors-strip .partner-caption{align-items:center;text-align:center;padding:12px 0 0;gap:7px}
+.sponsors-strip .partner-caption>span{justify-content:center;color:#b8c7dc;gap:10px}
+.sponsors-strip .partner-caption i{color:#b8c7dc}
+.sponsor-admin-preview .sponsors-strip{background:#07172f;border-radius:8px}
+.sponsor-admin-preview .sponsors-strip .partner-card{padding:0 4px}
+.sponsor-admin-preview .sponsors-strip .partner-logo{height:132px}
 @media(max-width:980px){.partners-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.partner-logo{height:128px}}
 @media(max-width:620px){.sponsors-section{padding:32px 0 36px}.partners-heading{margin-bottom:18px;gap:16px}.partners-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.partner-card{padding:8px;border-radius:12px}.partner-logo{height:128px;padding:8px}.partner-caption{padding:12px 2px 4px}.partner-caption h3{font-size:13px}.partner-caption>span{font-size:11px}.partners-grid>.partner-card:last-child:nth-child(2n+1){grid-column:1/-1;justify-self:center;width:calc((100% - 12px)/2)}}
+@media(max-width:620px){.sponsors-strip .partners-grid{gap:24px 12px}.sponsors-strip .partner-card{padding:0 2px}.sponsors-strip .partner-logo{height:142px;padding:8px 0}.sponsors-strip .partner-caption{padding-top:8px}}
 @media(max-width:350px){.partner-logo{height:110px}.partner-caption h3{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.partner-card{transition:none}a.partner-card:hover{transform:none}}
