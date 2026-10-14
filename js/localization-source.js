@@ -17,6 +17,8 @@ export function localizationTargets(data) {
   blocks(cms.home?.blocks,'homeBlocks','site');
   blocks(cms.guide?.blocks,'guideBlocks','guide');
   add(cms.community,'title','community.title','İcma başlığı','community');
+  for(const key of ['title','subtitle'])add(cms.sponsors,key,'cms.sponsors.'+key,'Tərəfdaşlar · '+key,'sponsors');
+  for(const item of list(cms.sponsors?.items))if(item)for(const key of ['name','alt'])add(item,key,'sponsors.'+item.id+'.'+key,item.name+' · '+key,'sponsors');
   add(cms.community?.poll,'question','community.poll.question','Səsvermə sualı','community');
   for(const key of ['title','text'])add(cms.community?.featured,key,'community.featured.'+key,'Turun oyunu · '+key,'community');
   for(const p of list(cms.community?.posts))if(p)for(const key of ['title','text'])add(p,key,'social.'+p.id+'.'+key,p.title+' · '+key,'community');

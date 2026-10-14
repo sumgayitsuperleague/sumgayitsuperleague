@@ -1,4 +1,5 @@
 import {EXPERIENCE_COPY} from './experience-copy.js';
+import {SPONSOR_COPY} from './sponsors-source.js';
 import {EDITORIAL_COPY} from './editorial-copy.js';
 import {BASE_TRANSLATIONS} from './interface-base.js';
 import {FAN_COPY} from './fan-copy.js';
@@ -12,7 +13,7 @@ export const LANG=languageFrom(location.search,typeof localStorage==='undefined'
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS];
-rows.push(...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY);
+rows.push(...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY);
 const dictionaries={en:new Map(),ru:new Map()};
 for(const [az,en,ru] of rows){dictionaries.en.set(az.toLocaleLowerCase('az'),en);dictionaries.ru.set(az.toLocaleLowerCase('az'),ru);}
 const russianCount=(number,forms)=>{const n=Number(number);return forms[n%100>=11&&n%100<=14?2:n%10===1?0:n%10>=2&&n%10<=4?1:2];};

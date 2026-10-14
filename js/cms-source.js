@@ -4,6 +4,7 @@ import {defaultGuide} from './guide-source.js';
 import {defaultCommunity,instagramPostURL} from './community-source.js';
 import {defaultEditor,validateEditor,editorLinkOK} from './site-edit-source.js';
 import {defaultMatchCenter,MATCH_STAGES} from './home-source.js';
+import {defaultSponsors,validateSponsors} from './sponsors-source.js';
 export const NAV_ITEMS = [
   ['home','Ana səhifə','index.html'],['games','Oyunlar','oyunlar.html'],['table','Cədvəl','cedvel.html'],
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
@@ -22,14 +23,14 @@ export function getCMS(data) {
   const site=data.site||{},cms=data.cms||{};
   const defaults={
     home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',leadType:'news',featuredMatch:'',featuredTitle:'Əsas oyun',featuredText:'',showSideNews:true,showGuidePromo:true,showEntryLinks:true,blocks:[],blockPosition:'afterLead',matchCenter:defaultMatchCenter(),newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
-    guide:defaultGuide(),community:defaultCommunity(),editor:defaultEditor(),
+    guide:defaultGuide(),community:defaultCommunity(),sponsors:defaultSponsors(),editor:defaultEditor(),
     about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',showFacts:true,showClubs:true,showJourney:true,showContact:true,blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
     appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'system',headingFont:'system',radius:18,width:1320,mobileNav:true},
     branding:{logo:'/assets/logo.png',footerText:'Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.',copyright:'Bütün hüquqlar qorunur.'},
     seo:{title:site.name||'',description:(site.hero||'').slice(0,500),image:''},
     navigation:NAV_ITEMS.map(([id,label])=>({id,label,visible:true})),pages:[],media:[]
   };
-  for(const key of ['home','about','guide','community','editor','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
+  for(const key of ['home','about','guide','community','sponsors','editor','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
   defaults.community.poll={...defaultCommunity().poll,...(cms.community?.poll||{})};
   defaults.community.featured={...defaultCommunity().featured,...(cms.community?.featured||{})};
   defaults.home.matchCenter={...defaultMatchCenter(),...(cms.home?.matchCenter||{})};
@@ -53,7 +54,8 @@ export function safeLink(x) {
 }
 export function validateCMS(cms) {
   const errors=[],check=(ok,msg)=>{if(!ok&&errors.length<30)errors.push(msg);return ok;};
-  if(!check(keys(cms,['home','about','guide','community','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(!check(keys(cms,['home','about','guide','community','sponsors','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(cms.sponsors!==undefined)errors.push(...validateSponsors(cms.sponsors,imagePath));
   if(cms.editor!==undefined)errors.push(...validateEditor(cms.editor,{imagePath,linkOK:value=>editorLinkOK(value,safeLink)}));
   const H=cms.home,A=cms.about,T=cms.appearance,B=cms.branding,S=cms.seo;
   if(T?.mobileNav!==undefined)check(typeof T.mobileNav==='boolean','Telefon menyusu ayarı düzgün deyil.');
