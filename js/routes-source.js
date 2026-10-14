@@ -1,3 +1,4 @@
+export const POLICY_SLUGS=Object.freeze(['mexfilik','kukiler','redaksiya']);
 // Public routes stay independent of the GitHub Pages file layout.
 export const PAGE_ROUTES = Object.freeze({
  '/':'index.html','/oyunlar':'oyunlar.html','/cedvel':'cedvel.html',

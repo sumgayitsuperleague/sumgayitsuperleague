@@ -1,7 +1,7 @@
 import {matchStage,ordinal} from './league-source.js';
 
 export const MATCH_STAGES=[['group','Qrup mərhələsi'],['semifinal','Yarımfinal'],['final','Final']];
-export const defaultMatchCenter=()=>({title:'Matç mərkəzi',mode:'automatic',round:1,stage:'semifinal',matches:[],limit:4,showSelector:true});
+export const defaultMatchCenter=()=>({title:'Matç mərkəzi',mode:'automatic',round:1,stage:'semifinal',matches:[],limit:4,showSelector:true,showCountdown:true});
 export const defaultFeaturedMatch=()=>({match:'',title:'Turun oyunu',text:'',showVideo:true});
 export const stageTitle=stage=>MATCH_STAGES.find(([id])=>id===stage)?.[1]||'Oyunlar';
 const sorted=matches=>matches.slice().sort((a,b)=>(a.date+' '+a.time).localeCompare(b.date+' '+b.time)||a.id.localeCompare(b.id));

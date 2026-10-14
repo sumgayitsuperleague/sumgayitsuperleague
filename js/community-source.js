@@ -1,6 +1,6 @@
 // The public community model contains editorial configuration, never voter records.
 import {defaultFeaturedMatch} from './home-source.js';
-export const defaultCommunity=()=>({enabled:true,title:'Liqanın içindən',homeLimit:2,posts:[],homeFeature:'poll',featured:defaultFeaturedMatch(),poll:{enabled:false,round:1,question:'Turun ən yadda qalan oyunu hansıdır?'}});
+export const defaultCommunity=()=>({enabled:true,showQuiz:true,title:'Liqanın içindən',homeLimit:2,posts:[],homeFeature:'poll',featured:defaultFeaturedMatch(),poll:{enabled:false,round:1,question:'Turun ən yadda qalan oyunu hansıdır?'}});
 export function instagramPostURL(value){
  try{const u=new URL(value);if(u.protocol!=='https:'||u.hostname!=='www.instagram.com'||u.username||u.password||u.search||u.hash)return false;return /^\/(?:sumqayitsuperliqa\/)?(?:p|reel)\/[A-Za-z0-9_-]{5,40}\/$/.test(u.pathname);}catch{return false;}
 }
