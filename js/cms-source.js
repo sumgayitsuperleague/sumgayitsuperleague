@@ -1,3 +1,4 @@
+import {stadiumSettings,validateStadium} from './stadium-source.js';
 // Structured site editing shared by the admin and public renderer.
 import {PAGE_ROUTES} from './routes-source.js';
 import {defaultGuide} from './guide-source.js';
@@ -23,11 +24,11 @@ export function getCMS(data) {
   const site=data.site||{},cms=data.cms||{};
   const defaults={
     home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',leadType:'news',featuredMatch:'',featuredTitle:'Əsas oyun',featuredText:'',showSideNews:true,showGuidePromo:true,showEntryLinks:true,blocks:[],blockPosition:'afterLead',matchCenter:defaultMatchCenter(),newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
-    guide:defaultGuide(),community:defaultCommunity(),sponsors:defaultSponsors(),editor:defaultEditor(),
+    stadium:stadiumSettings(cms.stadium),guide:defaultGuide(),community:defaultCommunity(),sponsors:defaultSponsors(),editor:defaultEditor(),
     about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',showFacts:true,showClubs:true,showJourney:true,showContact:true,blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
     appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'system',headingFont:'system',radius:18,width:1320,mobileNav:true},
     branding:{logo:'/assets/logo.png',footerText:'Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.',copyright:'Bütün hüquqlar qorunur.'},
-    seo:{title:site.name||'',description:(site.hero||'').slice(0,500),image:''},
+    seo:{title:site.name||'',description:(site.hero||'').slice(0,500),image:'',googleVerification:'',alternateNames:['Sumgayit Super League','Сумгаитская Суперлига']},
     navigation:NAV_ITEMS.map(([id,label])=>({id,label,visible:true})),pages:[],media:[]
   };
   for(const key of ['home','about','guide','community','sponsors','editor','appearance','branding','seo'])defaults[key]={...defaults[key],...(cms[key]||{})};
@@ -54,7 +55,8 @@ export function safeLink(x) {
 }
 export function validateCMS(cms) {
   const errors=[],check=(ok,msg)=>{if(!ok&&errors.length<30)errors.push(msg);return ok;};
-  if(!check(keys(cms,['home','about','guide','community','sponsors','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(!check(keys(cms,['stadium','home','about','guide','community','sponsors','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(cms.stadium!==undefined)errors.push(...validateStadium(cms.stadium));
   if(cms.sponsors!==undefined)errors.push(...validateSponsors(cms.sponsors,imagePath));
   if(cms.editor!==undefined)errors.push(...validateEditor(cms.editor,{imagePath,linkOK:value=>editorLinkOK(value,safeLink)}));
   const H=cms.home,A=cms.about,T=cms.appearance,B=cms.branding,S=cms.seo;
@@ -103,7 +105,9 @@ export function validateCMS(cms) {
   }
   if(check(keys(T,['background','surface','text','muted','font','headingFont','radius','width','mobileNav']),'Dizayn ayarları düzgün deyil.'))check(['background','surface','text','muted'].every(k=>color(T[k]))&&['manrope','montserrat','system','georgia'].includes(T.font)&&['barlow','montserrat','system','georgia'].includes(T.headingFont)&&Number.isInteger(T.radius)&&T.radius>=0&&T.radius<=32&&Number.isInteger(T.width)&&T.width>=960&&T.width<=1600,'Dizayn rəngləri, şrift və ya ölçülər düzgün deyil.');
   if(check(keys(B,['logo','footerText','copyright']),'Loqo və alt hissə ayarları düzgün deyil.'))check(imagePath(B.logo)&&!!B.logo&&text(B.footerText,1500)&&text(B.copyright,300),'Loqo və alt hissə mətnləri düzgün deyil.');
-  if(check(keys(S,['title','description','image']),'Axtarış ayarları düzgün deyil.'))check(text(S.title,160)&&text(S.description,500)&&imagePath(S.image),'Axtarış başlığı, təsviri və ya şəkli düzgün deyil.');
+  if(check(keys(S,['title','description','image','googleVerification','alternateNames']),'Axtarış ayarları düzgün deyil.'))check(text(S.title,160)&&text(S.description,500)&&imagePath(S.image),'Axtarış başlığı, təsviri və ya şəkli düzgün deyil.');
+  if(S?.googleVerification!==undefined)check(typeof S.googleVerification==='string'&&/^[a-zA-Z0-9_-]{0,120}$/.test(S.googleVerification),'Google təsdiq kodu düzgün deyil. Yalnız content dəyərini daxil et.');
+  if(S?.alternateNames!==undefined)check(Array.isArray(S.alternateNames)&&S.alternateNames.length<=5&&new Set(S.alternateNames).size===S.alternateNames.length&&S.alternateNames.every(v=>text(v,120,true)),'Saytın alternativ adları düzgün deyil.');
   check(Array.isArray(cms.navigation)&&cms.navigation.length>=10&&cms.navigation.length<=NAV_ITEMS.length&&new Set(cms.navigation.map(n=>n?.id)).size===cms.navigation.length&&NAV_ITEMS.slice(0,10).every(([id])=>cms.navigation.some(n=>n?.id===id))&&cms.navigation.every(n=>keys(n,['id','label','visible'])&&NAV_ITEMS.some(([id])=>id===n.id)&&text(n.label,50,true)&&typeof n.visible==='boolean'),'Sayt menyusu düzgün deyil.');
   if(check(Array.isArray(cms.pages)&&cms.pages.length<=50,'Ən çox 50 əlavə səhifə olmalıdır.')){
     const ids=new Set(),slugs=new Set();

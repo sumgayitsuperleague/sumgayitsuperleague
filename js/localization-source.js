@@ -10,6 +10,8 @@ export function localizationTargets(data) {
  const cms=data.cms;
  if(cms){
   for(const [section,fields] of Object.entries({home:['title','highlight','buttonLabel','announcement','featuredTitle','featuredText'],about:['title','subtitle','heading'],guide:['title','subtitle'],branding:['footerText','copyright'],seo:['title','description']}))for(const key of fields)add(cms[section],key,'cms.'+section+'.'+key,section+' · '+key,['about','guide'].includes(section)?section:'site');
+  add(cms.stadium?.broadcast,'label','stadium.broadcast.label','YouTube canlı düyməsi','site');
+  for(const track of list(cms.stadium?.music?.tracks))if(track)add(track,'title','stadium.track.'+track.id,'Musiqi · '+track.title,'site');
   add(cms.home?.matchCenter,'title','home.matchCenter.title','Matç mərkəzinin başlığı','site');
   for(const n of list(cms.navigation))if(n)add(n,'label','navigation.'+n.id,n.label,'menu');
   const blocks=(items,prefix,group)=>{for(const b of list(items))if(b)for(const key of ['text','alt'])add(b,key,prefix+'.'+b.id+'.'+key,typeof b.text==='string'?b.text.slice(0,55):b.alt,group);};

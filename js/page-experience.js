@@ -8,7 +8,7 @@ export function installPageExperience(ctx){
   const headings=page.blocks.filter(b=>b.type==='heading'),policy=POLICY_SLUGS.includes(slug);let index=0;
   const blocks=window.SSL_CMS.renderBlocks(page.blocks).replace(/<h([234])([^>]*)>/g,(tag,level,attrs)=>`<h${level}${attrs} id="page-section-${index++}">`);
   const outline=headings.length>1?`<aside class="page-outline"><strong>${UI.t('Səhifənin bölmələri')}</strong>${headings.map((b,i)=>`<a href="#page-section-${i}">${esc(b.text)}</a>`).join('')}</aside>`:'';
-  const preferences=slug==='kukiler'?`<section class="device-preferences"><h2>${UI.t('Brauzerdə saxlanan seçimlər')}</h2><p>${UI.t('Dil, sevimli komanda və saxlanmış video seçimləri bu cihazdan silinir.')}</p><button type="button" data-reset-preferences>${UI.t('Seçimləri sıfırla')}</button><p role="status" id="preferences-status"></p></section>`:'';
+  const preferences=slug==='kukiler'?`<section class="device-preferences"><h2>${UI.t('Brauzerdə saxlanan seçimlər')}</h2><p>${UI.t('Dil, sevimli komanda, saxlanmış video və musiqi seçimləri bu cihazdan silinir.')}</p><button type="button" data-reset-preferences>${UI.t('Seçimləri sıfırla')}</button><p role="status" id="preferences-status"></p></section>`:'';
   return head(esc(page.title),esc(page.description))+`<section class="sec"><div class="wrap ${outline?'policy-page-layout':''}"><article class="cms-content cms-blocks ${policy?'policy-article':''}">${blocks}${preferences}</article>${outline}</div></section>`;
  };
  const originalBind=P.news?.init;
