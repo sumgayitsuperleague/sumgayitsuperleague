@@ -39,7 +39,7 @@ export function defaultStadium(){return {
  version:2,
  cursor:{mode:'football',size:20,touch:true},
  clock:{enabled:true,seconds:true},
- motion:{enabled:true,level:'balanced',reveal:true,interactions:true,progress:true,intro:true,mobile3d:true,slideDepth:true,opening:'match',featureFirst:true,presentation:'panorama',transition:'slide',depth:true,carousel:true,autoplay:true,interval:6},
+ motion:{enabled:true,level:'balanced',reveal:true,interactions:true,progress:true,intro:true,mobile3d:true,slideDepth:true,opening:'match',featureFirst:true,presentation:'panorama',navigationLabels:true,featuredVideo:'',scene:'stand',transition:'slide',depth:true,carousel:true,autoplay:true,interval:6},
  music:{enabled:false,autoplay:true,shuffle:true,volume:25,tracks:worldCupAudioSlots()},
  broadcast:{enabled:true,home:true,cards:true,label:'YouTube-da canlı izlə'}
 };}
@@ -55,6 +55,10 @@ export function stadiumSettings(value){
  if(stockSynth||stockVideo||stockAudio){defaults.music.tracks=worldCupAudioSlots();defaults.music.enabled=false;}
  return defaults;
 }
+export function featuredStadiumVideo(videos=[],selected=''){
+ const published=videos.filter(v=>v.published).slice().sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+ return published.find(v=>v.id===selected)||published.find(v=>(v.kind||'match')==='match')||published[0];
+}
 export function audioURL(value){
  if(typeof value!=='string'||value.length>1000||/[<>\\\u0000-\u0020]/.test(value))return false;
  if(/^\/assets\/audio\/[a-z0-9_-]+\.(?:mp3|m4a|ogg|wav)$/.test(value))return true;
@@ -69,7 +73,7 @@ export function validateStadium(s){
  const c=s.cursor,k=s.clock,m=s.motion,a=s.music,b=s.broadcast;
  check(keys(c,['mode','size','touch'])&&['system','football'].includes(c.mode)&&[16,20,24,32,40].includes(c.size)&&bool(c.touch),'Futbol göstəricisinin ayarları düzgün deyil.');
  check(keys(k,['enabled','seconds'])&&bool(k.enabled)&&bool(k.seconds),'Bakı saatının ayarları düzgün deyil.');
- check(keys(m,['enabled','level','reveal','interactions','progress','intro','mobile3d','slideDepth','opening','featureFirst','presentation','transition','depth','carousel','autoplay','interval'])&&['none','fade','slide'].includes(m.transition)&&['depth','carousel','autoplay'].every(x=>bool(m[x]))&&int(m.interval,5,30)&&['enabled','reveal','interactions','progress','intro','mobile3d','slideDepth','featureFirst'].every(x=>m[x]===undefined||bool(m[x]))&&(m.level===undefined||['subtle','balanced','expressive'].includes(m.level))&&(m.opening===undefined||['news','match','media'].includes(m.opening))&&(m.presentation===undefined||['panorama','broadcast','classic'].includes(m.presentation)),'Slayd və hərəkət ayarları düzgün deyil.');
+ check(keys(m,['enabled','level','reveal','interactions','progress','intro','mobile3d','slideDepth','opening','featureFirst','presentation','navigationLabels','featuredVideo','scene','transition','depth','carousel','autoplay','interval'])&&['none','fade','slide'].includes(m.transition)&&['depth','carousel','autoplay'].every(x=>bool(m[x]))&&int(m.interval,5,30)&&['enabled','reveal','interactions','progress','intro','mobile3d','slideDepth','featureFirst','navigationLabels'].every(x=>m[x]===undefined||bool(m[x]))&&(m.level===undefined||['subtle','balanced','expressive'].includes(m.level))&&(m.opening===undefined||['news','match','media'].includes(m.opening))&&(m.presentation===undefined||['panorama','broadcast','classic'].includes(m.presentation))&&(m.scene===undefined||['stand','touchline','aerial'].includes(m.scene))&&(m.featuredVideo===undefined||m.featuredVideo===''||text(m.featuredVideo,120)),'Slayd və hərəkət ayarları düzgün deyil.');
  if(check(keys(a,['enabled','autoplay','shuffle','volume','tracks'])&&['enabled','autoplay','shuffle'].every(x=>bool(a[x]))&&int(a.volume,0,100)&&Array.isArray(a.tracks)&&a.tracks.length<=12,'Musiqi ayarları düzgün deyil.')){
   const ids=new Set();for(const t of a.tracks){if(!check(keys(t,['id','title','preset','source','url','enabled']),'Musiqi sətrinin quruluşu düzgün deyil.'))continue;check(text(t.id,80)&&/^[a-z0-9][a-z0-9_-]*$/.test(t.id)&&!ids.has(t.id)&&text(t.title,120)&&STADIUM_PRESETS.some(p=>p.id===t.preset)&&['original','url','youtube'].includes(t.source)&&bool(t.enabled)&&(t.source==='original'?t.url==='':t.source==='youtube'?!!youtubeVideoID(t.url):audioURL(t.url)||!t.enabled&&t.url===''),'Musiqinin adı, növü və ya audio keçidi düzgün deyil.');ids.add(t.id);}
   check(!a.enabled||a.tracks.some(t=>t?.enabled),'Pleyer aktivdirsə ən azı bir musiqi seç.');
@@ -78,6 +82,8 @@ export function validateStadium(s){
 }
 export function nextTrack(tracks,current,shuffle,random=Math.random){const active=tracks.filter(t=>t.enabled);if(!active.length)return null;if(active.length===1)return active[0];const at=active.findIndex(t=>t.id===current);if(!shuffle)return active[(at+1)%active.length];const choices=active.filter(t=>t.id!==current);return choices[Math.min(choices.length-1,Math.floor(random()*choices.length))];}
 export const STADIUM_COPY=[
+ ['Matç','Match','Матч'],['Xəbər','News','Новости'],['Liqadan','From the league','Из лиги'],['Seçilmiş video','Featured video','Выбранное видео'],
+
  ['Şəhərin oyunu.','The city’s game.','Игра нашего города.'],['Bizim liqa.','Our league.','Наша лига.'],
  ['Oyunun nəticəsi','Match result','Результат матча'],['Musiqi dayandırıldı.','Music paused.','Музыка приостановлена.'],['Musiqi səslənir.','Music is playing.','Музыка играет.'],['Musiqi yüklənir…','Loading music…','Музыка загружается…'],['Musiqi açılmadı. Yenidən play düyməsinə toxun.','Unable to play music. Tap play to try again.','Не удалось включить музыку. Нажмите ещё раз.'],['Musiqi kreditləri','Music credits','Авторы музыки'],['Fon musiqiləri Kevin MacLeod tərəfindən hazırlanıb.','Background music by Kevin MacLeod.','Фоновая музыка — Kevin MacLeod.'],['Musiqilər dəyişdirilməyib.','The recordings are unmodified.','Записи использованы без изменений.'],
  ['Musiqi pleyerini aç','Open music player','Открыть музыкальный плеер'],['Musiqi pleyerini bağla','Close music player','Закрыть музыкальный плеер'],['Musiqi','Music','Музыка'],['Videoya bax','Show video','Показать видео'],['YouTube musiqisi video açıldıqda səslənir.','YouTube music plays while the video is open.','Музыка YouTube играет, пока открыто видео.'],

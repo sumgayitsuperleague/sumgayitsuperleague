@@ -61,8 +61,9 @@ export function installStadiumScene(carousel,options,engine){
  let renderer,host=null,frame=null,visible=true,disposed=false,elapsed=0,last=0,resizeObserver=null;
  let quality=window.matchMedia('(max-width: 760px)').matches?1:1.5,slowFrames=0;
  const state={entrance:options.intro===false?0:1,scroll:0,turn:0,x:0,y:0},pointer={x:0,y:0},cleanups=[];
+ const view=({stand:[10,13,18],touchline:[0,8,22],aerial:[.1,24,7]})[options.scene]||[10,13,18];
  const pose=()=>{
-  camera.position.set(10-state.scroll*1.5+state.x*.65,13-state.scroll*2.5-state.y*.4,18);
+  camera.position.set(view[0]-state.scroll*1.5+state.x*.65,view[1]-state.scroll*2.5-state.y*.4,view[2]);
   camera.lookAt(0,0,0);objects.rotation.y=.06+state.turn*.1;
  };
  const release=()=>{

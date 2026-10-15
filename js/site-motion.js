@@ -14,6 +14,7 @@ export function animateRail(rail,from,to,options={},reduced=false,engine=motionR
 export function animateHero(slide,options={},initial=false,instant=false,engine=motionRuntime){
  if(!slide||instant||!motionAllowed(options)||initial&&options.intro===false||typeof slide.animate!=='function'&&engine===motionRuntime)return null;
  const feature=slide.querySelector('.stadium-slide-feature,.league-main-news,.selected-match');if(!feature)return null;
+ if(options.transition==='fade'){try{return engine.animate(feature,{opacity:[.15,1]},{duration:.28,ease:EASE_OUT});}catch{return null;}}
  const items=[...feature.querySelectorAll('.stadium-slide-stage,.stadium-match-caption,.stadium-slide-teams,.stadium-fixture-detail,h2,p,.stadium-slide-link,.league-main-copy>b')].filter(el=>!el.matches('.stadium-match-caption')||!el.querySelector('h2'));
  const duration=initial?motionProfile(options).duration:.42;
  const sequence=items.map((el,i)=>[el,{opacity:[.15,1],transform:[`translate3d(0,${Math.max(14,28-i*3)}px,0)`,'translate3d(0,0,0)']},{at:i*.055,duration,ease:EASE_OUT}]);
@@ -28,14 +29,16 @@ export function installSiteMotion(options={},env={}){
  body.dataset.motionEngine=allowed?'motion-14.2.0':'off';if(!allowed)return ()=>{};
  const profile=motionProfile(options),cleanups=[],seen=new WeakSet(),bound=new WeakSet(),active=new Map(),bases=new WeakMap(),keys=new Set();
  let observer=null,queued=false,disposed=false;
- const base=el=>{if(!bases.has(el))bases.set(el,{transform:el.style.transform||'',opacity:el.style.opacity||''});return bases.get(el);};
- const restore=(el,values)=>{for(const [key,value] of Object.entries(values)){if(value)el.style[key]=value;else el.style.removeProperty(key);}};
+ const base=el=>{if(!bases.has(el))bases.set(el,{transform:el.style.transform||'',opacity:el.style.opacity||'',clipPath:el.style.clipPath||''});return bases.get(el);};
+ const restore=(el,values)=>{for(const [key,value] of Object.entries(values)){if(value)el.style[key]=value;else el.style.removeProperty(key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase()));}};
  const play=(el,frames,settings={},reset=false)=>{
   const original=base(el);active.get(el)?.stop?.();
   try{const control=engine.animate(el,frames,settings);active.set(el,control);control?.then?.(()=>{if(active.get(el)===control){active.delete(el);if(reset)restore(el,original);}});return control;}
   catch{restore(el,original);body.dataset.motionError='animation';return null;}
  };
- const revealSelector='.league-front-heading,.league-side-heading,.video-card,.news-card,.partner-card,.about-hero-copy';
+ const entrance=doc.querySelector('.league-entry--panorama .league-front-heading');
+ if(entrance&&options.intro!==false){entrance.dataset.authoredEntrance='';const parts=[...entrance.querySelectorAll('.panorama-season,h1,.league-entry-title>p,.panorama-primary')];for(const [i,el] of parts.entries())play(el,{opacity:[.3,1],clipPath:['inset(0 0 100% 0)','inset(0 0 0% 0)'],transform:['translate3d(0,24px,0)','translate3d(0,0,0)']},{duration:profile.duration,delay:i*.08,ease:EASE_OUT});}
+ const revealSelector='.league-front-heading:not([data-authored-entrance]),.league-side-heading,.video-card,.news-card,.partner-card,.about-hero-copy';
  const liftSelector='.entry-match,.league-side-story,.video-card,.news-card,.partner-card,.learn-promo,.league-entry-links>a';
  const scan=()=>{
   if(disposed)return;queued=false;
