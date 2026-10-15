@@ -102,7 +102,7 @@ export function installStadiumScene(carousel,options,engine){
   const shadowGeometry=new PlaneGeometry(3.3,2.2),shadowMaterial=new MeshBasicMaterial({color:'#061c2c',transparent:true,opacity:.2,depthWrite:false});
   const shadow=new Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.set(8,.035,5);objects.add(shadow);
   const canRun=()=>!disposed&&visible&&!document.hidden&&!!host&&!carousel.classList.contains('is-paused')&&host.closest('[data-stadium-slide]')?.getAttribute('aria-hidden')!=='true';
-  const size=()=>{if(!host||disposed)return;const r=host.getBoundingClientRect();if(r.width<1||r.height<1)return;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,quality));renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();pose();renderer.render(scene,camera);};
+  const size=()=>{if(!host||disposed)return;const r=host.getBoundingClientRect();if(r.width<1||r.height<1)return;const narrow=r.width/r.height<1.1;ball.position.x=narrow?4.5:8;ball.scale.setScalar(narrow?.92:1.05);shadow.position.x=ball.position.x;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,quality));renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();pose();renderer.render(scene,camera);};
   const tick=now=>{
    frame=null;if(!canRun()){last=0;return;}
    const delta=last?Math.min((now-last)/1000,.08):0;last=now;elapsed+=delta;

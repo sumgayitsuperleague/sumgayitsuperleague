@@ -3,7 +3,6 @@
    Editorial sports experience. Existing team and league assets kept.
    Colors: original midnight navy, electric blue, signature red.
    =============================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap');
 :root{--b950:#050914;--b900:#081127;--b800:#0b1a3a;--b700:#17346a;--b600:#215adc;--b500:#427aff;--red:#fc344b;--gold:#efc985;--green:#4aeba1;--txt:#f6f7ff;--mut:#a3b0cf;--br:rgba(183,200,245,.13);--r:18px;--font:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;--display:"Barlow Condensed","Arial Narrow",Impact,sans-serif}
 html{scroll-padding-top:106px}
 body{background:#050914;color:var(--txt);font-size:14px;letter-spacing:-.01em}

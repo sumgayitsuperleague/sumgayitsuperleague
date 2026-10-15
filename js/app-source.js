@@ -1,3 +1,4 @@
+import {installSiteFonts} from './site-fonts.js';
 import {installSiteMotion} from './site-motion.js';
 import {installStadium} from './stadium-view.js';
 import {installMatchLive,liveClockHTML,liveStatusHTML,watchLiveHTML} from './live-match-view.js';
@@ -15,6 +16,7 @@ if(S.primary)document.documentElement.style.setProperty('--b600',S.primary);if(S
 const CMS=window.SSL_CMS?window.SSL_CMS.getCMS(CONTENT||window.CONTENT):{},H=CMS.home||{},B=CMS.branding||{};
 UI.configureEditorTexts(CMS.editor,window.CONTENT,document.body.dataset.previewPath||location.pathname);
 if(window.CONTENT?.cms){const a=CMS.appearance,root=document.documentElement;for(const [key,value] of Object.entries({'--b950':a.background,'--b900':a.surface,'--b800':a.surface,'--txt':a.text,'--mut':a.muted,'--r':a.radius+'px','--content-width':a.width+'px','--br':a.text+'22','--button-text':window.SSL_CMS.buttonText(S.accent),'--arena-bg':a.background,'--arena-surface':a.surface,'--arena-text':a.text,'--arena-muted':a.muted}))root.style.setProperty(key,value);const fonts={manrope:'"Manrope",system-ui,sans-serif',montserrat:'"Montserrat",system-ui,sans-serif',system:'system-ui,sans-serif',georgia:'Georgia,serif',barlow:'"Barlow Condensed","Arial Narrow",Impact,sans-serif'};root.style.setProperty('--font',fonts[a.font]);root.style.setProperty('--display',fonts[a.headingFont]);document.body.classList.add('cms-themed');}
+installSiteFonts(CMS.appearance);
 const T=Object.create(null);L.teams.forEach(t=>T[t.id]=t);
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const MON=['yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentyabr','oktyabr','noyabr','dekabr'];

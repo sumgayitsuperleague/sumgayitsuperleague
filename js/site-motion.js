@@ -14,7 +14,7 @@ export function animateRail(rail,from,to,options={},reduced=false,engine=motionR
 export function animateHero(slide,options={},initial=false,instant=false,engine=motionRuntime){
  if(!slide||instant||!motionAllowed(options)||initial&&options.intro===false||typeof slide.animate!=='function'&&engine===motionRuntime)return null;
  const feature=slide.querySelector('.stadium-slide-feature,.league-main-news,.selected-match');if(!feature)return null;
- const items=[...feature.querySelectorAll('.stadium-slide-stage,.stadium-match-caption,.stadium-slide-teams,h2,p,.stadium-slide-link,.league-main-copy>b')];
+ const items=[...feature.querySelectorAll('.stadium-slide-stage,.stadium-match-caption,.stadium-slide-teams,.stadium-fixture-detail,h2,p,.stadium-slide-link,.league-main-copy>b')].filter(el=>!el.matches('.stadium-match-caption')||!el.querySelector('h2'));
  const duration=initial?motionProfile(options).duration:.42;
  const sequence=items.map((el,i)=>[el,{opacity:[.15,1],transform:[`translate3d(0,${Math.max(14,28-i*3)}px,0)`,'translate3d(0,0,0)']},{at:i*.055,duration,ease:EASE_OUT}]);
  if(options.slideDepth!==false)sequence.unshift([feature,{transform:['perspective(1400px) rotateY(7deg) scale(.97)','perspective(1400px) rotateY(0deg) scale(1)']},{at:0,duration,ease:EASE_OUT}]);

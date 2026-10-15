@@ -1,5 +1,4 @@
 /* Sumqayıt Super Liqa — rəsmi sayt */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap');
 :root{--b950:#030a22;--b900:#050f33;--b800:#0a1f66;--b700:#0f2f8f;--b600:#1748bb;--b500:#2f6bff;--red:#e3313a;--gold:#ffd36b;--green:#27d078;--txt:#eaf0ff;--mut:#9fb5e5;--br:rgba(120,160,255,.22);--r:18px;--font:"Montserrat","Segoe UI",system-ui,-apple-system,Arial,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--b950);color:var(--txt);font-family:var(--font);line-height:1.5;overflow-x:hidden;min-height:100vh}

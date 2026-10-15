@@ -12,16 +12,20 @@ export function renderStadiumCarousel(ctx,lead){
  const options=stadiumSettings(ctx.CMS.stadium).motion;if(!options.carousel||!lead||ctx.H.leadType==='none')return lead;
  const selected=selectHomeMatches(ctx.L,ctx.H.matchCenter).matches;
  const m=selected.find(x=>x.status==='live')||selected.find(x=>x.status==='planned')||selected[0];
+ const broadcast=options.presentation==='broadcast';
+ const crest=id=>ctx.ball(id,'lg').replace('loading="lazy"',options.opening==='match'?'loading="eager" decoding="sync" fetchpriority="high"':'loading="lazy" decoding="async"');
  const slides=[{kind:'news',html:lead}];
- if(m)slides.push({kind:'match',html:`<a class="stadium-slide-feature stadium-match-slide" data-carousel-match="${esc(m.id)}" href="matc.html?id=${esc(m.id)}">${pitchScene()}<div class="stadium-match-caption"><span data-slide-caption>${esc(UI.t(matchCaption(m)))}</span><span class="stadium-slide-stage">${esc(UI.t(matchStageLabel(m)))}</span></div><div class="stadium-slide-teams"><span>${ctx.ball(m.home,'lg')}<b>${esc(ctx.T[m.home].name)}</b></span><strong>${m.status==='planned'?'VS':m.hs+' : '+m.as}</strong><span>${ctx.ball(m.away,'lg')}<b>${esc(ctx.T[m.away].name)}</b></span></div><p>${ctx.fd(m.date)} · ${esc(m.time)} · ${esc(m.venue)}</p><span class="stadium-slide-link">${esc(UI.t('Matç mərkəzi'))}<svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.8"/></svg></span></a>`});
+ if(m)slides.push({kind:'match',html:`<a class="stadium-slide-feature stadium-match-slide" data-carousel-match="${esc(m.id)}" href="matc.html?id=${esc(m.id)}">${pitchScene()}<div class="stadium-match-caption"><${broadcast?'h2':'span'} data-slide-caption>${esc(UI.t(matchCaption(m)))}</${broadcast?'h2':'span'}><span class="stadium-slide-stage">${esc(UI.t(matchStageLabel(m)))}</span></div><div class="stadium-slide-teams"><span>${crest(m.home)}<b>${esc(ctx.T[m.home].name)}</b></span><strong>${m.status==='planned'?'VS':m.hs+' : '+m.as}</strong><span>${crest(m.away)}<b>${esc(ctx.T[m.away].name)}</b></span></div>${broadcast?`<div class="stadium-fixture-detail"><time datetime="${esc(m.date)}T${esc(m.time)}:00+04:00"><span>${ctx.fd(m.date)}</span><strong>${esc(m.time)}</strong></time><span class="stadium-fixture-venue">${esc(m.venue)}</span></div>`:`<p>${ctx.fd(m.date)} · ${esc(m.time)} · ${esc(m.venue)}</p>`}<span class="stadium-slide-link">${esc(UI.t('Matç mərkəzi'))}<svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.8"/></svg></span></a>`});
  else slides.push({kind:'match',html:`<a class="stadium-slide-feature" href="haqqimizda.html">${pitchScene()}<h2>${esc(ctx.CMS.about.heading)}</h2><p>${esc(ctx.CMS.about.subtitle)}</p><span class="stadium-slide-link">${esc(UI.t('Liqa ilə tanış ol'))} ↗</span></a>`});
  slides.push({kind:'media',html:`<a class="stadium-slide-feature stadium-media-slide" href="media.html">${pitchScene()}<h2>${esc(UI.t('Oyunu izlə. Liqanı yaşa.'))}</h2><p>${esc(UI.t('Matç arxivi və yayımlar'))}</p><span class="stadium-slide-link">SSL TV ↗</span></a>`});
  const first=slides.findIndex(s=>s.kind===options.opening);if(first>0)slides.unshift(slides.splice(first,1)[0]);
  return `<section class="stadium-carousel" aria-label="${esc(UI.t('Liqa slaydları'))}" aria-roledescription="carousel"><div class="stadium-viewport"><div class="stadium-slides">${slides.map((s,i)=>`<div class="stadium-slide${i===0?' is-current':''}" data-stadium-slide="${i}" data-slide-kind="${s.kind}" role="group" aria-roledescription="slide" aria-label="${i+1} / ${slides.length}" aria-hidden="${i!==0}"${i?' inert':''}>${s.html}</div>`).join('')}</div></div><div class="stadium-carousel-controls"><div class="stadium-dots">${slides.map((s,i)=>`<button type="button" data-stadium-go="${i}" aria-label="${esc(UI.t('Slayd'))} ${i+1} / ${slides.length}" aria-pressed="${i===0}"><span></span></button>`).join('')}<span class="stadium-slide-count" data-stadium-count>01 / 0${slides.length}</span></div><div><button type="button" data-stadium-action="previous" aria-label="${esc(UI.t('Əvvəlki slayd'))}"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="1.8"/></svg></button><button type="button" data-stadium-action="pause" aria-label="${esc(UI.t('Slaydları dayandır'))}" aria-pressed="false"></button><button type="button" data-stadium-action="next" aria-label="${esc(UI.t('Növbəti slayd'))}"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true"><path d="m10 6 6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div><div class="stadium-slide-progress" aria-hidden="true"><i></i></div></section>`;
 }
 export function bakuTime(now,{seconds=true}={}){return new Intl.DateTimeFormat('az-AZ',{timeZone:'Asia/Baku',hour:'2-digit',minute:'2-digit',...(seconds?{second:'2-digit'}:{}),hourCycle:'h23'}).format(new Date(now));}
+export function supportsStadium3D(doc){try{const gl=doc.createElement('canvas').getContext('webgl2');if(!gl)return false;gl.getExtension('WEBGL_lose_context')?.loseContext();return true;}catch{return false;}}
 export function installStadium(ctx){
  const settings=stadiumSettings(ctx.CMS.stadium),reduced=settings.motion.enabled===false||!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,preview=!!document.body.dataset.previewPath;
+ document.body.dataset.stadiumPresentation=settings.motion.presentation;
  document.body.dataset.stadiumMotion=reduced?'none':settings.motion.transition;
  document.body.classList.toggle('stadium-depth',settings.motion.depth&&!reduced);
  document.body.classList.toggle('football-cursor',settings.cursor.mode==='football');document.body.dataset.footballSize=String(settings.cursor.size);
@@ -45,10 +49,17 @@ export function installStadium(ctx){
  const carousel=document.querySelector('.stadium-carousel');if(carousel){
   installCarousel(carousel,settings.motion,reduced);
   if(settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
-   const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261015g',location.origin);
-   // Let the opening sequence finish before allocating the WebGL context.
-   const sceneTimer=setTimeout(()=>import(sceneURL.href).then(module=>module.installStadiumScene(carousel,settings.motion,motionRuntime)).catch(()=>{carousel.dataset.sceneEngine='fallback';}),900);
-   window.addEventListener('pagehide',event=>{if(!event.persisted)clearTimeout(sceneTimer);},{once:true});
+   const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261015h',location.origin);
+   let sceneVisible=typeof window.IntersectionObserver!=='function',loaded=false,sceneTimer=null;
+   const cleanup=()=>{clearTimeout(sceneTimer);sceneObserver?.disconnect();carousel.removeEventListener('ssl-slide-change',schedule);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);};
+   const needed=()=>sceneVisible&&!document.hidden&&!!carousel.querySelector('.stadium-slide.is-current [data-stadium-canvas]');
+   const schedule=()=>{if(loaded||sceneTimer||!needed())return;sceneTimer=setTimeout(()=>{sceneTimer=null;if(!needed())return;loaded=true;cleanup();
+    if(window.navigator?.connection?.saveData||!supportsStadium3D(document)){carousel.dataset.sceneEngine='fallback';return;}
+    import(sceneURL.href).then(module=>module.installStadiumScene(carousel,settings.motion,motionRuntime)).catch(()=>{carousel.dataset.sceneEngine='fallback';});
+   },900);};
+   const sceneObserver=typeof window.IntersectionObserver==='function'?new window.IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;schedule();},{threshold:.05}):null;sceneObserver?.observe(carousel);
+   carousel.addEventListener('ssl-slide-change',schedule);document.addEventListener('visibilitychange',schedule);window.addEventListener('pageshow',schedule);
+   window.addEventListener('pagehide',event=>{clearTimeout(sceneTimer);sceneTimer=null;if(!event.persisted)cleanup();});schedule();
   }
  }
  if(settings.music.enabled&&!preview)installMusicPlayer(settings.music);
