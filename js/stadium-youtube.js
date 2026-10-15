@@ -20,7 +20,7 @@ export function createYouTubeController({win=window,doc=document,mount,onState=(
    if(!ready)ready=(async()=>{const YT=await loadYouTubeAPI(win,doc);if(destroyed)throw new Error('Player closed');
     const frame=doc.createElement('iframe');const origin=win.location?.origin||location.origin;
     frame.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&playsinline=1&controls=1&rel=0&origin='+encodeURIComponent(origin);
-    frame.title='YouTube · '+id;frame.width='356';frame.height='200';frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';frame.referrerPolicy='strict-origin-when-cross-origin';frame.allowFullscreen=true;
+    frame.title='YouTube · '+id;frame.width='200';frame.height='200';frame.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';frame.referrerPolicy='strict-origin-when-cross-origin';frame.allowFullscreen=true;
     mount.replaceChildren(frame);video=id;
     return new Promise((resolve,reject)=>{let settled=false;player=new YT.Player(frame,{events:{
      onReady:e=>{if(destroyed)return;e.target.setVolume(25);settled=true;resolve();},

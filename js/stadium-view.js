@@ -1,4 +1,5 @@
 import * as UI from './i18n.js';
+import {animateRail} from './site-motion.js';
 import {stadiumSettings} from './stadium-source.js';
 import {installMusicPlayer} from './stadium-player.js';
 import {selectHomeMatches} from './home-source.js';
@@ -16,7 +17,7 @@ export function renderStadiumCarousel(ctx,lead){
 }
 export function bakuTime(now,{seconds=true}={}){return new Intl.DateTimeFormat('az-AZ',{timeZone:'Asia/Baku',hour:'2-digit',minute:'2-digit',...(seconds?{second:'2-digit'}:{}),hourCycle:'h23'}).format(new Date(now));}
 export function installStadium(ctx){
- const settings=stadiumSettings(ctx.CMS.stadium),reduced=!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,preview=!!document.body.dataset.previewPath;
+ const settings=stadiumSettings(ctx.CMS.stadium),reduced=settings.motion.enabled===false||!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,preview=!!document.body.dataset.previewPath;
  document.body.dataset.stadiumMotion=reduced?'none':settings.motion.transition;
  document.body.classList.toggle('stadium-depth',settings.motion.depth&&!reduced);
  document.body.classList.toggle('football-cursor',settings.cursor.mode==='football');document.body.dataset.footballSize=String(settings.cursor.size);
@@ -29,7 +30,7 @@ export function installStadium(ctx){
   const ball=document.createElement('span');ball.className='football-tap';ball.setAttribute('aria-hidden','true');ball.style.left=event.clientX+'px';ball.style.top=event.clientY+'px';ball.style.width=ball.style.height=settings.cursor.size+'px';document.body.append(ball);const all=document.querySelectorAll('.football-tap');if(all.length>5)all[0].remove();ball.addEventListener('animationend',()=>ball.remove(),{once:true});setTimeout(()=>ball.remove(),700);
  },{passive:true});
  if(settings.motion.depth&&!reduced&&window.matchMedia?.('(hover: hover) and (pointer: fine)').matches){
-  for(const card of document.querySelectorAll('.stadium-carousel,.entry-match,.about-identity')){
+  for(const card of document.querySelectorAll('.stadium-carousel,.about-identity')){
    card.classList.add('stadium-tilt');let pending=false,point;
    const draw=()=>{pending=false;const r=card.getBoundingClientRect();if(!r.width||!r.height)return;card.style.setProperty('--tilt-x',((.5-(point.y-r.top)/r.height)*5).toFixed(2)+'deg');card.style.setProperty('--tilt-y',(((point.x-r.left)/r.width-.5)*6).toFixed(2)+'deg');card.style.setProperty('--spot-x',((point.x-r.left)/r.width*100).toFixed(1)+'%');card.style.setProperty('--spot-y',((point.y-r.top)/r.height*100).toFixed(1)+'%');};
    card.addEventListener('pointermove',e=>{point={x:e.clientX,y:e.clientY};if(!pending){pending=true;(window.requestAnimationFrame||((fn)=>fn()))(draw);}},{passive:true});
@@ -42,11 +43,11 @@ export function installStadium(ctx){
 }
 export function installCarousel(carousel,options,reduced){
  const slides=[...carousel.querySelectorAll('[data-stadium-slide]')],rail=carousel.querySelector('.stadium-slides'),pauseButton=carousel.querySelector('[data-stadium-action=pause]');
- let current=0,paused=reduced||!options.autoplay,hover=false,start=null,suppressClick=false,timer=null,cycle=false;
+ let current=0,paused=reduced||!options.autoplay,hover=false,start=null,suppressClick=false,timer=null,cycle=false,railAnimation=null;
  carousel.style.setProperty('--slide-duration',options.interval+'s');
  const pauseUI=()=>{pauseButton.textContent=paused?'▶':'Ⅱ';pauseButton.setAttribute('aria-pressed',String(paused));pauseButton.setAttribute('aria-label',UI.t(paused?'Slaydları davam etdir':'Slaydları dayandır'));carousel.classList.toggle('is-paused',paused||hover);};
  const show=index=>{
-  current=(index+slides.length)%slides.length;rail.style.transform=`translate3d(-${current*100}%,0,0)`;carousel.dataset.activeSlide=String(current);
+  const from=window.getComputedStyle?.(rail).transform||rail.style.transform||'translate3d(0,0,0)';railAnimation?.stop?.();current=(index+slides.length)%slides.length;const to=`translate3d(-${current*100}%,0,0)`;railAnimation=animateRail(rail,from,to,options,reduced||options.transition==='fade');carousel.dataset.activeSlide=String(current);
   slides.forEach((slide,i)=>{slide.inert=i!==current;slide.setAttribute('aria-hidden',String(i!==current));slide.classList.toggle('is-current',i===current);});
   for(const dot of carousel.querySelectorAll('[data-stadium-go]'))dot.setAttribute('aria-pressed',String(Number(dot.dataset.stadiumGo)===current));
   carousel.querySelector('[data-stadium-count]').textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');cycle=!cycle;carousel.classList.toggle('is-cycle-even',cycle);

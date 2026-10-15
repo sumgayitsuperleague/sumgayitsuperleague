@@ -1,3 +1,4 @@
+import {installSiteMotion} from './site-motion.js';
 import {installStadium} from './stadium-view.js';
 import {installMatchLive,liveClockHTML,liveStatusHTML,watchLiveHTML} from './live-match-view.js';
 import {installSiteDesign} from './site-design.js';
@@ -176,4 +177,5 @@ window.addEventListener('ssl-preferences-reset',()=>{savedVideos.clear();for(con
 UI.installLanguage();
 installSiteDesign(CMS.editor,window.CONTENT);
 installStadium({CMS,L,M,T,H,ball,fd});
+installSiteMotion(CMS.stadium?.motion);
 })();
