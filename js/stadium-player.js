@@ -1,75 +1,73 @@
 import * as UI from './i18n.js';
-import {animate,spring} from './motion-runtime.js';
-import {nextTrack,audioURL,youtubeVideoID} from './stadium-source.js';
-import {createStadiumSynth} from './stadium-audio.js';
-import {createYouTubeController} from './stadium-youtube.js';
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+import {nextTrack,audioURL} from './stadium-source.js';
+
+const PLAY='<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5.8a1 1 0 0 1 1.5-.86l9 5.2a1 1 0 0 1 0 1.72l-9 5.2a1 1 0 0 1-1.5-.87Z"/></svg>';
+const PAUSE='<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg>';
+
+// Background music is native audio. YouTube links belong to the media pages.
 export function installMusicPlayer(config){
- const tracks=config.tracks.filter(t=>t.enabled);if(!tracks.length||document.querySelector('[data-stadium-player]'))return;
- const read=(name,scope)=>{try{return JSON.parse(scope?.getItem(name)||'null');}catch{return null;}},local=typeof localStorage==='undefined'?null:localStorage,session=typeof sessionStorage==='undefined'?null:sessionStorage,saved=read('ssl.music.session.v1',session)||{},preference=read('ssl.music.preference.v1',local)||{};
- let current=tracks.find(t=>t.id===saved.id)||tracks[0],volume=Number.isFinite(preference.volume)?Math.max(0,Math.min(1,preference.volume)):config.volume/100,shuffle=typeof preference.shuffle==='boolean'?preference.shuffle:config.shuffle,playing=false,expanded=false,opened=false,busy=false,audio=null,synth=null,youtube=null,wantsPlay=false,generation=0,position=Number.isFinite(saved.seconds)&&saved.id===current.id?Math.max(0,saved.seconds):0;
- const player=document.createElement('aside');player.className='stadium-player';player.dataset.stadiumPlayer='';player.setAttribute('aria-label','SSL · '+UI.t('Futbol musiqiləri'));
- player.innerHTML=`<button type="button" class="stadium-music-launcher" data-audio="panel" aria-label="${UI.t('Musiqi pleyerini aç')}" aria-controls="ssl-music-panel" aria-expanded="false" title="${UI.t('Musiqi')}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 14v-3a8 8 0 0 1 16 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="12" width="4" height="8" rx="2" fill="currentColor"/><rect x="17" y="12" width="4" height="8" rx="2" fill="currentColor"/></svg><span class="stadium-music-dot" aria-hidden="true"></span></button><div id="ssl-music-panel" class="stadium-music-panel" data-music-panel role="dialog" aria-label="${UI.t('Futbol musiqiləri')}" hidden><div class="stadium-now"><span>SSL / ${UI.t('Musiqi')}</span><b data-audio-title></b><small data-audio-status>${UI.t('Musiqi üçün toxun')}</small></div><div class="stadium-player-main"><button type="button" data-audio="toggle" class="stadium-play" aria-label="${UI.t('Musiqini aç')}">▶</button><button type="button" data-audio="next" aria-label="${UI.t('Növbəti musiqi')}">↠</button><button type="button" data-audio="expand" aria-label="${UI.t('Musiqi ayarları')}" aria-expanded="false">⚙</button><button type="button" data-audio="minimise" aria-label="${UI.t('Pleyeri yığışdır')}">×</button></div><div class="stadium-video-panel" hidden><div data-music-video></div><div class="stadium-video-footer"><a data-music-youtube target="_blank" rel="noopener noreferrer">${UI.t('YouTube-da aç')} ↗</a></div></div><div class="stadium-player-settings" hidden><label>${UI.t('Mahnını seç')}<select data-audio-track>${tracks.map(t=>`<option value="${esc(t.id)}"${t.id===current.id?' selected':''}>${esc(UI.t(t.title))}</option>`).join('')}</select></label><label>${UI.t('Səs səviyyəsi')}<input data-audio-volume type="range" min="0" max="100" value="${Math.round(volume*100)}"></label><label class="stadium-shuffle"><input data-audio-shuffle type="checkbox"${shuffle?' checked':''}>${UI.t('Qarışıq sıra')}</label></div></div>`;
+ const tracks=config.tracks.filter(t=>t.enabled&&t.source==='url'&&audioURL(t.url));
+ if(!tracks.length||document.querySelector('[data-stadium-player]'))return;
+ const read=(name,scope)=>{try{return JSON.parse(scope?.getItem(name)||'null');}catch{return null;}};
+ const local=typeof localStorage==='undefined'?null:localStorage,session=typeof sessionStorage==='undefined'?null:sessionStorage;
+ const saved=read('ssl.music.session.v1',session)||{},preference=read('ssl.music.preference.v1',local)||{};
+ let current=tracks.find(t=>t.id===saved.id)||tracks[config.shuffle?Math.floor(Math.random()*tracks.length):0];
+ let playing=false,busy=false,wantsPlay=false,generation=0,audio=null;
+ let position=saved.id===current.id&&Number.isFinite(saved.seconds)?Math.max(0,saved.seconds):0;
+ const volume=config.volume/100;
+ const player=document.createElement('aside');player.className='stadium-player';player.dataset.stadiumPlayer='';
+ player.setAttribute('aria-label',UI.t('Musiqi'));
+ player.innerHTML=`<button type="button" class="stadium-audio-toggle" data-audio="toggle" aria-label="${UI.t('Musiqini aç')}" aria-pressed="false" aria-describedby="ssl-music-status">${PLAY}</button><span id="ssl-music-status" class="stadium-audio-status" data-audio-status role="status" aria-live="polite"></span>`;
  document.body.append(player);document.body.classList.add('has-stadium-player');
- const control=player.querySelector('[data-audio=toggle]'),status=player.querySelector('[data-audio-status]'),trackSelect=player.querySelector('[data-audio-track]'),videoPanel=player.querySelector('.stadium-video-panel'),videoMount=player.querySelector('[data-music-video]'),launcher=player.querySelector('[data-audio=panel]'),panel=player.querySelector('[data-music-panel]');
- const panelUI=()=>{panel.hidden=!opened;player.classList.toggle('is-open',opened);launcher.setAttribute('aria-expanded',String(opened));launcher.setAttribute('aria-label',UI.t(opened?'Musiqi pleyerini bağla':playing?'Musiqini dayandır':'Musiqi pleyerini aç'));};
- const openPanel=()=>{if(opened)return;opened=true;panelUI();if(typeof panel.animate==='function'&&document.body.dataset.stadiumMotion!=='none')try{animate(panel,{opacity:[0,1],transform:['translate3d(0,10px,0) scale(.96)','translate3d(0,0,0) scale(1)']},{type:spring,duration:.3,bounce:.12});}catch{}};
- const seconds=()=>current.source==='youtube'?(youtube?youtube.position():position):current.source==='url'?(Number.isFinite(audio?.currentTime)?audio.currentTime:position):(synth?synth.position():position);
- const persist=enabled=>{try{local?.setItem('ssl.music.preference.v1',JSON.stringify({enabled:enabled??playing,volume,shuffle}));session?.setItem('ssl.music.session.v1',JSON.stringify({id:current.id,seconds:seconds(),playing}));}catch{}};
+ const control=player.querySelector('[data-audio=toggle]'),status=player.querySelector('[data-audio-status]');
+ const seconds=()=>Number.isFinite(audio?.currentTime)?audio.currentTime:position;
+ const persist=enabled=>{try{
+  local?.setItem('ssl.music.preference.v1',JSON.stringify({enabled:enabled??wantsPlay}));
+  session?.setItem('ssl.music.session.v1',JSON.stringify({id:current.id,seconds:seconds(),playing:wantsPlay}));
+ }catch{}};
  const draw=()=>{
-  control.textContent=playing?'Ⅱ':busy?'…':'▶';control.setAttribute('aria-label',UI.t(playing?'Musiqini dayandır':'Musiqini aç'));control.setAttribute('aria-pressed',String(playing));control.setAttribute('aria-busy',String(busy));
-  // Pause and minimise always remain available while an embed is loading.
-  player.classList.toggle('is-playing',playing);panelUI();player.classList.toggle('has-video',!videoPanel.hidden);player.querySelector('[data-audio-title]').textContent=UI.t(current.title);trackSelect.value=current.id;
-  player.querySelector('[data-music-youtube]').href=current.source==='youtube'?'https://www.youtube.com/watch?v='+youtubeVideoID(current.url):'#';
-  if(playing)status.textContent=current.source==='youtube'?'YouTube · '+UI.t('Futbol musiqiləri'):'SSL · '+UI.t('Media');
+  control.innerHTML=playing?PAUSE:PLAY;
+  control.setAttribute('aria-label',UI.t(playing?'Musiqini dayandır':'Musiqini aç'));
+  control.setAttribute('aria-pressed',String(playing));control.setAttribute('aria-busy',String(busy));
+  control.title=UI.t(playing?'Musiqini dayandır':'Musiqini aç');
+  player.classList.toggle('is-playing',playing);player.classList.toggle('is-loading',busy);player.dataset.track=current.id;
  };
- const pause=(user=true)=>{generation++;wantsPlay=false;position=seconds();synth?.pause();audio?.pause();youtube?.pause();playing=false;busy=false;status.textContent=UI.t('Musiqi üçün toxun');draw();persist(user?false:preference.enabled);};
- const closePanel=()=>{if(current.source==='youtube')pause();opened=false;expanded=false;videoPanel.hidden=true;player.querySelector('.stadium-player-settings').hidden=true;const more=player.querySelector('[data-audio=expand]');more.setAttribute('aria-expanded','false');more.setAttribute('aria-label',UI.t('Musiqi ayarları'));more.textContent='⚙';panelUI();draw();};
- const fail=()=>{youtube?.destroy();youtube=null;wantsPlay=false;playing=false;busy=false;status.textContent=UI.t('Video bu saytda açılmadı. YouTube-da dinlə və ya növbəti mahnını seç.');draw();};
- const makeYouTube=()=>createYouTubeController({mount:videoMount,onState:state=>{
-  if(current.source!=='youtube')return;
-  if(state===1){if(document.hidden||videoPanel.hidden||!opened){youtube?.pause();return;}wantsPlay=true;busy=false;playing=true;draw();persist(true);}
-  else if(state===2){playing=false;busy=false;status.textContent=UI.t('Videoda ▶ düyməsinə toxun');draw();persist(false);}
-  else if(state===3){busy=false;playing=false;status.textContent=UI.t('Video yüklənir…');draw();}
-  else if(state===0&&wantsPlay)advance();
- },onBlocked:()=>{busy=false;playing=false;wantsPlay=false;status.textContent=UI.t('Videoda ▶ düyməsinə toxun');draw();},onError:fail});
- const start=async(gesture=true)=>{
-  if(busy){pause();return false;}const ticket=++generation;wantsPlay=true;busy=true;draw();
+ const pause=(remember=true)=>{
+  ++generation;wantsPlay=false;playing=false;busy=false;position=seconds();audio?.pause();
+  status.textContent=UI.t('Musiqi dayandırıldı.');draw();if(remember)persist(false);
+ };
+ const release=()=>{if(!audio)return;const old=audio;audio=null;old.pause();old.removeAttribute?.('src');old.load?.();old.remove?.();};
+ const failed=error=>{
+  wantsPlay=false;playing=false;busy=false;
+  status.textContent=UI.t(error?.name==='NotAllowedError'?'Musiqi üçün toxun':'Musiqi açılmadı. Yenidən play düyməsinə toxun.');draw();
+ };
+ const start=async()=>{
+  if(busy){pause();return false;}
+  const ticket=++generation;wantsPlay=true;busy=true;status.textContent=UI.t('Musiqi yüklənir…');draw();
   try{
-   if(current.source==='youtube'){
-    const id=youtubeVideoID(current.url);if(!id)throw new Error('Invalid YouTube URL');
-    openPanel();videoPanel.hidden=false;status.textContent=UI.t('Video yüklənir…');draw();youtube=youtube||makeYouTube();await youtube.prepare(id,position);
-    if(ticket!==generation||!wantsPlay)return false;youtube.volume(volume);youtube.play();
-    // PLAYING, BLOCKED and ERROR events determine the real UI state.
-    busy=false;status.textContent=UI.t('Videoda ▶ düyməsinə toxun');draw();return true;
+   if(!audio){
+    audio=new window.Audio(current.url);audio.preload='none';audio.volume=volume;
+    const target=audio;
+    if(target.nodeType===1){target.hidden=true;target.dataset.stadiumAudio='';player.append(target);}
+    target.addEventListener('loadedmetadata',()=>{if(target===audio&&position&&Number.isFinite(target.duration))target.currentTime=Math.min(position,Math.max(0,target.duration-.2));},{once:true});
+    target.addEventListener('ended',()=>{if(target===audio&&wantsPlay)advance();});
+    target.addEventListener('error',()=>{if(target===audio)failed();});
+    target.addEventListener('pause',()=>{if(target===audio&&playing){playing=false;wantsPlay=false;draw();persist(false);}});
    }
-   videoPanel.hidden=true;youtube?.pause();let ok=false;
-   if(current.source==='url'&&audioURL(current.url)){
-    if(!audio){audio=new window.Audio(current.url);audio.preload='none';audio.onended=()=>advance();audio.addEventListener('loadedmetadata',()=>{if(position&&Number.isFinite(audio.duration))audio.currentTime=Math.min(position,audio.duration);},{once:true});}
-    audio.volume=volume;await audio.play();ok=true;
-   }else{const Ctor=window.AudioContext||window.webkitAudioContext;if(Ctor){synth=synth||createStadiumSynth({AudioContextCtor:Ctor,onEnded:()=>advance()});synth.setVolume(volume);ok=await synth.play(current.preset,{gesture,seconds:position});}}
-   if(ticket!==generation){audio?.pause();synth?.pause();return false;}playing=ok;if(ok)persist(true);else status.textContent=UI.t('Musiqi üçün toxun');return ok;
-  }catch(error){if(ticket!==generation)return false;if(current.source==='youtube'){youtube?.destroy();youtube=null;}playing=false;status.textContent=UI.t(error.name==='NotAllowedError'?'Musiqi üçün toxun':'Musiqi açılmadı. Başqa musiqi seç.');return false;}
+   const media=audio;await media.play();
+   if(ticket!==generation||!wantsPlay){if(!wantsPlay||media!==audio)media.pause();return false;}
+   playing=true;status.textContent=UI.t('Musiqi səslənir.')+' '+current.title;persist(true);return true;
+  }catch(error){if(ticket===generation)failed(error);return false;}
   finally{if(ticket===generation){busy=false;draw();}}
  };
- const change=async id=>{pause(false);current=tracks.find(t=>t.id===id)||current;position=0;if(audio){audio.src='';audio=null;}draw();await start(true);};
- const advance=()=>{const next=nextTrack(tracks,current.id,shuffle);if(next)return change(next.id);};
- player.addEventListener('click',e=>{const button=e.target.closest('[data-audio]');if(!button)return;const action=button.dataset.audio;
-  if(action==='panel'){if(opened)closePanel();else if(playing)pause();else{openPanel();control.focus?.();}}
-  else if(action==='toggle'){if(playing||busy)pause();else start();}
-  else if(action==='next')advance();
-  else if(action==='minimise')closePanel();
-  else{expanded=!expanded;player.querySelector('.stadium-player-settings').hidden=!expanded;button.setAttribute('aria-expanded',String(expanded));button.setAttribute('aria-label',UI.t(expanded?'Ayarları bağla':'Musiqi ayarları'));button.textContent=expanded?'⌄':'⚙';}
- });
- trackSelect.onchange=()=>change(trackSelect.value);
- player.querySelector('[data-audio-volume]').oninput=e=>{volume=Number(e.target.value)/100;if(audio)audio.volume=volume;synth?.setVolume(volume);youtube?.volume(volume);persist();};
- player.querySelector('[data-audio-shuffle]').onchange=e=>{shuffle=e.target.checked;persist();};
- window.addEventListener('pagehide',()=>{persist();wantsPlay=false;synth?.pause();audio?.pause();youtube?.pause();});
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&current.source==='youtube')pause(false);});
- document.addEventListener('click',e=>{if(e.target.closest('[data-watch-live],a[href*="youtube.com"],a[href*="youtu.be"]')&&(playing||busy))pause(false);});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened){closePanel();launcher.focus?.();}});
- document.addEventListener('click',e=>{if(opened&&!player.contains(e.target))closePanel();});
- window.addEventListener('ssl-preferences-reset',()=>{closePanel();pause();youtube?.destroy();youtube=null;videoPanel.hidden=true;draw();for(const scope of [local,session])try{scope?.removeItem('ssl.music.preference.v1');scope?.removeItem('ssl.music.session.v1');}catch{}});
- draw();if(current.source!=='youtube'&&config.autoplay&&preference.enabled!==false&&saved.playing!==false&&!document.hidden)start(false);
- return {pause,start,change,open:openPanel,close:closePanel};
+ const change=async id=>{pause(false);release();current=tracks.find(t=>t.id===id)||current;position=0;draw();return start();};
+ const advance=()=>{const next=nextTrack(tracks,current.id,config.shuffle);if(next)return change(next.id);};
+ control.addEventListener('click',()=>{if(playing||busy)pause();else start();});
+ document.addEventListener('click',e=>{if(e.target.closest('[data-watch-live],a[href*="youtube.com"],a[href*="youtu.be"]')&&(playing||busy))pause();});
+ window.addEventListener('pagehide',()=>{persist();pause(false);});
+ window.addEventListener('ssl-preferences-reset',()=>{pause();release();position=0;for(const scope of [local,session])try{scope?.removeItem('ssl.music.preference.v1');scope?.removeItem('ssl.music.session.v1');}catch{}});
+ status.textContent=UI.t('Musiqi üçün toxun');draw();
+ // A listener can opt in to resume; a first visit never starts unwanted sound.
+ if(config.autoplay&&preference.enabled===true&&saved.playing!==false&&!document.hidden)start();
+ return {pause,start,change};
 }

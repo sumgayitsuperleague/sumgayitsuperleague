@@ -13,7 +13,8 @@ export function renderLeagueEntrance(ctx){
  const lead=renderStadiumCarousel(ctx,contentLead);
  const side=H.showSideNews?`<div class="league-side-news"><div class="league-side-heading"><span>LİQANIN GÜNDƏMİ</span><a href="xeberler.html">Hamısı ↗</a></div>${others.map(n=>`<a class="league-side-story" href="xeberler.html?id=${encodeURIComponent(n.id)}">${glyph(n)}<div><span>${esc(n.category)} <i>·</i> ${fmtShort(n.date)}</span><h3>${esc(n.title)}</h3><b>Xəbəri oxu ↗</b></div></a>`).join('')}${H.showGuidePromo?'<a class="learn-promo" href="minifutbol.html"><span>OYUNU TANI</span><strong>Minifutbol bələdçisi</strong><b>↗</b></a>':''}</div>`:'';
  const introduction=lead||side?`<section class="league-entry"><div class="wrap"><div class="league-front-heading"><h1>${esc(ctx.S.name)}</h1><a href="merhele.html">${esc(L.season)} MÖVSÜMÜ <i>·</i> ${ordinal(L.edition||1)} SEZON <span>↗</span></a></div><div class="league-news-layout ${side?'':'single-column'} ${lead?'':'side-only'}">${lead}${side}</div>${H.showEntryLinks?`<div class="league-entry-links">${[['cedvel.html','Turnir cədvəli'],['komandalar.html','Komandalar'],['merhele.html','Mövsüm mərkəzi']].map(([href,label])=>`<a href="${href}">${label}<span>↗</span></a>`).join('')}</div>`:''}</div></section>`:'';
- return strip+(H.blockPosition==='beforeLead'&&H.leadType!=='custom'?custom:'')+introduction+(H.blockPosition==='afterLead'&&H.leadType!=='custom'?custom:'');
+ const before=H.blockPosition==='beforeLead'&&H.leadType!=='custom'?custom:'',after=H.blockPosition==='afterLead'&&H.leadType!=='custom'?custom:'';
+ return ctx.CMS.stadium?.motion.featureFirst!==false?before+introduction+strip+after:strip+before+introduction+after;
 }
 export function bindMatchCenter(ctx){
  const box=ctx.$('#entry-matches');if(!box)return;const select=ctx.$('#entry-round'),config=ctx.H.matchCenter;let userChoice=false;
