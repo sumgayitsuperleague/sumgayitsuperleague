@@ -26,6 +26,7 @@ export function installMusicPlayer(config){
   if(current.source!=='youtube')return;
   if(state===1){if(document.hidden||videoPanel.hidden){youtube?.pause();return;}wantsPlay=true;busy=false;playing=true;draw();persist(true);}
   else if(state===2){playing=false;busy=false;status.textContent=UI.t('Videoda ▶ düyməsinə toxun');draw();persist(false);}
+  else if(state===3){busy=false;playing=false;status.textContent=UI.t('Video yüklənir…');draw();}
   else if(state===0&&wantsPlay)advance();
  },onBlocked:()=>{busy=false;playing=false;wantsPlay=false;status.textContent=UI.t('Videoda ▶ düyməsinə toxun');draw();},onError:fail});
  const start=async(gesture=true)=>{

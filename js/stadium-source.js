@@ -24,6 +24,7 @@ export function youtubeVideoID(value){
 }
 export const cursorSize=value=>value===32?20:value===40?24:[16,20,24].includes(value)?value:20;
 export function defaultStadium(){return {
+ version:2,
  cursor:{mode:'football',size:20,touch:true},
  clock:{enabled:true,seconds:true},
  motion:{transition:'slide',depth:true,carousel:true,autoplay:true,interval:6},
@@ -31,8 +32,9 @@ export function defaultStadium(){return {
  broadcast:{enabled:true,home:true,cards:true,label:'YouTube-da canlı izlə'}
 };}
 export function stadiumSettings(value){
- const defaults=defaultStadium();for(const key of Object.keys(defaults))defaults[key]={...defaults[key],...(value?.[key]||{})};
+ const defaults=defaultStadium();for(const key of ['cursor','clock','motion','music','broadcast'])defaults[key]={...defaults[key],...(value?.[key]||{})};
  defaults.cursor.size=cursorSize(defaults.cursor.size);
+ if(value?.cursor&&value.version!==2)defaults.cursor={...defaults.cursor,mode:'football',size:20};
  // Replace the old, untouched six-theme pack without discarding custom audio or owner switches.
  const tracks=defaults.music.tracks;
  if(Array.isArray(tracks)&&tracks.length===STADIUM_PRESETS.length&&tracks.every(t=>t.source==='original'&&t.url===''&&STADIUM_PRESETS.some(p=>p.id===t.id&&p.id===t.preset&&p.title===t.title)))defaults.music.tracks=defaultStadium().music.tracks.map((track,i)=>({...track,enabled:tracks[i].enabled}));
@@ -47,7 +49,8 @@ export function audioOrigins(stadium){return [...new Set((stadium?.music?.tracks
 const object=x=>x&&typeof x==='object'&&!Array.isArray(x),keys=(x,n)=>object(x)&&Object.keys(x).every(k=>n.includes(k)),bool=x=>typeof x==='boolean',int=(x,a,b)=>Number.isInteger(x)&&x>=a&&x<=b,text=(x,n)=>typeof x==='string'&&x.trim()&&x.length<=n&&!/[<>\u0000-\u001f]/.test(x);
 export function validateStadium(s){
  const e=[],check=(v,m)=>{if(!v)e.push(m);return v;};
- if(!check(keys(s,['cursor','clock','motion','music','broadcast']),'Sayt effektlərinin quruluşu düzgün deyil.'))return e;
+ if(!check(keys(s,['version','cursor','clock','motion','music','broadcast']),'Sayt effektlərinin quruluşu düzgün deyil.'))return e;
+ check(s.version===undefined||s.version===2,'Sayt effektlərinin versiyası düzgün deyil.');
  const c=s.cursor,k=s.clock,m=s.motion,a=s.music,b=s.broadcast;
  check(keys(c,['mode','size','touch'])&&['system','football'].includes(c.mode)&&[16,20,24,32,40].includes(c.size)&&bool(c.touch),'Futbol göstəricisinin ayarları düzgün deyil.');
  check(keys(k,['enabled','seconds'])&&bool(k.enabled)&&bool(k.seconds),'Bakı saatının ayarları düzgün deyil.');

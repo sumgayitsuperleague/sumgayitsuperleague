@@ -25,8 +25,8 @@
 .stadium-carousel-controls{height:55px;display:flex;align-items:center;justify-content:space-between;gap:12px}.stadium-carousel-controls>div{display:flex;align-items:center;gap:4px}
 .stadium-carousel-controls button{min-width:42px;min-height:42px;border:1px solid transparent;background:transparent;color:var(--arena-text,#172640);border-radius:8px;font-weight:750;font-size:17px;cursor:pointer}
 .stadium-carousel-controls button:hover{background:#215adc0d;border-color:#215adc18}.stadium-carousel-controls button:focus-visible{outline:3px solid #215adc;outline-offset:1px}
-.stadium-dots button{padding:12px;min-width:32px}.stadium-dots span{display:block;width:7px;height:7px;border-radius:20px;background:#aab5c5;transition:width .25s,background .25s}.stadium-dots [aria-pressed=true] span{width:26px;background:#215adc}
-.stadium-slide-count{font:750 10px var(--font,system-ui);font-variant-numeric:tabular-nums;letter-spacing:.06em;color:#6a7890;margin-left:12px}
+.stadium-dots button{padding:12px;min-width:32px}.stadium-dots button span{display:block;width:7px;height:7px;border-radius:20px;background:#aab5c5;transition:width .25s,background .25s}.stadium-dots [aria-pressed=true] span{width:26px;background:#215adc}
+.stadium-slide-count{display:inline-block;min-width:50px;white-space:nowrap;font:750 10px var(--font,system-ui);font-variant-numeric:tabular-nums;letter-spacing:.06em;color:#6a7890;margin-left:12px}
 .stadium-slide-progress{height:2px;overflow:hidden;background:#dce4ef}.stadium-slide-progress i{display:block;width:100%;height:100%;background:#215adc;transform-origin:left;animation:stadium-progress-a var(--slide-duration,6s) linear infinite}
 .stadium-carousel.is-cycle-even .stadium-slide-progress i{animation-name:stadium-progress-b}.stadium-carousel.is-paused .stadium-slide-progress i{animation-play-state:paused}
 @keyframes stadium-progress-a{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes stadium-progress-b{from{transform:scaleX(0)}to{transform:scaleX(1)}}
