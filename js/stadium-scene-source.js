@@ -60,9 +60,9 @@ export function installStadiumScene(carousel,options,engine){
  const scene=new Scene(),camera=new PerspectiveCamera(37,1,.1,90),objects=new Group();scene.add(objects);
  let renderer,host=null,frame=null,visible=true,disposed=false,elapsed=0,last=0,resizeObserver=null;
  let quality=window.matchMedia('(max-width: 760px)').matches?1:1.5,slowFrames=0;
- const state={entrance:options.intro===false?0:1,scroll:0,turn:0},cleanups=[];
+ const state={entrance:options.intro===false?0:1,scroll:0,turn:0,x:0,y:0},pointer={x:0,y:0},cleanups=[];
  const pose=()=>{
-  camera.position.set(10-state.scroll*1.5,13-state.scroll*2.5,18);
+  camera.position.set(10-state.scroll*1.5+state.x*.65,13-state.scroll*2.5-state.y*.4,18);
   camera.lookAt(0,0,0);objects.rotation.y=.06+state.turn*.1;
  };
  const release=()=>{
@@ -102,12 +102,13 @@ export function installStadiumScene(carousel,options,engine){
   const shadowGeometry=new PlaneGeometry(3.3,2.2),shadowMaterial=new MeshBasicMaterial({color:'#061c2c',transparent:true,opacity:.2,depthWrite:false});
   const shadow=new Mesh(shadowGeometry,shadowMaterial);shadow.rotation.x=-Math.PI/2;shadow.position.set(8,.035,5);objects.add(shadow);
   const canRun=()=>!disposed&&visible&&!document.hidden&&!!host&&!carousel.classList.contains('is-paused')&&host.closest('[data-stadium-slide]')?.getAttribute('aria-hidden')!=='true';
-  const size=()=>{if(!host||disposed)return;const r=host.getBoundingClientRect();if(r.width<1||r.height<1)return;const narrow=r.width/r.height<1.1;ball.position.x=narrow?4.5:8;ball.scale.setScalar(narrow?.92:1.05);shadow.position.x=ball.position.x;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,quality));renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();pose();renderer.render(scene,camera);};
+  const size=()=>{if(!host||disposed)return;const r=host.getBoundingClientRect();if(r.width<1||r.height<1)return;const narrow=window.matchMedia('(max-width: 760px)').matches||r.width/r.height<1.1;ball.position.x=narrow?4.5:8;ball.scale.setScalar(narrow?.92:1.05);shadow.position.x=ball.position.x;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,quality));renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();pose();renderer.render(scene,camera);};
   const tick=now=>{
    frame=null;if(!canRun()){last=0;return;}
    const delta=last?Math.min((now-last)/1000,.08):0;last=now;elapsed+=delta;
    if(delta>.038)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
    if(slowFrames>45&&quality>1){quality=1;slowFrames=0;size();carousel.dataset.sceneQuality='low';}
+   state.x+=(pointer.x-state.x)*.08;state.y+=(pointer.y-state.y)*.08;
    ball.rotation.set(.18+elapsed*.16,elapsed*.38,.12);ball.position.y=1.3+Math.sin(elapsed*1.15)*.22+state.entrance*.7;
    shadow.scale.setScalar(1-state.entrance*.15);pose();renderer.render(scene,camera);
    frame=requestAnimationFrame(tick);
@@ -122,6 +123,12 @@ export function installStadiumScene(carousel,options,engine){
   };
   resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(size):null;
   const changed=()=>{state.turn+=1;mount();};
+  // Pointer depth belongs to the scene, never to readable match information.
+  if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+   const move=e=>{const r=carousel.getBoundingClientRect();pointer.x=Math.max(-1,Math.min(1,(e.clientX-r.left)/r.width*2-1));pointer.y=Math.max(-1,Math.min(1,(e.clientY-r.top)/r.height*2-1));};
+   const leave=()=>{pointer.x=0;pointer.y=0;};carousel.addEventListener('pointermove',move,{passive:true});carousel.addEventListener('pointerleave',leave);
+   cleanups.push(()=>carousel.removeEventListener('pointermove',move),()=>carousel.removeEventListener('pointerleave',leave));
+  }
   carousel.addEventListener('ssl-slide-change',changed);carousel.addEventListener('ssl-slide-pause',wake);document.addEventListener('visibilitychange',wake);window.addEventListener('resize',size,{passive:true});
   cleanups.push(()=>carousel.removeEventListener('ssl-slide-change',changed),()=>carousel.removeEventListener('ssl-slide-pause',wake),()=>document.removeEventListener('visibilitychange',wake),()=>window.removeEventListener('resize',size));
   const view=typeof IntersectionObserver==='function'?new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;wake();},{threshold:.01}):null;view?.observe(carousel);cleanups.push(()=>view?.disconnect());

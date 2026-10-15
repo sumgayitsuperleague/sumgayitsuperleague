@@ -12,7 +12,7 @@ export function renderStadiumCarousel(ctx,lead){
  const options=stadiumSettings(ctx.CMS.stadium).motion;if(!options.carousel||!lead||ctx.H.leadType==='none')return lead;
  const selected=selectHomeMatches(ctx.L,ctx.H.matchCenter).matches;
  const m=selected.find(x=>x.status==='live')||selected.find(x=>x.status==='planned')||selected[0];
- const broadcast=options.presentation==='broadcast';
+ const broadcast=options.presentation!=='classic';
  const crest=id=>ctx.ball(id,'lg').replace('loading="lazy"',options.opening==='match'?'loading="eager" decoding="sync" fetchpriority="high"':'loading="lazy" decoding="async"');
  const slides=[{kind:'news',html:lead}];
  if(m)slides.push({kind:'match',html:`<a class="stadium-slide-feature stadium-match-slide" data-carousel-match="${esc(m.id)}" href="matc.html?id=${esc(m.id)}">${pitchScene()}<div class="stadium-match-caption"><${broadcast?'h2':'span'} data-slide-caption>${esc(UI.t(matchCaption(m)))}</${broadcast?'h2':'span'}><span class="stadium-slide-stage">${esc(UI.t(matchStageLabel(m)))}</span></div><div class="stadium-slide-teams"><span>${crest(m.home)}<b>${esc(ctx.T[m.home].name)}</b></span><strong>${m.status==='planned'?'VS':m.hs+' : '+m.as}</strong><span>${crest(m.away)}<b>${esc(ctx.T[m.away].name)}</b></span></div>${broadcast?`<div class="stadium-fixture-detail"><time datetime="${esc(m.date)}T${esc(m.time)}:00+04:00"><span>${ctx.fd(m.date)}</span><strong>${esc(m.time)}</strong></time><span class="stadium-fixture-venue">${esc(m.venue)}</span></div>`:`<p>${ctx.fd(m.date)} · ${esc(m.time)} · ${esc(m.venue)}</p>`}<span class="stadium-slide-link">${esc(UI.t('Matç mərkəzi'))}<svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.8"/></svg></span></a>`});
@@ -49,7 +49,7 @@ export function installStadium(ctx){
  const carousel=document.querySelector('.stadium-carousel');if(carousel){
   installCarousel(carousel,settings.motion,reduced);
   if(settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
-   const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261015h',location.origin);
+   const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261015i',location.origin);
    let sceneVisible=typeof window.IntersectionObserver!=='function',loaded=false,sceneTimer=null;
    const cleanup=()=>{clearTimeout(sceneTimer);sceneObserver?.disconnect();carousel.removeEventListener('ssl-slide-change',schedule);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);};
    const needed=()=>sceneVisible&&!document.hidden&&!!carousel.querySelector('.stadium-slide.is-current [data-stadium-canvas]');
