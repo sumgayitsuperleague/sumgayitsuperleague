@@ -75,8 +75,19 @@ export function controlMatch(source,command,now=Date.now(),eventID){
   case 'next-period':
    checked(command,[]);live();if(clock.state==='running'||clock.period>=4)throw new MatchControlError('Növbəti hissə üçün əvvəl saatı dayandır və ya fasilə ver.',409);clock.period++;clock.elapsed=0;run();break;
   case 'set-clock':
-   checked(command,['period','seconds']);if(clock.state==='running')throw new MatchControlError('Vaxtı düzəltmək üçün əvvəl saatı dayandır.',409);
+   checked(command,['period','seconds']);
    if(!LIVE_PERIODS.includes(command.period)||!integer(command.seconds,0,10800))reject('Hissə və ya vaxt düzgün deyil.');clock.period=command.period;clock.elapsed=command.seconds;clock.state='paused';clock.startedAt=null;break;
+  case 'reset-clock':
+   checked(command,[]);clock.period=1;clock.elapsed=0;clock.state='paused';clock.startedAt=null;break;
+  case 'reset-match':
+   checked(command,[]);if(match.status!=='live')throw new MatchControlError('Sınağı ləğv etmək üçün oyun canlı vəziyyətdə olmalıdır.',409);
+   match.status='planned';match.hs=null;match.as=null;match.goals=[];match.cards=[];match.mvp=null;clock.period=1;clock.elapsed=0;clock.state='paused';clock.startedAt=null;break;
+  case 'fixture':{
+   checked(command,['stage','round','leg','date','time','venue']);
+   if(!['group','semifinal','final'].includes(command.stage)||command.stage==='group'&&!integer(command.round,1,200)||command.stage!=='group'&&command.round!==undefined)reject('Yarış mərhələsini və qrup turunu düzgün seç.');
+   if(!text(command.leg)||command.leg.length>80||typeof command.venue!=='string'||command.venue.length>160||/[<>\u0000-\u001f]/.test(command.venue)||typeof command.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(command.date)||Number.isNaN(Date.parse(command.date+'T00:00:00Z'))||new Date(command.date+'T00:00:00Z').toISOString().slice(0,10)!==command.date||typeof command.time!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(command.time))reject('Tarix, saat, məkan və ya mərhələ adı düzgün deyil.');
+   Object.assign(match,{stage:command.stage,round:command.stage==='group'?command.round:match.round||1,leg:command.leg.trim(),date:command.date,time:command.time,venue:command.venue.trim()});break;
+  }
   case 'finish':checked(command,[]);live();stop('paused');match.status='done';break;
   case 'reopen':checked(command,[]);if(match.status!=='done')throw new MatchControlError('Yalnız tamamlanmış oyun yenidən açıla bilər.',409);match.status='live';clock.state='paused';clock.startedAt=null;break;
   case 'score':checked(command,['home','away']);active();if(!integer(command.home,0,200)||!integer(command.away,0,200))reject('Hesab 0–200 aralığında olmalıdır.');match.hs=command.home;match.as=command.away;break;

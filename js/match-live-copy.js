@@ -1,5 +1,6 @@
 export const MATCH_LIVE_COPY=[
- ['Canlı','Live','В прямом эфире'],['CANLI OYUN','LIVE MATCH','МАТЧ В ПРЯМОМ ЭФИРЕ'],
+ ['Mərhələ','Stage','Стадия'],['Bütün statuslar','All statuses','Все статусы'],['Oyun statusu','Match status','Статус матча'],
+ ['Canlı','Live','В эфире'],['CANLI OYUN','LIVE MATCH','МАТЧ В ПРЯМОМ ЭФИРЕ'],
  ['Canlı oyunlar','Live matches','Матчи в прямом эфире'],['1-ci hissə','First half','Первый тайм'],['2-ci hissə','Second half','Второй тайм'],
  ['1-ci əlavə hissə','First extra-time period','Первый дополнительный тайм'],['2-ci əlavə hissə','Second extra-time period','Второй дополнительный тайм'],
  ['Fasilə','Half-time / interval','Перерыв'],['Dayandırılıb','Paused','Приостановлен'],
