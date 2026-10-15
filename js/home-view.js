@@ -23,7 +23,7 @@ export function bindMatchCenter(ctx){
 export function renderMatchCenter(ctx){
  const {H,L,esc}=ctx,config=H.matchCenter,selection=selectHomeMatches(L,config);
  const next=selection.matches.filter(m=>m.status==='planned').slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];
- const timing=config.showCountdown!==false?`<div class="matchbar-time-note"><span>Bakı vaxtı · UTC+4</span><span data-kickoff-hint="${esc(next?.id||'')}"${next?'':' hidden'}>${esc(kickoffText(next))}</span></div>`:'';
+ const timing=config.showCountdown!==false?`<div class="matchbar-time-note"><span>UTC+4</span><span data-kickoff-hint="${esc(next?.id||'')}"${next?'':' hidden'}>${esc(kickoffText(next))}</span></div>`:'';
  const choices=selection.choices.some(c=>c.value===selection.selected)?selection.choices:[{value:selection.selected,label:selection.label},...selection.choices];
  return H.showScoreStrip!==false?`<section class="league-matchbar" aria-label="${esc(config.title)}"><div class="wrap"><div class="matchbar-heading"><div><span class="eyebrow">${esc(L.season)} MÖVSÜMÜ <i>·</i> <span id="entry-stage-label">${esc(selection.label)}</span></span><h2>${esc(config.title)}</h2></div>${config.showSelector&&config.mode!=='manual'?`<label><span>Oyunları seç</span><select id="entry-round">${choices.map(c=>`<option value="${esc(c.value)}"${c.value===selection.selected?' selected':''}>${esc(c.label)}</option>`).join('')}</select></label>`:''}<a href="oyunlar.html">Bütün oyunlar ↗</a></div>${timing}<div class="entry-matches ${selection.matches.length<=2?'few-matches':''}" id="entry-matches"></div></div></section>`:'';
 }
