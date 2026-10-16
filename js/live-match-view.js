@@ -1,4 +1,5 @@
 import {defaultStadium} from './stadium-source.js';
+import {uiIcon} from './ui-icons.js';
 import {clockText,eventTime,liveLabel,liveStreamURL,validateMatchClock} from './match-live-source.js';
 import * as UI from './i18n.js';
 import {matchStage,matchStageLabel,playerName} from './league-source.js';
@@ -16,7 +17,7 @@ function eventPlayer(event,ctx){
  return url?`<a href="${escape(url)}">${escape(name)}</a>`:escape(name);
 }
 export function matchTimeline(match,ctx){
- const {T}=ctx,events=[...match.goals.map((event,index)=>({event,index,kind:'goals',type:event.og?'Avtoqol':'Qol',symbol:'<img src="/assets/football-cursor-large.svg" alt="" width="22" height="22">'})),...match.cards.map((event,index)=>({event,index,kind:'cards',type:event.c==='r'?'Qırmızı kart':'Sarı kart',symbol:`<svg width="18" height="24" viewBox="0 0 18 24" aria-hidden="true"><rect x="2" y="1" width="14" height="21" rx="2" fill="${event.c==='r'?'#cc2947':'#edb72a'}"/></svg>`}))];
+ const {T}=ctx,events=[...match.goals.map((event,index)=>({event,index,kind:'goals',type:event.og?'Avtoqol':'Qol',symbol:uiIcon('football')})),...match.cards.map((event,index)=>({event,index,kind:'cards',type:event.c==='r'?'Qırmızı kart':'Sarı kart',symbol:uiIcon(event.c==='r'?'red':'yellow')}))];
  events.sort((a,b)=>(a.event.period||0)-(b.event.period||0)||(a.event.at??Infinity)-(b.event.at??Infinity)||a.index-b.index);
  return events.length?`<ol class="live-timeline events-cols">${events.map(({event,type,symbol,kind})=>`<li data-match-event="${kind}" class="${eventTime(event)?'has-event-time':'no-event-time'}">${eventTime(event)?`<time>${eventTime(event)}</time>`:''}<span class="live-event-symbol" aria-hidden="true">${symbol}</span><div><span>${escape(UI.t(T[event.t]?.name||''))}${event.og?' · '+UI.t('öz qapısına'):''}</span><b>${eventPlayer(event,ctx)}</b><small>${UI.t(type)}${event.period?' · '+UI.t(({1:'1-ci hissə',2:'2-ci hissə',3:'1-ci əlavə hissə',4:'2-ci əlavə hissə'})[event.period]):''}</small></div></li>`).join('')}</ol>`:`<p class="live-empty">${UI.t(match.status==='live'?'Hələ qol və kart yoxdur.':'Bu oyunun hadisələri arxivdə yoxdur.')}</p>`;
 }

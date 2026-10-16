@@ -1,4 +1,5 @@
 import * as UI from './i18n.js';
+import {installProjectedStadium} from './projected-stadium.js';
 import {animateRail,animateHero,motionRuntime} from './site-motion.js';
 import {stadiumSettings,featuredStadiumVideo} from './stadium-source.js';
 import {videoCover} from './video-cover-source.js';
@@ -40,7 +41,7 @@ export function installStadium(ctx){
   if(!['touch','pen'].includes(event.pointerType)||event.target.closest('input,select,textarea,[data-stadium-player]'))return;
   const ball=document.createElement('span');ball.className='football-tap';ball.setAttribute('aria-hidden','true');ball.style.left=event.clientX+'px';ball.style.top=event.clientY+'px';ball.style.width=ball.style.height=settings.cursor.size+'px';document.body.append(ball);const all=document.querySelectorAll('.football-tap');if(all.length>5)all[0].remove();ball.addEventListener('animationend',()=>ball.remove(),{once:true});setTimeout(()=>ball.remove(),700);
  },{passive:true});
- if(settings.motion.depth&&!reduced&&window.matchMedia?.('(hover: hover) and (pointer: fine)').matches){
+ if(settings.motion.presentation!=='arena'&&settings.motion.depth&&!reduced&&window.matchMedia?.('(hover: hover) and (pointer: fine)').matches){
   for(const card of document.querySelectorAll('.stadium-carousel,.about-identity')){
    card.classList.add('stadium-tilt');let pending=false,point;
    const draw=()=>{pending=false;const r=card.getBoundingClientRect();if(!r.width||!r.height)return;card.style.setProperty('--tilt-x',((.5-(point.y-r.top)/r.height)*5).toFixed(2)+'deg');card.style.setProperty('--tilt-y',(((point.x-r.left)/r.width-.5)*6).toFixed(2)+'deg');card.style.setProperty('--spot-x',((point.x-r.left)/r.width*100).toFixed(1)+'%');card.style.setProperty('--spot-y',((point.y-r.top)/r.height*100).toFixed(1)+'%');};
@@ -51,7 +52,8 @@ export function installStadium(ctx){
  const updateCarousel=()=>{for(const card of document.querySelectorAll('[data-carousel-match]')){const match=ctx.M?.find(m=>m.id===card.dataset.carouselMatch);if(!match)continue;card.querySelector('.stadium-slide-teams>strong').textContent=match.status==='planned'?'VS':match.hs+' : '+match.as;card.querySelector('[data-slide-caption]').textContent=UI.t(matchCaption(match));}};window.addEventListener('ssl-match-live-change',updateCarousel);
  const carousel=document.querySelector('.stadium-carousel');if(carousel){
   installCarousel(carousel,settings.motion,reduced);
-  if(settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
+  if(settings.motion.presentation==='arena'){installProjectedStadium(carousel,settings.motion,{reduced});installSceneControls(carousel,settings.motion,reduced);}
+  if(settings.motion.presentation!=='arena'&&settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
    const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261016a',location.origin);
    let sceneVisible=typeof window.IntersectionObserver!=='function',loaded=false,sceneTimer=null;
    const cleanup=()=>{clearTimeout(sceneTimer);sceneObserver?.disconnect();carousel.removeEventListener('ssl-slide-change',schedule);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);};
@@ -59,13 +61,21 @@ export function installStadium(ctx){
    const schedule=()=>{if(loaded||sceneTimer||!needed())return;sceneTimer=setTimeout(()=>{sceneTimer=null;if(!needed())return;loaded=true;cleanup();
     if(window.navigator?.connection?.saveData||!supportsStadium3D(document)){carousel.dataset.sceneEngine='fallback';return;}
     import(sceneURL.href).then(module=>module.installStadiumScene(carousel,settings.motion,motionRuntime)).catch(()=>{carousel.dataset.sceneEngine='fallback';});
-   },900);};
+   },200);};
    const sceneObserver=typeof window.IntersectionObserver==='function'?new window.IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;schedule();},{threshold:.05}):null;sceneObserver?.observe(carousel);
    carousel.addEventListener('ssl-slide-change',schedule);document.addEventListener('visibilitychange',schedule);window.addEventListener('pageshow',schedule);
    window.addEventListener('pagehide',event=>{clearTimeout(sceneTimer);sceneTimer=null;if(!event.persisted)cleanup();});schedule();
   }
  }
  if(settings.music.enabled&&!preview)installMusicPlayer(settings.music);
+}
+function installSceneControls(carousel,options,reduced){
+ const names=[['stand','Tribunadan'],['touchline','Yan xətdən'],['aerial','Yuxarıdan']];
+ const controls=document.createElement('div');controls.className='arena-scene-controls';
+ controls.innerHTML=`<div role="group" aria-label="${esc(UI.t('Meydana baxış'))}">${names.map(([id,name])=>`<button type="button" data-arena-camera="${id}" aria-pressed="${id===options.scene}">${esc(UI.t(name))}</button>`).join('')}</div><button type="button" data-arena-motion aria-pressed="${reduced}" aria-label="${esc(UI.t('Səhnəni dayandır'))}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>`;
+ carousel.querySelector('.stadium-viewport').after(controls);controls.querySelector('[data-arena-motion]').disabled=reduced||options.depth===false;
+ controls.addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;if(button.hasAttribute('data-arena-camera')){for(const b of controls.querySelectorAll('[data-arena-camera]'))b.setAttribute('aria-pressed',String(b===button));carousel.dispatchEvent(new CustomEvent('ssl-scene-camera',{detail:{scene:button.dataset.arenaCamera}}));}else{const paused=carousel.dataset.scenePaused!=='true';carousel.dataset.scenePaused=String(paused);button.setAttribute('aria-pressed',String(paused));button.setAttribute('aria-label',UI.t(paused?'Səhnəni davam etdir':'Səhnəni dayandır'));button.innerHTML=paused?'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7Z"/></svg>':'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';carousel.dispatchEvent(new Event('ssl-scene-pause'));}});
+ const show=()=>{controls.hidden=carousel.querySelector('.stadium-slide.is-current')?.dataset.slideKind!=='match';};carousel.addEventListener('ssl-slide-change',show);show();
 }
 export function installCarousel(carousel,options,reduced){
  const slides=[...carousel.querySelectorAll('[data-stadium-slide]')],rail=carousel.querySelector('.stadium-slides'),pauseButton=carousel.querySelector('[data-stadium-action=pause]');
