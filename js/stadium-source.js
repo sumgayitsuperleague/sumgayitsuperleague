@@ -36,17 +36,20 @@ export function youtubeVideoID(value){
 }
 export const cursorSize=value=>value===32?20:value===40?24:[16,20,24].includes(value)?value:20;
 export function defaultStadium(){return {
- version:2,
+ version:3,
  cursor:{mode:'football',size:20,touch:true},
  clock:{enabled:true,seconds:true},
- motion:{enabled:true,level:'balanced',reveal:true,interactions:true,progress:true,intro:true,mobile3d:true,slideDepth:true,opening:'match',featureFirst:true,presentation:'arena',navigationLabels:true,featuredVideo:'',scene:'stand',transition:'slide',depth:true,carousel:true,autoplay:true,interval:6},
+ motion:{enabled:true,level:'balanced',reveal:true,interactions:true,progress:true,intro:true,mobile3d:true,slideDepth:true,opening:'match',featureFirst:true,presentation:'official',navigationLabels:true,featuredVideo:'',scene:'stand',transition:'slide',depth:true,carousel:true,autoplay:true,interval:6},
  music:{enabled:false,autoplay:true,shuffle:true,volume:25,tracks:worldCupAudioSlots()},
  broadcast:{enabled:true,home:true,cards:true,label:'YouTube-da canlı izlə'}
 };}
 export function stadiumSettings(value){
  const defaults=defaultStadium();for(const key of ['cursor','clock','motion','music','broadcast'])defaults[key]={...defaults[key],...(value?.[key]||{})};
+ // The owner requested replacement of every previous visual world. Upgrade once;
+ // choices made in the new editor, including legacy presentations, remain stable.
+ if(value?.version!==3)defaults.motion.presentation='official';
  defaults.cursor.size=cursorSize(defaults.cursor.size);
- if(value?.cursor&&value.version!==2)defaults.cursor={...defaults.cursor,mode:'football',size:20};
+ if(value?.cursor&&![2,3].includes(value.version))defaults.cursor={...defaults.cursor,mode:'football',size:20};
  // Upgrade only untouched stock packs, preserving custom audio and owner switches.
  const tracks=defaults.music.tracks;
  const stockSynth=Array.isArray(tracks)&&tracks.length===6&&tracks.every(t=>t.source==='original'&&t.url===''&&STADIUM_PRESETS.some(p=>p.id===t.id&&p.id===t.preset&&p.title===t.title));
@@ -69,11 +72,11 @@ const object=x=>x&&typeof x==='object'&&!Array.isArray(x),keys=(x,n)=>object(x)&
 export function validateStadium(s){
  const e=[],check=(v,m)=>{if(!v)e.push(m);return v;};
  if(!check(keys(s,['version','cursor','clock','motion','music','broadcast']),'Sayt effektlərinin quruluşu düzgün deyil.'))return e;
- check(s.version===undefined||s.version===2,'Sayt effektlərinin versiyası düzgün deyil.');
+ check(s.version===undefined||[2,3].includes(s.version),'Sayt effektlərinin versiyası düzgün deyil.');
  const c=s.cursor,k=s.clock,m=s.motion,a=s.music,b=s.broadcast;
  check(keys(c,['mode','size','touch'])&&['system','football'].includes(c.mode)&&[16,20,24,32,40].includes(c.size)&&bool(c.touch),'Futbol göstəricisinin ayarları düzgün deyil.');
  check(keys(k,['enabled','seconds'])&&bool(k.enabled)&&bool(k.seconds),'Bakı saatının ayarları düzgün deyil.');
- check(keys(m,['enabled','level','reveal','interactions','progress','intro','mobile3d','slideDepth','opening','featureFirst','presentation','navigationLabels','featuredVideo','scene','transition','depth','carousel','autoplay','interval'])&&['none','fade','slide'].includes(m.transition)&&['depth','carousel','autoplay'].every(x=>bool(m[x]))&&int(m.interval,5,30)&&['enabled','reveal','interactions','progress','intro','mobile3d','slideDepth','featureFirst','navigationLabels'].every(x=>m[x]===undefined||bool(m[x]))&&(m.level===undefined||['subtle','balanced','expressive'].includes(m.level))&&(m.opening===undefined||['news','match','media'].includes(m.opening))&&(m.presentation===undefined||['arena','panorama','broadcast','classic'].includes(m.presentation))&&(m.scene===undefined||['stand','touchline','aerial'].includes(m.scene))&&(m.featuredVideo===undefined||m.featuredVideo===''||text(m.featuredVideo,120)),'Slayd və hərəkət ayarları düzgün deyil.');
+ check(keys(m,['enabled','level','reveal','interactions','progress','intro','mobile3d','slideDepth','opening','featureFirst','presentation','navigationLabels','featuredVideo','scene','transition','depth','carousel','autoplay','interval'])&&['none','fade','slide'].includes(m.transition)&&['depth','carousel','autoplay'].every(x=>bool(m[x]))&&int(m.interval,5,30)&&['enabled','reveal','interactions','progress','intro','mobile3d','slideDepth','featureFirst','navigationLabels'].every(x=>m[x]===undefined||bool(m[x]))&&(m.level===undefined||['subtle','balanced','expressive'].includes(m.level))&&(m.opening===undefined||['news','match','media'].includes(m.opening))&&(m.presentation===undefined||['official','arena','panorama','broadcast','classic'].includes(m.presentation))&&(m.scene===undefined||['stand','touchline','aerial'].includes(m.scene))&&(m.featuredVideo===undefined||m.featuredVideo===''||text(m.featuredVideo,120)),'Slayd və hərəkət ayarları düzgün deyil.');
  if(check(keys(a,['enabled','autoplay','shuffle','volume','tracks'])&&['enabled','autoplay','shuffle'].every(x=>bool(a[x]))&&int(a.volume,0,100)&&Array.isArray(a.tracks)&&a.tracks.length<=12,'Musiqi ayarları düzgün deyil.')){
   const ids=new Set();for(const t of a.tracks){if(!check(keys(t,['id','title','preset','source','url','enabled']),'Musiqi sətrinin quruluşu düzgün deyil.'))continue;check(text(t.id,80)&&/^[a-z0-9][a-z0-9_-]*$/.test(t.id)&&!ids.has(t.id)&&text(t.title,120)&&STADIUM_PRESETS.some(p=>p.id===t.preset)&&['original','url','youtube'].includes(t.source)&&bool(t.enabled)&&(t.source==='original'?t.url==='':t.source==='youtube'?!!youtubeVideoID(t.url):audioURL(t.url)||!t.enabled&&t.url===''),'Musiqinin adı, növü və ya audio keçidi düzgün deyil.');ids.add(t.id);}
   check(!a.enabled||a.tracks.some(t=>t?.enabled),'Pleyer aktivdirsə ən azı bir musiqi seç.');

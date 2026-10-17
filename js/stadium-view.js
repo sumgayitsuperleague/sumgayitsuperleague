@@ -1,4 +1,5 @@
 import * as UI from './i18n.js';
+import {installOfficialGround} from './official-view.js';
 import {installProjectedStadium} from './projected-stadium.js';
 import {animateRail,animateHero,motionRuntime} from './site-motion.js';
 import {stadiumSettings,featuredStadiumVideo} from './stadium-source.js';
@@ -14,10 +15,10 @@ export function renderStadiumCarousel(ctx,lead){
  const options=stadiumSettings(ctx.CMS.stadium).motion;if(!options.carousel||!lead||ctx.H.leadType==='none')return lead;
  const selected=selectHomeMatches(ctx.L,ctx.H.matchCenter).matches;
  const m=selected.find(x=>x.status==='live')||selected.find(x=>x.status==='planned')||selected[0];
- const broadcast=options.presentation!=='classic';
+ const broadcast=options.presentation!=='classic',official=options.presentation==='official';
  const crest=id=>ctx.ball(id,'lg').replace('loading="lazy"',options.opening==='match'?'loading="eager" decoding="sync" fetchpriority="high"':'loading="lazy" decoding="async"');
  const slides=[{kind:'news',label:ctx.H.leadType==='news'?'Xəbər':'Liqadan',html:lead}];
- if(m)slides.push({kind:'match',label:'Matç',html:`<a class="stadium-slide-feature stadium-match-slide" data-carousel-match="${esc(m.id)}" href="matc.html?id=${esc(m.id)}">${pitchScene()}<div class="stadium-match-caption"><${broadcast?'h2':'span'} data-slide-caption>${esc(UI.t(matchCaption(m)))}</${broadcast?'h2':'span'}><span class="stadium-slide-stage">${esc(UI.t(matchStageLabel(m)))}</span></div><div class="stadium-slide-teams"><span>${crest(m.home)}<b>${esc(ctx.T[m.home].name)}</b></span><strong>${m.status==='planned'?'VS':m.hs+' : '+m.as}</strong><span>${crest(m.away)}<b>${esc(ctx.T[m.away].name)}</b></span></div>${broadcast?`<div class="stadium-fixture-detail"><time datetime="${esc(m.date)}T${esc(m.time)}:00+04:00"><span>${ctx.fd(m.date)}</span><strong>${esc(m.time)}</strong></time><span class="stadium-fixture-venue">${esc(m.venue)}</span></div>`:`<p>${ctx.fd(m.date)} · ${esc(m.time)} · ${esc(m.venue)}</p>`}<span class="stadium-slide-link">${esc(UI.t('Matç mərkəzi'))}<svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.8"/></svg></span></a>`});
+ if(m)slides.push({kind:'match',label:'Matç',html:`<a class="stadium-slide-feature stadium-match-slide" data-carousel-match="${esc(m.id)}" href="matc.html?id=${esc(m.id)}">${official?'':pitchScene()}<div class="stadium-match-caption"><${broadcast?'h2':'span'} data-slide-caption>${esc(UI.t(matchCaption(m)))}</${broadcast?'h2':'span'}><span class="stadium-slide-stage">${esc(UI.t(matchStageLabel(m)))}</span></div><div class="stadium-slide-teams"><span>${crest(m.home)}<b>${esc(ctx.T[m.home].name)}</b></span><strong>${m.status==='planned'?'VS':m.hs+' : '+m.as}</strong><span>${crest(m.away)}<b>${esc(ctx.T[m.away].name)}</b></span></div>${broadcast?`<div class="stadium-fixture-detail"><time datetime="${esc(m.date)}T${esc(m.time)}:00+04:00"><span>${ctx.fd(m.date)}</span><strong>${esc(m.time)}</strong></time><span class="stadium-fixture-venue">${esc(m.venue)}</span></div>`:`<p>${ctx.fd(m.date)} · ${esc(m.time)} · ${esc(m.venue)}</p>`}<span class="stadium-slide-link">${esc(UI.t('Matç mərkəzi'))}<svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" stroke="currentColor" stroke-width="1.8"/></svg></span></a>`});
  else slides.push({kind:'match',label:'Matç',html:`<a class="stadium-slide-feature" href="haqqimizda.html">${pitchScene()}<h2>${esc(ctx.CMS.about.heading)}</h2><p>${esc(ctx.CMS.about.subtitle)}</p><span class="stadium-slide-link">${esc(UI.t('Liqa ilə tanış ol'))} ↗</span></a>`});
  const video=featuredStadiumVideo(ctx.VIDEOS,options.featuredVideo);
  const media=video?`<a class="stadium-slide-feature stadium-media-slide stadium-video-slide" href="${esc(video.url)}" target="_blank" rel="noopener noreferrer"><div class="stadium-video-art">${videoCover({...video,coverMode:'poster'},{league:ctx.L,site:ctx.S,logo:ctx.B.logo||'/assets/logo.png',translate:UI.t})}</div><div class="stadium-video-copy"><h2>${esc(video.title)}</h2><p>${ctx.fmtShort(video.date)}</p><span class="stadium-slide-link">${esc(UI.t('Videonu izlə'))} <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="m9 5 10 7-10 7Z" stroke="currentColor" stroke-width="1.6"/></svg></span></div></a>`:`<a class="stadium-slide-feature stadium-media-slide" href="media.html">${pitchScene()}<h2>${esc(UI.t('Oyunu izlə. Liqanı yaşa.'))}</h2><p>${esc(UI.t('Matç arxivi və yayımlar'))}</p><span class="stadium-slide-link">SSL TV ↗</span></a>`;
@@ -29,8 +30,9 @@ export function bakuTime(now,{seconds=true}={}){return new Intl.DateTimeFormat('
 export function supportsStadium3D(doc){try{const gl=doc.createElement('canvas').getContext('webgl2');if(!gl)return false;gl.getExtension('WEBGL_lose_context')?.loseContext();return true;}catch{return false;}}
 export function installStadium(ctx){
  const settings=stadiumSettings(ctx.CMS.stadium),reduced=settings.motion.enabled===false||!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,preview=!!document.body.dataset.previewPath;
- document.body.dataset.stadiumPresentation=settings.motion.presentation;document.body.dataset.stadiumScene=settings.motion.scene;
+ document.body.classList.add('ssl-official');document.body.dataset.stadiumPresentation=settings.motion.presentation;document.body.dataset.stadiumScene=settings.motion.scene;
  document.body.dataset.stadiumMotion=reduced?'none':settings.motion.transition;
+ if(settings.motion.presentation==='official')installOfficialGround(document.querySelector('.league-entry--official'));
  document.body.classList.toggle('stadium-depth',settings.motion.depth&&!reduced);
  document.body.classList.toggle('football-cursor',settings.cursor.mode==='football');document.body.dataset.footballSize=String(settings.cursor.size);
  if(settings.clock.enabled){const place=document.querySelector('.utility-season');if(place&&!place.querySelector('[data-baku-clock]')){
@@ -41,7 +43,7 @@ export function installStadium(ctx){
   if(!['touch','pen'].includes(event.pointerType)||event.target.closest('input,select,textarea,[data-stadium-player]'))return;
   const ball=document.createElement('span');ball.className='football-tap';ball.setAttribute('aria-hidden','true');ball.style.left=event.clientX+'px';ball.style.top=event.clientY+'px';ball.style.width=ball.style.height=settings.cursor.size+'px';document.body.append(ball);const all=document.querySelectorAll('.football-tap');if(all.length>5)all[0].remove();ball.addEventListener('animationend',()=>ball.remove(),{once:true});setTimeout(()=>ball.remove(),700);
  },{passive:true});
- if(settings.motion.presentation!=='arena'&&settings.motion.depth&&!reduced&&window.matchMedia?.('(hover: hover) and (pointer: fine)').matches){
+ if(!['official','arena'].includes(settings.motion.presentation)&&settings.motion.depth&&!reduced&&window.matchMedia?.('(hover: hover) and (pointer: fine)').matches){
   for(const card of document.querySelectorAll('.stadium-carousel,.about-identity')){
    card.classList.add('stadium-tilt');let pending=false,point;
    const draw=()=>{pending=false;const r=card.getBoundingClientRect();if(!r.width||!r.height)return;card.style.setProperty('--tilt-x',((.5-(point.y-r.top)/r.height)*5).toFixed(2)+'deg');card.style.setProperty('--tilt-y',(((point.x-r.left)/r.width-.5)*6).toFixed(2)+'deg');card.style.setProperty('--spot-x',((point.x-r.left)/r.width*100).toFixed(1)+'%');card.style.setProperty('--spot-y',((point.y-r.top)/r.height*100).toFixed(1)+'%');};
@@ -53,7 +55,7 @@ export function installStadium(ctx){
  const carousel=document.querySelector('.stadium-carousel');if(carousel){
   installCarousel(carousel,settings.motion,reduced);
   if(settings.motion.presentation==='arena'){installProjectedStadium(carousel,settings.motion,{reduced});installSceneControls(carousel,settings.motion,reduced);}
-  if(settings.motion.presentation!=='arena'&&settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
+  if(!['official','arena'].includes(settings.motion.presentation)&&settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
    const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261016a',location.origin);
    let sceneVisible=typeof window.IntersectionObserver!=='function',loaded=false,sceneTimer=null;
    const cleanup=()=>{clearTimeout(sceneTimer);sceneObserver?.disconnect();carousel.removeEventListener('ssl-slide-change',schedule);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);};
