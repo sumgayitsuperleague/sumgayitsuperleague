@@ -10,7 +10,7 @@ import {matchStageLabel} from './league-source.js';
 export {installMusicPlayer} from './stadium-player.js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pitchScene=()=>`<div class="stadium-scene" aria-hidden="true"><div class="stadium-webgl" data-stadium-canvas></div><div class="stadium-glow"></div><div class="stadium-pitch"><svg viewBox="0 0 640 400" fill="none"><path d="M24 24h592v352H24zM320 24v352M24 100h95v200H24m592-200h-95v200h95M24 148h34v104H24m592-104h-34v104h34"/><circle cx="320" cy="200" r="62"/><circle cx="320" cy="200" r="3"/></svg><i class="stadium-goal goal-left"></i><i class="stadium-goal goal-right"></i></div><div class="stadium-fallback-ball"><img src="/assets/football-cursor-large.svg" alt=""></div></div>`;
-const matchCaption=m=>m.status==='live'?'Canlı hesab və vaxt':m.status==='done'?'Oyunun nəticəsi':'Meydanın növbəti görüşü';
+const matchCaption=m=>m.status==='live'?'Canlı hesab və vaxt':m.status==='done'?'Oyunun nəticəsi':'Növbəti oyun';
 export function renderStadiumCarousel(ctx,lead){
  const options=stadiumSettings(ctx.CMS.stadium).motion;if(!options.carousel||!lead||ctx.H.leadType==='none')return lead;
  const selected=selectHomeMatches(ctx.L,ctx.H.matchCenter).matches;

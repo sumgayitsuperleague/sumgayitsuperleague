@@ -1,7 +1,7 @@
 /* Avtomatik yaradılıb — nəticələri admin.html ilə yeniləyin */
 window.LEAGUE={
  "season": "2026",
- "name": "Sumqayıt Super Liqa",
+ "name": "Sumqayıt Super Liqası",
  "updated": "2026-10-09",
  "teams": [
   {

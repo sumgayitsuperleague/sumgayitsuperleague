@@ -1,6 +1,6 @@
 export const REFINEMENT_COPY=[
  ['Şəhərin oyunu.','The city’s game.','Игра нашего города.'],['Bizim liqa.','Our league.','Наша лига.'],
- ['Meydanda rəqabət. Tribunada birlik. Sumqayıt Super Liqanın rəsmi platforması.','Competition on the pitch. Community around it. The official home of Sumgayit Super League.','Соперничество на поле. Единство на трибунах. Официальная платформа Сумгаитской Суперлиги.'],
+ ['Meydanda rəqabət. Tribunada birlik. Sumqayıt Super Liqasının rəsmi platforması.','Competition on the pitch. Community around it. The official home of Sumqayıt Super Liqası.','Соперничество на поле. Единство на трибунах. Официальная платформа Sumqayıt Super Liqası.'],
  ['GÜNDƏM','LATEST','АКТУАЛЬНО'],['LİQA FOTOLARI /','LEAGUE PHOTOS /','ФОТО ЛИГИ /'],['OYUNU TANI','KNOW THE GAME','УЗНАЙТЕ ИГРУ'],['Minifutbol','Minifootball','Мини-футбол'],['Əlaqə','Contact','Контакты'],['Tam oyunlar və seçilmiş anlar','Full matches and selected moments','Полные матчи и лучшие моменты'],
  ['Tam oyun','Full match','Полный матч'],['Oyun icmalı','Highlights','Обзор матча'],['Qısa video','Short video','Короткое видео'],['Videonu saxla','Save video','Сохранить видео'],['Saxladığım videolar','Saved videos','Сохранённые видео'],
  ['Oyunu tanı','Know the game','Узнайте игру'],['Liqa bələdçisi','League guide','Гид по лиге'],['Taktika lövhəsi','Tactics board','Тактическая доска'],['Futbol lüğəti','Football glossary','Футбольный словарь'],

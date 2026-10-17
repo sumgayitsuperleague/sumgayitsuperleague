@@ -1,6 +1,6 @@
 // Public interface copy. Club and player names retain their official spelling.
 export const EDITORIAL_COPY=[
- ['SUMQAYIT / SUPER LİQA','SUMGAYIT / SUPER LEAGUE','СУМГАИТ / СУПЕРЛИГА'],
+ ['SUMQAYIT / SUPER LİQASI','SUMGAYIT / SUPER LEAGUE','СУМГАИТ / СУПЕРЛИГА'],
  ['Axtarış sözü','Search term','Поисковый запрос'],['Komanda, futbolçu və ya oyun...','Club, player or match…','Команда, игрок или матч…'],
  ['Oyunçu axtar','Search players','Поиск игроков'],['Oyunçu axtar…','Search players…','Найти игрока…'],
  ['Instagram-da izlə','Follow on Instagram','Следите в Instagram'],['Səs sayı','Votes','Количество голосов'],['Xəbər sayı','News articles','Количество новостей'],

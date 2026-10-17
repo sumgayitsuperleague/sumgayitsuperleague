@@ -1,3 +1,4 @@
+import {READABILITY_COPY} from './readability-copy.js';
 import {STADIUM_COPY} from './stadium-source.js';
 import {MATCH_LIVE_COPY} from './match-live-copy.js';
 import {EXPERIENCE_COPY} from './experience-copy.js';
@@ -15,7 +16,7 @@ export const LANG=languageFrom(location.search,typeof localStorage==='undefined'
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS];
-rows.push(...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY);
+rows.push(...READABILITY_COPY,...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY);
 const dictionaries={en:new Map(),ru:new Map()};
 for(const [az,en,ru] of rows){dictionaries.en.set(az.toLocaleLowerCase('az'),en);dictionaries.ru.set(az.toLocaleLowerCase('az'),ru);}
 const russianCount=(number,forms)=>{const n=Number(number);return forms[n%100>=11&&n%100<=14?2:n%10===1?0:n%10>=2&&n%10<=4?1:2];};
@@ -56,7 +57,7 @@ export function t(text,lang=LANG){
 export function fullDate(date){if(!date)return '';if(LANG==='az'){const [y,m,d]=date.split('-'),months=['yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentyabr','oktyabr','noyabr','dekabr'];return +d+' '+months[m-1]+' '+y;}return new Intl.DateTimeFormat(LANG==='ru'?'ru-RU':'en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(date+'T00:00:00Z'));}
 export function languageSelector(){return `<div class="language-picker" role="group" aria-label="${t('Dil seçimi')}">${['az','ru','en'].map(code=>`<button type="button" class="language-option ${code===LANG?'active':''}" data-language="${code}" aria-pressed="${code===LANG}" title="${LANGUAGE_NAMES[code]}" aria-label="${LANGUAGE_NAMES[code]}"><img src="/assets/flags/${code}.svg" alt="" width="22" height="22"><span>${code.toUpperCase()}</span></button>`).join('')}</div>`;}
 export function enhanceRoot(root=document.body,force=false){
- const walk=node=>{if(node.nodeType===3){if(node.parentElement?.closest('[contenteditable="true"],[contenteditable="plaintext-only"]'))return;const memory=textMemory.get(node),original=memory&&(force||node.nodeValue===memory.output)?memory.source:originalCopy(node.nodeValue),translated=t(original);textMemory.set(node,{source:original,output:translated});if(translated!==node.nodeValue)node.nodeValue=translated;return;}if(node.nodeType!==1||['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName))return;let attrs=attributeMemory.get(node);if(!attrs){attrs={};attributeMemory.set(node,attrs);}for(const key of ['aria-label','placeholder','title','alt'])if(node.hasAttribute(key)){const current=node.getAttribute(key),old=attrs[key],original=old&&(force||current===old.output)?old.source:originalCopy(current),translated=t(original);attrs[key]={source:original,output:translated};if(translated!==current)node.setAttribute(key,translated);}for(const child of [...node.childNodes])walk(child);};walk(root);
+ const walk=node=>{if(node.nodeType===3){if(node.parentElement?.closest('[contenteditable="true"],[contenteditable="plaintext-only"]'))return;const memory=textMemory.get(node),original=memory&&(force||node.nodeValue===memory.output)?memory.source:originalCopy(node.nodeValue),translated=t(original);textMemory.set(node,{source:original,output:translated});if(translated!==node.nodeValue)node.nodeValue=translated;return;}if(node.nodeType!==1||['SCRIPT','STYLE','TEXTAREA'].includes(node.tagName)||node.getAttribute('translate')==='no')return;let attrs=attributeMemory.get(node);if(!attrs){attrs={};attributeMemory.set(node,attrs);}for(const key of ['aria-label','placeholder','title','alt'])if(node.hasAttribute(key)){const current=node.getAttribute(key),old=attrs[key],original=old&&(force||current===old.output)?old.source:originalCopy(current),translated=t(original);attrs[key]={source:original,output:translated};if(translated!==current)node.setAttribute(key,translated);}for(const child of [...node.childNodes])walk(child);};walk(root);
  const base=new URL(location.href||'https://sumgayitsuperleague.com/');
  for(const anchor of root.querySelectorAll('a[href]')){const value=anchor.getAttribute('href');try{const href=siteAnchor(value,base.href,LANG,document.body.dataset.cleanRoutes==='1');if(value!==href)anchor.setAttribute('href',href);}catch{}}
 }
