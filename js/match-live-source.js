@@ -1,3 +1,4 @@
+import {matchStage} from './league-source.js';
 // The clock stores a server timestamp, not a per-second database write.
 export const LIVE_PERIODS=[1,2,3,4];
 export const defaultMatchClock=()=>({period:1,state:'paused',elapsed:0,startedAt:null,periodMinutes:25,extraMinutes:10});
@@ -67,7 +68,7 @@ export function controlMatch(source,command,now=Date.now(),eventID){
    checked(command,['periodMinutes','extraMinutes']);if(clock.state==='running')throw new MatchControlError('Müddəti dəyişmək üçün saatı dayandır.',409);
    if(!integer(command.periodMinutes,1,60)||!integer(command.extraMinutes,1,30))reject('Hissə 1–60, əlavə hissə 1–30 dəqiqə olmalıdır.');clock.periodMinutes=command.periodMinutes;clock.extraMinutes=command.extraMinutes;break;
   case 'start':
-   checked(command,[]);if(match.status!=='planned')throw new MatchControlError('Bu oyun artıq başladılıb. Saatı davam etdirmək üçün “Davam et” seç.',409);
+   checked(command,[]);if(match.qualificationPending)throw new MatchControlError('Yarımfinal iştirakçıları hələ təsdiqlənməyib.',409);if(!match.date||!match.time)throw new MatchControlError('Əvvəl oyunun tarix və saatını təyin et.',409);if(match.status!=='planned')throw new MatchControlError('Bu oyun artıq başladılıb. Saatı davam etdirmək üçün “Davam et” seç.',409);
    match.status='live';match.hs=0;match.as=0;clock.period=1;clock.elapsed=0;run();break;
   case 'pause':checked(command,[]);live();if(clock.state!=='running')throw new MatchControlError('Oyun saatı artıq dayandırılıb.',409);stop('paused');break;
   case 'resume':checked(command,[]);live();if(clock.state!=='paused')throw new MatchControlError('Davam etmək üçün dayandırılmış oyun saatı olmalıdır.',409);run();break;
@@ -81,14 +82,18 @@ export function controlMatch(source,command,now=Date.now(),eventID){
    checked(command,[]);clock.period=1;clock.elapsed=0;clock.state='paused';clock.startedAt=null;break;
   case 'reset-match':
    checked(command,[]);if(match.status!=='live')throw new MatchControlError('Sınağı ləğv etmək üçün oyun canlı vəziyyətdə olmalıdır.',409);
-   match.status='planned';match.hs=null;match.as=null;match.goals=[];match.cards=[];match.mvp=null;clock.period=1;clock.elapsed=0;clock.state='paused';clock.startedAt=null;break;
+   delete match.penalties;match.status='planned';match.hs=null;match.as=null;match.goals=[];match.cards=[];match.mvp=null;clock.period=1;clock.elapsed=0;clock.state='paused';clock.startedAt=null;break;
   case 'fixture':{
    checked(command,['stage','round','leg','date','time','venue']);
-   if(!['group','semifinal','final'].includes(command.stage)||command.stage==='group'&&!integer(command.round,1,200)||command.stage!=='group'&&command.round!==undefined)reject('Yarış mərhələsini və qrup turunu düzgün seç.');
-   if(!text(command.leg)||command.leg.length>80||typeof command.venue!=='string'||command.venue.length>160||/[<>\u0000-\u001f]/.test(command.venue)||typeof command.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(command.date)||Number.isNaN(Date.parse(command.date+'T00:00:00Z'))||new Date(command.date+'T00:00:00Z').toISOString().slice(0,10)!==command.date||typeof command.time!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(command.time))reject('Tarix, saat, məkan və ya mərhələ adı düzgün deyil.');
+   if(!['group','semifinal','final','third-place'].includes(command.stage)||command.stage==='group'&&!integer(command.round,1,200)||command.stage!=='group'&&command.round!==undefined)reject('Yarış mərhələsini və qrup turunu düzgün seç.');
+   const unscheduled=command.stage!=='group'&&match.status==='planned'&&command.date===''&&command.time==='';
+   if(!text(command.leg)||command.leg.length>80||typeof command.venue!=='string'||command.venue.length>160||/[<>\u0000-\u001f]/.test(command.venue)||(!unscheduled&&(typeof command.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(command.date)||Number.isNaN(Date.parse(command.date+'T00:00:00Z'))||new Date(command.date+'T00:00:00Z').toISOString().slice(0,10)!==command.date||typeof command.time!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(command.time))))reject('Tarix, saat, məkan və ya mərhələ adı düzgün deyil.');
    Object.assign(match,{stage:command.stage,round:command.stage==='group'?command.round:match.round||1,leg:command.leg.trim(),date:command.date,time:command.time,venue:command.venue.trim()});break;
   }
   case 'finish':checked(command,[]);live();stop('paused');match.status='done';break;
+  case 'penalties':
+   checked(command,['home','away']);active();if(matchStage(match)==='group'||match.hs!==match.as||!integer(command.home,0,100)||!integer(command.away,0,100)||command.home===command.away)reject('Penalti seriyası üçün bərabərə bitən pley-off oyunu və fərqli hesab yaz.');match.penalties={home:command.home,away:command.away};break;
+  case 'clear-penalties':checked(command,[]);active();delete match.penalties;break;
   case 'reopen':checked(command,[]);if(match.status!=='done')throw new MatchControlError('Yalnız tamamlanmış oyun yenidən açıla bilər.',409);match.status='live';clock.state='paused';clock.startedAt=null;break;
   case 'score':checked(command,['home','away']);active();if(!integer(command.home,0,200)||!integer(command.away,0,200))reject('Hesab 0–200 aralığında olmalıdır.');match.hs=command.home;match.as=command.away;break;
   case 'goal':case 'card':{
@@ -107,5 +112,6 @@ export function controlMatch(source,command,now=Date.now(),eventID){
   case 'broadcast':checked(command,['url']);if(!liveStreamURL(command.url))reject('Yayım üçün düzgün YouTube HTTPS keçidi daxil et.');match.streamUrl=command.url;break;
   default:reject('Canlı əməliyyat tanınmadı.');
  }
+ if(match.hs!==match.as||matchStage(match)==='group')delete match.penalties;
  const errors=validateMatchClock(clock,match.status);if(errors.length)reject(errors.join(' '));return match;
 }

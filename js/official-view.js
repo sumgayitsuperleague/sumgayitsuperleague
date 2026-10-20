@@ -1,12 +1,15 @@
+import {matchStage} from './league-source.js';
 import * as UI from './i18n.js';
 import {ordinal} from './league-source.js';
 import {uiIcon} from './ui-icons.js';
 
 export const OFFICIAL_ART='/assets/editorial/matchnight-field.webp';
 export function officialEntrance(ctx,lead,side){
- const {H,L,S,esc}=ctx,art=H.image||OFFICIAL_ART;
+ const {H,L,S,esc}=ctx,art=H.image||OFFICIAL_ART,final=L.matches.find(m=>matchStage(m)==='final'&&!m.qualificationPending),third=L.matches.find(m=>matchStage(m)==='third-place'&&!m.qualificationPending);
+ const phase=H.showFinalStage!==false&&final?`<a class="official-phase" href="merhele.html#final-stage">${uiIcon('trophy')}${esc(UI.t('Final mərhələsi'))}${uiIcon('arrow')}</a>`:'';
+ const secondary=H.showFinalStage!==false&&third&&final?`<a class="official-third-match" href="matc.html?id=${esc(third.id)}"><span>${esc(UI.t('3-cü yer uğrunda'))}</span><b>${esc(ctx.T[third.home].name)}<i>—</i>${esc(ctx.T[third.away].name)}</b>${uiIcon('arrow')}</a>`:'';
  const links=H.showEntryLinks?`<nav class="official-entry-links" aria-label="${esc(UI.t('Liqa mərkəzi'))}">${[['oyunlar.html','Oyunlar'],['cedvel.html','Turnir cədvəli'],['komandalar.html','Komandalar'],['merhele.html','Mövsüm mərkəzi']].map(([href,label])=>`<a href="${href}">${esc(UI.t(label))}${uiIcon('arrow')}</a>`).join('')}</nav>`:'';
- return `<section class="league-entry league-entry--official"><div class="official-hero-art" aria-hidden="true"><img src="${esc(art)}" alt="" width="1672" height="941" fetchpriority="high" decoding="async"></div><div class="wrap official-hero-grid${lead?'':' official-hero-empty'}"><div class="official-intro"><h1>${esc(UI.t(H.title||L.season+' mövsümü'))}</h1>${H.highlight?`<p class="official-intro-line">${esc(UI.t(H.highlight))}</p>`:''}${H.buttonLabel?`<a class="official-primary" href="${esc(H.buttonUrl||'/oyunlar')}">${esc(UI.t(H.buttonLabel))}${uiIcon('arrow')}</a>`:''}</div><div class="official-feature">${lead}</div></div>${links?`<div class="official-entry-bar"><div class="wrap">${links}</div></div>`:''}</section><div data-panorama-editorial>${side?`<section class="league-editorial official-editorial"><div class="wrap">${side}</div></section>`:''}</div>`;
+ return `<section class="league-entry league-entry--official"><div class="official-hero-art" aria-hidden="true"><img src="${esc(art)}" alt="" width="1672" height="941" fetchpriority="high" decoding="async"></div><div class="wrap official-hero-grid${lead?'':' official-hero-empty'}"><div class="official-intro">${phase}<h1>${esc(UI.t(H.title||L.season+' mövsümü'))}</h1>${H.highlight?`<p class="official-intro-line">${esc(UI.t(H.highlight))}</p>`:''}${H.buttonLabel?`<a class="official-primary" href="${esc(H.buttonUrl||'/oyunlar')}">${esc(UI.t(H.buttonLabel))}${uiIcon('arrow')}</a>`:''}</div><div class="official-feature">${lead}${secondary}</div></div>${links?`<div class="official-entry-bar"><div class="wrap">${links}</div></div>`:''}</section><div data-panorama-editorial>${side?`<section class="league-editorial official-editorial"><div class="wrap">${side}</div></section>`:''}</div>`;
 }
 
 export function installOfficialGround(root){

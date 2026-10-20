@@ -23,7 +23,7 @@ export function buttonText(color) {
 export function getCMS(data) {
   const site=data.site||{},cms=data.cms||{};
   const defaults={
-    home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',leadType:'news',featuredMatch:'',featuredTitle:'Əsas oyun',featuredText:'',showSideNews:true,showCommunity:true,showGuidePromo:true,showEntryLinks:true,blocks:[],blockPosition:'afterLead',matchCenter:defaultMatchCenter(),newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
+    home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',leadType:'news',featuredMatch:'',featuredTitle:'Əsas oyun',featuredText:'',showSideNews:true,showFinalStage:true,showCommunity:true,showGuidePromo:true,showEntryLinks:true,blocks:[],blockPosition:'afterLead',matchCenter:defaultMatchCenter(),newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
     stadium:stadiumSettings(cms.stadium),guide:defaultGuide(),community:defaultCommunity(),sponsors:defaultSponsors(),editor:defaultEditor(),
     about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',showFacts:true,showClubs:true,showJourney:true,showContact:true,blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
     appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'system',headingFont:'system',radius:18,width:1320,mobileNav:true},
@@ -61,7 +61,7 @@ export function validateCMS(cms) {
   if(cms.editor!==undefined)errors.push(...validateEditor(cms.editor,{imagePath,linkOK:value=>editorLinkOK(value,safeLink)}));
   const H=cms.home,A=cms.about,T=cms.appearance,B=cms.branding,S=cms.seo;
   if(T?.mobileNav!==undefined)check(typeof T.mobileNav==='boolean','Telefon menyusu ayarı düzgün deyil.');
-  if(check(keys(H,['title','highlight','buttonLabel','buttonUrl','image','announcement','announcementUrl','sections','layout','featuredNews','newsLimit','videoLimit','showClubStrip','showScoreStrip','matchCenter','leadType','featuredMatch','featuredTitle','featuredText','showSideNews','showCommunity','showGuidePromo','showEntryLinks','blocks','blockPosition']),'Ana səhifə ayarları düzgün deyil.')) {
+  if(check(keys(H,['title','highlight','buttonLabel','buttonUrl','image','announcement','announcementUrl','sections','layout','featuredNews','newsLimit','videoLimit','showClubStrip','showScoreStrip','matchCenter','leadType','featuredMatch','featuredTitle','featuredText','showSideNews','showFinalStage','showCommunity','showGuidePromo','showEntryLinks','blocks','blockPosition']),'Ana səhifə ayarları düzgün deyil.')) {
     check(text(H.title,100)&&text(H.highlight,100)&&text(H.buttonLabel,80,true)&&safeLink(H.buttonUrl)&&!!H.buttonUrl&&imagePath(H.image)&&text(H.announcement,300)&&safeLink(H.announcementUrl),'Ana səhifədə mətn və ya keçid düzgün deyil.');
     check(Array.isArray(H.sections)&&H.sections.length===HOME_SECTIONS.length&&new Set(H.sections.map(s=>s?.id)).size===HOME_SECTIONS.length&&H.sections.every(s=>keys(s,['id','visible'])&&HOME_SECTIONS.some(([id])=>id===s.id)&&typeof s.visible==='boolean'),'Ana səhifənin bölmələri düzgün deyil.');
     check(H.layout===undefined||['league','editorial','classic'].includes(H.layout),'Giriş düzülüşü düzgün deyil.');
@@ -72,7 +72,7 @@ export function validateCMS(cms) {
     check(H.featuredMatch===undefined||H.featuredMatch===''||ident(H.featuredMatch),'Əsas oyun seçimi düzgün deyil.');
     check(H.featuredTitle===undefined||text(H.featuredTitle,160,true),'Əsas oyun başlığı düzgün deyil.');
     check(H.featuredText===undefined||text(H.featuredText,600),'Əsas oyun təqdimatı düzgün deyil.');
-    for(const k of ['showSideNews','showCommunity','showGuidePromo','showEntryLinks'])check(H[k]===undefined||typeof H[k]==='boolean','Ana səhifə hissəsinin görünməsi düzgün deyil.');
+    for(const k of ['showSideNews','showFinalStage','showCommunity','showGuidePromo','showEntryLinks'])check(H[k]===undefined||typeof H[k]==='boolean','Ana səhifə hissəsinin görünməsi düzgün deyil.');
     check(H.blockPosition===undefined||['beforeLead','afterLead','bottom'].includes(H.blockPosition),'Ana səhifə bloklarının yeri düzgün deyil.');
     const c=H.matchCenter;
     if(c?.showCountdown!==undefined)check(typeof c.showCountdown==='boolean','Oyun vaxtı ayarı düzgün deyil.');

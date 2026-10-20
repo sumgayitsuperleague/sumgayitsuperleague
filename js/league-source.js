@@ -2,8 +2,8 @@
 export const playerName=s=>String(s||'').normalize('NFC').replace(/\s*\((?:kapitan|qk|v\s*\/\s*k)\)\s*/gi,' ').replace(/\s+/g,' ').trim();
 export const ordinal=value=>{const n=Number(value),last=n%10;const suffix=last?({1:'ci',2:'ci',3:'cü',4:'cü',5:'ci',6:'cı',7:'ci',8:'ci',9:'cu'})[last]:({10:'cu',20:'ci',30:'cu',40:'cı',50:'ci',60:'cı',70:'ci',80:'ci',90:'cı'})[n%100]||'cü';return n+'-'+suffix;};
 export const playerKey=s=>playerName(s).toLocaleLowerCase('az').split(' ').sort().join(' ');
-export function matchStage(m){return m.stage||(/yarım\s*final/i.test(m.leg||'')?'semifinal':/\bfinal\b/i.test(m.leg||'')?'final':'group');}
-export const matchStageLabel=m=>matchStage(m)==='group'?ordinal(m.round)+' tur':matchStage(m)==='semifinal'?'Yarımfinal':'Final';
+export function matchStage(m){return m.stage||(/(?:3-cü|üçüncü)\s*(?:yer|lük)/i.test(m.leg||'')?'third-place':/yarım\s*final/i.test(m.leg||'')?'semifinal':/\bfinal\b/i.test(m.leg||'')?'final':'group');}
+export const matchStageLabel=m=>matchStage(m)==='group'?ordinal(m.round)+' tur':matchStage(m)==='semifinal'?'Yarımfinal':matchStage(m)==='third-place'?'3-cü yer uğrunda':'Final';
 export const matchStageKey=m=>matchStage(m)==='group'?String(m.round):'stage:'+matchStage(m);
 export const creditedTeam=(m,g)=>g.og?(g.t===m.home?m.away:m.home):g.t;
 export function standings(league,group) {
@@ -35,5 +35,13 @@ export function headToHead(league,first,second) {
 export function competition(league) {
   const state=league.competition||{phase:'group',qualified:[]};
   const group=league.matches.filter(m=>matchStage(m)==='group'),done=group.filter(m=>m.status==='done');
-  return {...state,groupComplete:group.length>0&&group.length===done.length,groupPlayed:done.length,qualified:state.qualified.filter(id=>league.teams.some(t=>t.id===id)),semifinals:league.matches.filter(m=>matchStage(m)==='semifinal'),finals:league.matches.filter(m=>matchStage(m)==='final')};
+  return {...state,groupComplete:group.length>0&&group.length===done.length,groupPlayed:done.length,qualified:state.qualified.filter(id=>league.teams.some(t=>t.id===id)),semifinals:league.matches.filter(m=>matchStage(m)==='semifinal'),finals:league.matches.filter(m=>matchStage(m)==='final'),thirdPlace:league.matches.filter(m=>matchStage(m)==='third-place')};
 }
+
+// Shootout goals decide qualification and never enter league/scorer totals.
+export function matchWinner(match){
+ if(match?.status!=='done')return null;
+ if(match.hs!==match.as)return match.hs>match.as?match.home:match.away;
+ const p=match.penalties;return p&&p.home!==p.away?(p.home>p.away?match.home:match.away):null;
+}
+export const scheduledMatch=match=>!!match.date&&!!match.time;

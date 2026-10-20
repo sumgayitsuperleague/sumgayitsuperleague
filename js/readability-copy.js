@@ -1,4 +1,8 @@
 export const READABILITY_COPY=[
+ ['Final mərhələsi','Final stage','Финальная стадия'],
+ ['3-cü yer uğrunda','Third-place match','Матч за третье место'],
+ ['Tarix və saat tezliklə','Date and time to be confirmed','Дата и время будут объявлены'],
+ ['Penaltilər','Penalties','Пенальти'],
  ['Sumqayıt Super Liqası','Sumqayıt Super Liqası','Sumqayıt Super Liqası'],
  ['2026 mövsümü','2026 season','Сезон 2026'],
  ['Növbəti oyun','Next match','Следующий матч'],
