@@ -1,4 +1,5 @@
 import {READABILITY_COPY} from './readability-copy.js';
+import {PLAYER_DUEL_COPY} from './player-duel-copy.js';
 import {STADIUM_COPY} from './stadium-source.js';
 import {MATCH_LIVE_COPY} from './match-live-copy.js';
 import {EXPERIENCE_COPY} from './experience-copy.js';
@@ -16,7 +17,7 @@ export const LANG=languageFrom(location.search,typeof localStorage==='undefined'
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS];
-rows.push(...READABILITY_COPY,...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY);
+rows.push(...READABILITY_COPY,...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY,...PLAYER_DUEL_COPY);
 const dictionaries={en:new Map(),ru:new Map()};
 for(const [az,en,ru] of rows){dictionaries.en.set(az.toLocaleLowerCase('az'),en);dictionaries.ru.set(az.toLocaleLowerCase('az'),ru);}
 const russianCount=(number,forms)=>{const n=Number(number);return forms[n%100>=11&&n%100<=14?2:n%10===1?0:n%10>=2&&n%10<=4?1:2];};

@@ -26,6 +26,21 @@ export function teamSummary(league,id) {
   for(const m of matches){const own=m.home===id?m.hs:m.as,opp=m.home===id?m.as:m.hs;result.played++;result.goalsFor+=own;result.goalsAgainst+=opp;result.wins+=own>opp;result.draws+=own===opp;result.losses+=own<opp;result.cleanSheets+=opp===0;result.form.push(own>opp?'Q':own<opp?'M':'H');for(const card of m.cards)if(card.t===id)result[card.c==='r'?'red':'yellow']++;}
   result.form=result.form.slice(-5);result.average=result.played?result.goalsFor/result.played:0;return result;
 }
+// A score sheet records goals, awards and cards, not a player's appearances.
+export function playerSummary(league,teamId,name) {
+ const key=playerKey(name),team=league.teams.find(t=>t.id===teamId),player=team?.players.find(p=>playerKey(p.name)===key);
+ if(!player)return null;
+ const result={goals:0,scoringGames:0,mvp:0,yellow:0,red:0};
+ const belongs=event=>!!event&&event.t===teamId&&playerKey(event.p)===key;
+ for(const match of league.matches){
+  if(match.status!=='done'||![match.home,match.away].includes(teamId))continue;
+  const goals=(match.goals||[]).filter(g=>!g.og&&!g.unk&&belongs(g)).length;
+  result.goals+=goals;result.scoringGames+=goals>0;
+  result.mvp+=belongs(match.mvp);
+  for(const card of match.cards||[])if(belongs(card)&&['y','r'].includes(card.c))result[card.c==='r'?'red':'yellow']++;
+ }
+ return result;
+}
 export function headToHead(league,first,second) {
   const matches=league.matches.filter(m=>m.status==='done'&&(m.home===first&&m.away===second||m.home===second&&m.away===first)).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
   let firstWins=0,secondWins=0,draws=0,firstGoals=0,secondGoals=0;

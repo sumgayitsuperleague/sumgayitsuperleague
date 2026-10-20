@@ -9,9 +9,9 @@ body.ux-site.ssl-official .nav{border-bottom:1px solid var(--league-line)}
 body.ux-site.ssl-official .links>a{font-size:14px;color:#364974}body.ux-site.ssl-official .links>a.on{color:var(--league-blue)}body.ux-site.ssl-official .links>a:after{background:var(--league-blue)}
 body.ux-site.ssl-official .header-live{background:var(--league-blue);color:#fff;font-size:12px;letter-spacing:0}
 body.ux-site.ssl-official .brand{color:#17357d}body.ux-site.ssl-official .global-search,body.ux-site.ssl-official .burger{border-color:#d7e1f6;color:var(--league-blue);border-radius:8px}
-/* The owner's blue belongs to the league mark; sponsor identities keep their navy rail. */
-body.ux-site.ssl-official .nav .brand{color:#1c44be}
-body.ux-site.ssl-official .nav .brand>img{background:#1c44be}
+/* Header and footer use the same league mark and editable primary swatch. */
+body.ux-site.ssl-official .nav .brand{color:var(--league-blue)}
+body.ux-site.ssl-official .nav .brand>img{background:var(--league-blue)}
 body.ux-site.ssl-official .league-entry--official{background:linear-gradient(120deg,#fff 0%,#fff 50%,#f4f7ff 50%,#edf3ff 100%);border-bottom:1px solid var(--league-line);color:#142857}
 body.ux-site.ssl-official .official-hero-art{display:none}
 body.ux-site.ssl-official .official-hero-grid{min-height:570px;gap:64px;padding-block:46px}
@@ -85,8 +85,73 @@ body.ux-site.ssl-official .totop{background:var(--league-blue);color:#fff;border
 .sponsor-directory-logo .partner-scale-275{transform:scale(2.75)}
 .sponsor-directory-logo .partner-scale-300{transform:scale(3)}
 body.ux-site.ssl-official .official-custom-art .official-hero-art{display:block;opacity:.13;z-index:-2}.official-custom-art .official-hero-art:after{background:linear-gradient(90deg,#fff 0%,#ffffffcc 45%,#ffffff30 100%)}
-.sponsor-directory-logo{background:#0c2849}
+.sponsor-directory-logo{background:var(--league-blue)}
 .sponsor-directory-logo img[src*="partner-amf-transparent"]{filter:brightness(0) invert(1)}
 @media(max-width:1000px){body.ux-site.ssl-official .more-links a{font-size:15px;line-height:1.4;min-height:44px;padding:12px 10px}body.ux-site.ssl-official .links{overscroll-behavior:contain;scrollbar-width:thin}}
 @media(max-width:760px){body.ux-site.ssl-official .links{max-height:calc(100dvh - 190px);padding-bottom:16px}}
 body.ux-site.ssl-official .links>a:hover{color:#123797}
+
+/* One brand across profiles, season pages, partner areas and the reading pages. */
+body.ux-site.ssl-official .arena-footer .brand,
+body.ux-site.ssl-official .arena-footer .brand:hover{color:var(--league-blue)}
+body.ux-site.ssl-official .brand>img{background:var(--league-blue)}
+body.ux-site.ssl-official .footer-season span{color:var(--league-blue);font-size:13px;line-height:1.5;letter-spacing:.025em;margin:0}
+body.ux-site.ssl-official :is(.player-hero,.th,.match-hero,.comparison-hero,.season-hub,.guide-side-note,.fan-round-facts,.contact-socials,.about-contact-banner,.instagram-profile,.round-art,.season-record-grid>a,.broadcast-bar,.tw-head){background:var(--league-blue);color:#fff;border-color:transparent}
+body.ux-site.ssl-official .player-hero h1,
+body.ux-site.ssl-official .th h1,
+body.ux-site.ssl-official :is(.season-hub,.comparison-hero,.guide-side-note,.fan-round-facts,.contact-socials,.broadcast-bar,.tw-head) :is(h2,h3,strong){color:#fff}
+body.ux-site.ssl-official :is(.player-hero,.match-hero,.th) :is(.crumb,.eyebrow,p,.meta,.match-heading,.match-central>span),
+body.ux-site.ssl-official :is(.season-hub,.guide-side-note,.fan-round-facts,.comparison-hero,.broadcast-bar,.contact-socials) :is(.eyebrow,p,small),
+body.ux-site.ssl-official .comparison-hero>div>span{color:#e7edff}
+body.ux-site.ssl-official .player-hero :is(.player-club,.player-duel-link),
+body.ux-site.ssl-official .season-hub-links>a{color:#fff;border-color:#ffffff66}
+body.ux-site.ssl-official .season-hub-links>a:hover{background:#ffffff14;border-color:#fff}
+body.ux-site.ssl-official .season-hub h2{color:#fff}
+body.ux-site.ssl-official .guide-side-note .btn.pri,
+body.ux-site.ssl-official .broadcast-bar .btn.pri{background:#fff;color:var(--league-blue);border-color:#fff}
+body.ux-site.ssl-official .learn-promo{background:var(--league-light);border-color:var(--league-line);color:var(--league-blue)}
+body.ux-site.ssl-official .about-identity{background-color:var(--league-blue)}
+body.ux-site.ssl-official .about-identity:before{background:color-mix(in srgb,var(--league-blue) 88%,transparent)}
+body.ux-site.ssl-official :is(.crisp-cover,.video-art,.media-cover-fallback){background:var(--league-blue)}
+body.ux-site.ssl-official .league-entry--official .round-art{background:var(--league-blue)}
+body.ux-site.ssl-official .sponsors-section,
+body.ux-site.ssl-official .sponsors-marquee,
+.sponsor-admin-preview .sponsors-section{background:var(--league-blue);color:#fff}
+body.ux-site.ssl-official .sponsors-section .partners-heading h2{color:#fff}
+body.ux-site.ssl-official .sponsors-section .partners-grid .partner-card{background:transparent;border-color:#ffffff33;color:#fff;box-shadow:none}
+body.ux-site.ssl-official .sponsors-section .partners-grid .partner-caption :is(h3,span){color:#fff}
+body.ux-site.ssl-official .sponsors-marquee :is(.partners-heading p,.partner-caption h3,.partners-directory-link){color:#fff}
+body.ux-site.ssl-official .sponsors-marquee [data-partner-pause]{color:#fff;border-color:#ffffff80}
+body.ux-site.ssl-official .sponsors-marquee [data-partner-pause]:hover{background:#ffffff1c}
+body.ux-site.ssl-official .sponsors-marquee .partners-marquee-window{scrollbar-color:#fff var(--league-blue)}
+body.ux-site.ssl-official .player-duel-link{display:inline-flex;align-items:center;min-height:44px;gap:9px;margin:14px 0 0;padding:9px 15px;border:1px solid #ffffff80;border-radius:6px;font-size:15px;line-height:1.4;font-weight:650}
+body.ux-site.ssl-official .player-duel-link:hover{background:#ffffff18;border-color:#fff}
+.comparison-modes{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--league-line);padding:0 0 15px;margin-bottom:25px}
+.comparison-modes a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;border-radius:6px;color:#465c86;font-weight:650;font-size:16px;line-height:1.4}
+.comparison-modes a[aria-current=page]{background:var(--league-blue);color:#fff}
+.comparison-modes a:hover:not([aria-current]){background:var(--league-light);color:var(--league-blue)}
+.player-duel{max-width:1000px}
+.duel-selectors{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);align-items:end;gap:22px;margin-bottom:26px}
+.duel-selectors label{display:flex;flex-direction:column;gap:9px;font-size:15px;font-weight:650;color:#334b7b;min-width:0}
+.duel-selectors select{width:100%;min-width:0;max-width:100%;min-height:50px;border:1px solid #cbd8f2;border-radius:6px;background:#fff;color:#142857;padding:12px 34px 12px 13px;font:400 15px/1.5 var(--font)}
+.duel-selectors button{width:48px;min-height:50px;background:var(--league-light);border:1px solid var(--league-line);border-radius:6px;color:var(--league-blue);font:400 27px/1 var(--font);cursor:pointer}
+.duel-selectors button:hover{background:#e4ecff}
+.duel-selectors :is(select,button):focus-visible,.comparison-modes a:focus-visible{outline:3px solid var(--league-blue);outline-offset:3px}
+.duel-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr);align-items:center;gap:15px;padding:36px 30px;background:var(--league-blue);border-radius:10px;color:#fff;overflow:hidden}
+.duel-identity{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;color:#fff;gap:9px;min-width:0}
+.duel-identity h2{font:700 clamp(22px,2.6vw,31px)/1.2 var(--font);color:#fff;margin:8px 0 0;letter-spacing:-.02em;text-wrap:balance}
+.duel-identity>span:last-child{color:#e6ecff;font-size:15px;line-height:1.45}
+.duel-shirt{clip-path:polygon(25% 4%,37% 0,50% 8%,63% 0,75% 4%,100% 28%,84% 43%,77% 35%,77% 100%,23% 100%,23% 35%,16% 43%,0 28%);width:112px;height:112px;display:grid;place-items:center;background:#ffffffed;color:var(--league-blue);font:750 48px/1 var(--font);padding-top:12px}
+.duel-identity>.ball{position:absolute;top:80px;left:calc(50% + 20px);border:3px solid var(--league-blue);width:42px;height:42px;min-width:42px;background:white;padding:4px;box-shadow:none}
+.duel-versus{text-align:center}.duel-versus span{font-size:13px;letter-spacing:.1em;color:#e7edff}.duel-versus b{display:block;font:650 27px/1 var(--font);letter-spacing:.04em;margin-top:10px;color:#fff}
+.duel-statistics{padding:8px 24px;background:#fff;border:1px solid var(--league-line);border-top:0;border-radius:0 0 9px 9px;margin:0 10px}
+.duel-stat{padding:20px 0;border-bottom:1px solid #e5ebf8}.duel-stat:last-child{border-bottom:0}
+.duel-stat>div:first-child{display:grid;grid-template-columns:75px minmax(0,1fr) 75px;align-items:center;gap:18px;text-align:center}
+.duel-stat b{font:700 26px/1.2 var(--font);color:#496087;font-variant-numeric:tabular-nums}.duel-stat b.duel-leading{color:var(--league-blue)}
+.duel-stat>div>span{font:550 16px/1.4 var(--font);color:#33496f}
+.duel-bars{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.duel-bars span{display:block;height:4px;position:relative;background:#edf1fa;border-radius:2px;overflow:hidden}.duel-bars span:before{content:"";position:absolute;inset-block:0;width:var(--portion);background:var(--league-blue);border-radius:2px}.duel-bars span:first-child:before{right:0}.duel-bars span:last-child:before{left:0}
+.duel-stat[data-stat=yellow] .duel-bars span:before{background:#b68213}.duel-stat[data-stat=red] .duel-bars span:before{background:#c33d49}
+.duel-footnote{font-size:14px;line-height:1.65;color:#5a6b8c;margin:20px 10px 25px;max-width:70ch}
+.duel-share{display:flex;align-items:center;flex-wrap:wrap;gap:15px}.duel-share .btn{font-size:15px;line-height:1.4;min-height:46px}.duel-share .btn:disabled{opacity:.5;cursor:default}.duel-share [role=status]{font-size:14px;color:#334d7e}
+.duel-link{flex:1 0 100%;display:flex;flex-direction:column;gap:8px;font-size:14px}.duel-link[hidden]{display:none}.duel-link input{width:100%;min-height:46px;border:1px solid var(--league-line);border-radius:6px;padding:10px;color:#142857;background:var(--league-light);font:400 14px var(--font)}
+@media(max-width:760px){body.ux-site.ssl-official .footer-season{display:block;max-width:100%;text-align:left;margin:18px 0 0}body.ux-site.ssl-official .footer-season span{font-size:12px;letter-spacing:0}.comparison-modes{margin-bottom:22px;gap:5px}.comparison-modes a{font-size:15px;padding:10px 18px}.duel-selectors{grid-template-columns:minmax(0,1fr) 44px;gap:13px 12px}.duel-selectors label:first-child{grid-column:1;grid-row:1}.duel-selectors label:last-child{grid-column:1;grid-row:2}.duel-selectors button{grid-column:2;grid-row:1/3;align-self:center;width:44px;min-height:48px}.duel-selectors label{font-size:14px;gap:6px}.duel-selectors select{font-size:16px;min-height:48px}.duel-hero{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:8px;padding:26px 12px}.duel-shirt{width:80px;height:82px;font-size:37px;padding-top:9px}.duel-identity h2{font-size:21px;line-height:1.2;min-height:2.4em;display:flex;align-items:center;justify-content:center}.duel-identity>span:last-child{font-size:13px;min-height:2.9em}.duel-identity>.ball{top:56px;left:calc(50% + 10px);width:34px;height:34px;min-width:34px;padding:3px;border-width:2px}.duel-versus span{font-size:10px;letter-spacing:0}.duel-versus b{font-size:17px}.duel-statistics{padding:5px 16px;margin:0 5px}.duel-stat{padding:17px 0}.duel-stat>div:first-child{grid-template-columns:42px minmax(0,1fr) 42px;gap:8px}.duel-stat b{font-size:25px}.duel-stat>div>span{font-size:15px}.duel-footnote{margin-inline:5px;font-size:13px}.duel-share .btn{width:100%;white-space:normal}}
