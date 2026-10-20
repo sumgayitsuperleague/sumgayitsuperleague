@@ -96,7 +96,10 @@ export function validateCMS(cms) {
   if(cms.community!==undefined&&check(keys(cms.community,['enabled','showQuiz','title','homeLimit','posts','poll','homeFeature','featured']),'İcma ayarları düzgün deyil.')){
     const c=cms.community;if(c.showQuiz!==undefined)check(typeof c.showQuiz==='boolean','Liqa testi ayarı düzgün deyil.');check(typeof c.enabled==='boolean'&&text(c.title,160,true)&&Number.isInteger(c.homeLimit)&&c.homeLimit>=0&&c.homeLimit<=4,'İcma başlığı və ya paylaşım sayı düzgün deyil.');
     if(check(Array.isArray(c.posts)&&c.posts.length<=60,'Instagram bölməsində ən çox 60 paylaşım ola bilər.')){
-      const ids=new Set(),urls=new Set();for(const p of c.posts){if(!check(keys(p,['id','url','title','text','date','published','kind']),'Instagram paylaşımı düzgün deyil.'))continue;
+      const ids=new Set(),urls=new Set();for(const p of c.posts){if(!check(keys(p,['id','url','title','text','date','published','kind','image','imageFit','imagePosition']),'Instagram paylaşımı düzgün deyil.'))continue;
+        check(p.image===undefined||imagePath(p.image),'Instagram şəkli düzgün deyil.');
+        check(p.imageFit===undefined||['contain','cover'].includes(p.imageFit),'Instagram şəklinin ölçüsü düzgün deyil.');
+        check(p.imagePosition===undefined||['top','center','bottom'].includes(p.imagePosition),'Instagram şəklinin mövqeyi düzgün deyil.');
         check(ident(p.id)&&!ids.has(p.id)&&instagramPostURL(p.url)&&!urls.has(p.url)&&text(p.title,160,true)&&text(p.text,600)&&date(p.date)&&typeof p.published==='boolean'&&['post','reel'].includes(p.kind),'Instagram keçidi, tarix və ya mətn düzgün deyil.');ids.add(p.id);urls.add(p.url);}
     }
     if(check(keys(c.poll,['enabled','round','question']),'Səsvermə ayarları düzgün deyil.'))check(typeof c.poll.enabled==='boolean'&&Number.isInteger(c.poll.round)&&c.poll.round>=1&&c.poll.round<=99&&text(c.poll.question,200,true),'Səsvermə sualı və ya tur düzgün deyil.');

@@ -2239,7 +2239,10 @@ window.CONTENT={
       "published": true,
       "match": "r1-agt-omn",
       "text": "Sumqayıt Super Liqasının ilk mövsümü şəhərin 77-ci ilinə həsr olunub. Səkkiz komanda, iki qrup və hər turda yeni futbol hekayəsi.\n\nQrup oyunları 5 sentyabrda Agrotam — Old Men qarşılaşması ilə başladı. Açılış oyununda Agrotam 4–3 hesabı ilə qalib gəldi.\n\nAltı turun sonunda 24 qarşılaşma tamamlandı, 161 qol qeydə alındı. Siyəzən, Gənclərbirliyi, Five Star və Agrotam növbəti mərhələyə keçdi. Mövsümün oyunları, cədvəlləri və futbolçu statistikası saytın müvafiq bölmələrində toplanıb.",
-      "image": ""
+      "image": "/assets/editorial/news-season-draw.webp",
+      "imageFit": "cover",
+      "imagePosition": "center",
+      "imageCredit": "TVN.AZ"
     },
     {
       "id": "ssl-round6-2026",
@@ -2297,7 +2300,11 @@ window.CONTENT={
       "url": "https://tvn.az/tag/sumqay%C4%B1t-super-liqas%C4%B1/",
       "mark": "SSL",
       "text": "Sumqayıt Super Liqasının yaradılma məqsədi və şəhərin futbol həyatı barədə məlumatlar.",
-      "published": true
+      "published": true,
+      "image": "/assets/editorial/news-league-launch.webp",
+      "imageFit": "contain",
+      "imagePosition": "center",
+      "imageCredit": "TVN.AZ"
     },
     {
       "id": "mini",
@@ -2308,7 +2315,11 @@ window.CONTENT={
       "url": "https://minifootball.az/mini/?p=4300",
       "mark": "AZ",
       "text": "Azərbaycan Minifutbol Federasiyasının məlumatına görə, “Buxar” Sumqayıt EMF Avropa Kubokundakı üçüncü qarşılaşmada Bosniya və Hersoqovinanın “Delinqs İkon” komandasına 0–3 hesabı ilə uduzaraq çıxışını başa vurub. Sumqayıt təmsilçisi əvvəlki oyunda Çexiyanın “Abus Kastro” klubunu 2–1 məğlub etmişdi.\n\nŞəhərin beynəlxalq minifutbol iştirakından bu xəbərin tam mətnini rəsmi mənbədə oxuya bilərsən.",
-      "published": true
+      "published": true,
+      "image": "/assets/editorial/news-buxar.jpg",
+      "imageFit": "contain",
+      "imagePosition": "center",
+      "imageCredit": "Azərbaycan Minifutbol Federasiyası"
     }
   ],
   "videos": [
@@ -3166,7 +3177,10 @@ window.CONTENT={
           "text": "Rəsmi Instagram hesabımızdan paylaşım.",
           "date": "2026-10-11",
           "published": true,
-          "kind": "post"
+          "kind": "post",
+          "image": "/assets/editorial/ig-agrotam-semifinal.jpg",
+          "imageFit": "contain",
+          "imagePosition": "center"
         },
         {
           "id": "ig-groups",
@@ -3175,7 +3189,10 @@ window.CONTENT={
           "text": "Rəsmi Instagram hesabımızdan paylaşım.",
           "date": "2026-10-09",
           "published": true,
-          "kind": "post"
+          "kind": "post",
+          "image": "/assets/editorial/ig-group-table.jpg",
+          "imageFit": "contain",
+          "imagePosition": "center"
         },
         {
           "id": "ig-pitch",
@@ -3184,7 +3201,10 @@ window.CONTENT={
           "text": "Rəsmi Instagram hesabımızdan paylaşım.",
           "date": "2026-10-08",
           "published": true,
-          "kind": "reel"
+          "kind": "reel",
+          "image": "/assets/editorial/ig-pitch.jpg",
+          "imageFit": "contain",
+          "imagePosition": "center"
         },
         {
           "id": "ig-moment",
@@ -3193,7 +3213,10 @@ window.CONTENT={
           "text": "Rəsmi Instagram hesabımızdan paylaşım.",
           "date": "2026-10-08",
           "published": true,
-          "kind": "reel"
+          "kind": "reel",
+          "image": "/assets/editorial/ig-moment.jpg",
+          "imageFit": "contain",
+          "imagePosition": "center"
         }
       ],
       "homeFeature": "poll",
@@ -3778,6 +3801,48 @@ window.CONTENT={
         "title": "Ms. Liya",
         "alt": "Ms. Liya",
         "date": "2026-10-14"
+      },
+      {
+        "url": "/assets/editorial/news-season-draw.webp",
+        "title": "2026 mövsümünün püşkatması · TVN.AZ",
+        "alt": "2026 mövsümünün püşkatması · TVN.AZ",
+        "date": "2026-10-20"
+      },
+      {
+        "url": "/assets/editorial/news-league-launch.webp",
+        "title": "Liqanın rəsmi təqdimatı · TVN.AZ",
+        "alt": "Liqanın rəsmi təqdimatı · TVN.AZ",
+        "date": "2026-10-20"
+      },
+      {
+        "url": "/assets/editorial/news-buxar.jpg",
+        "title": "Buxar · Azərbaycan Minifutbol Federasiyası",
+        "alt": "Buxar · Azərbaycan Minifutbol Federasiyası",
+        "date": "2026-10-20"
+      },
+      {
+        "url": "/assets/editorial/ig-agrotam-semifinal.jpg",
+        "title": "Agrotam yarımfinalda · Instagram",
+        "alt": "Agrotam yarımfinalda · Instagram",
+        "date": "2026-10-20"
+      },
+      {
+        "url": "/assets/editorial/ig-group-table.jpg",
+        "title": "Qrup cədvəli · Instagram",
+        "alt": "Qrup cədvəli · Instagram",
+        "date": "2026-10-20"
+      },
+      {
+        "url": "/assets/editorial/ig-pitch.jpg",
+        "title": "Five Star müsahibəsi · Instagram",
+        "alt": "Five Star müsahibəsi · Instagram",
+        "date": "2026-10-20"
+      },
+      {
+        "url": "/assets/editorial/ig-moment.jpg",
+        "title": "Old Men — Five Star · Instagram",
+        "alt": "Old Men — Five Star · Instagram",
+        "date": "2026-10-20"
       }
     ]
   },

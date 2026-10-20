@@ -1,0 +1,60 @@
+/* Original editorial and Instagram images retain their complete frame. */
+.news-photo-frame{position:relative;width:100%;height:100%;min-height:inherit;isolation:isolate;overflow:hidden;background:#eef2f7}
+body.ux-site.ssl-official .news-photo-frame>.news-photo{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;background:#eef2f7;filter:none;opacity:1;transform:none;z-index:2}
+body.ux-site.ssl-official .news-photo-frame.image-fit-contain>.news-photo{object-fit:contain}
+.image-position-top>img{object-position:center top}.image-position-center>img{object-position:center}.image-position-bottom>img{object-position:center bottom}
+.news-photo-frame.cover-failed>.news-photo{display:none}
+body.ux-site.ssl-official .news-art-photo{aspect-ratio:3/2;border-radius:7px;background:#eef2f7}
+body.ux-site.ssl-official .news-meta{display:flex;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;letter-spacing:0;line-height:1.45}
+.news-category{font-size:11px;font-weight:750;color:#1c44be;letter-spacing:.025em}
+body.ux-site.ssl-official .news-card.featured{grid-template-columns:minmax(0,1.16fr) minmax(0,1fr);gap:32px}
+body.ux-site.ssl-official .news-copy h3{margin:12px 0 6px;font-size:27px;line-height:1.25}
+body.ux-site.ssl-official .news-card.featured .news-copy h3{font-size:clamp(27px,2.6vw,36px);line-height:1.2}
+body.ux-site.ssl-official .news-copy{padding:18px 0 24px}
+body.ux-site.ssl-official .article-cover:has(>.news-photo-frame){aspect-ratio:3/2;height:auto;max-height:720px;background:#eef2f7;border-radius:7px}
+body.ux-site.ssl-official .article-cover>.news-photo-frame{position:absolute;inset:0}
+.article-photo .image-credit{font-size:12px;letter-spacing:0;color:#617089;margin:9px 0}
+/* Data artwork remains live HTML, so names and figures stay sharp at any size. */
+body.ux-site.ssl-official .official-story-art{background:#1c44be;padding:30px;min-height:0}
+body.ux-site.ssl-official .official-story-results>div{margin-bottom:18px;gap:16px}
+body.ux-site.ssl-official .official-story-results>div>strong{font-size:clamp(24px,2.5vw,34px)}
+body.ux-site.ssl-official .official-story-results>div>span{color:#d3dfff;font-size:13px}
+body.ux-site.ssl-official .official-story-results>section{gap:10px}
+body.ux-site.ssl-official .official-story-results>section>div{background:#fff;border:0;border-radius:6px;padding:16px 9px;gap:8px;color:#173471;min-width:0}
+body.ux-site.ssl-official .official-story-results span{color:#314b7e;font-size:11px;min-width:0}
+body.ux-site.ssl-official .official-story-results b{font-size:30px;color:#142857}
+body.ux-site.ssl-official .official-story-results b i{color:#6885bd;padding-inline:3px}
+body.ux-site.ssl-official .official-story-results .ball.sm{background:#f0f4fc;border:0;width:35px;height:35px;flex:0 0 35px;padding:4px}
+body.ux-site.ssl-official .official-story-scorers{background:#f0f4fc;color:#173471;border:1px solid #dce5f5;justify-content:center}
+body.ux-site.ssl-official .official-story-scorers>strong{font-size:30px;margin-bottom:15px}
+body.ux-site.ssl-official .official-story-scorers>section>div{border-color:#d4dfef;padding:12px 0;gap:13px;min-width:0}
+body.ux-site.ssl-official .official-story-scorers>section>div>span{font-size:17px;line-height:1.2;min-width:0;color:#18355c}
+body.ux-site.ssl-official .official-story-scorers small{color:#647a99;font-size:12px;line-height:1.5;margin-top:4px}
+body.ux-site.ssl-official .official-story-scorers b{font-size:33px;color:#1c44be}
+body.ux-site.ssl-official .official-story-scorers .ball{width:45px;height:45px;flex:0 0 45px;background:#fff;padding:5px;border:1px solid #dae5f4}
+body.ux-site.ssl-official .official-story-season{gap:18px;background:#1c44be}
+body.ux-site.ssl-official .official-story-season:after{display:none}
+body.ux-site.ssl-official .official-story-season .official-story-mark{width:64px!important;height:64px!important;flex:0 0 64px;background:transparent}
+body.ux-site.ssl-official .official-story-season>strong{font-size:62px}
+.editorial-club-marks{display:flex;justify-content:center;gap:11px;flex-wrap:wrap;max-width:390px}
+.editorial-club-marks .ball.sm{width:31px;height:31px;flex:0 0 31px;background:#fff;border:0;padding:4px}
+/* A compact white header carries the label; nothing covers post text or faces. */
+.instagram-card{display:flex;flex-direction:column;background:#fff;border:1px solid #dce5f1;border-radius:9px;box-shadow:none;overflow:hidden;min-width:0}
+.instagram-card-heading{display:flex;align-items:center;gap:8px;min-height:49px;padding:11px 14px;color:#29466e;font-size:12px;font-weight:650;background:#fff;border-bottom:1px solid #e5eaf3}
+.instagram-card-heading>svg{width:18px;height:18px;flex:none}.instagram-card-heading>small{margin-left:auto;color:#657a99;font-size:11px;font-weight:550}
+body.ux-site.ssl-official .instagram-art{display:block;position:relative;aspect-ratio:4/5;min-height:0;height:auto;background:#0c223b;color:#fff;overflow:hidden}
+body.ux-site.ssl-official .instagram-art:before{display:none}
+body.ux-site.ssl-official .instagram-art>.instagram-post-image{display:block;position:absolute;inset:0;width:100%;height:100%;max-width:100%;object-fit:contain;background:#0c223b;filter:none;transform:none;opacity:1}
+body.ux-site.ssl-official .instagram-art.image-fit-cover>.instagram-post-image{object-fit:cover}
+.instagram-no-cover{display:flex;height:100%;width:100%;flex-direction:column;justify-content:center;align-items:center;gap:20px;padding:24px;text-align:center}
+.instagram-no-cover>svg{width:40px;height:40px}.instagram-no-cover>b{font-size:20px;line-height:1.3}.instagram-no-cover>span{font-size:13px;color:#c6d8ed}
+body.ux-site.ssl-official .instagram-copy{padding:17px 17px 19px;display:flex;flex-direction:column;flex:1;background:#fff}
+body.ux-site.ssl-official .instagram-copy>time{font-size:12px;line-height:1.5;color:#6b7e98}
+body.ux-site.ssl-official .instagram-copy h3{font:700 20px/1.25 var(--font);color:#18355c;letter-spacing:-.015em;margin:7px 0 12px}
+body.ux-site.ssl-official .instagram-copy p{font-size:14px;line-height:1.55;color:#596f90;margin:0 0 12px}
+body.ux-site.ssl-official .instagram-load{font:650 14px/1.4 var(--font);color:#1c44be;min-height:44px;border:1px solid #d6e1f4;border-radius:5px;padding:10px 12px;margin-top:auto;align-items:center;gap:12px}
+body.ux-site.ssl-official .instagram-privacy{font-size:11px;line-height:1.5;color:#70809a;margin-top:9px}
+body.ux-site.ssl-official #video-results:has(>.instagram-card),body.ux-site.ssl-official .instagram-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:stretch}
+@media(max-width:1100px){body.ux-site.ssl-official #video-results:has(>.instagram-card),body.ux-site.ssl-official .instagram-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){body.ux-site.ssl-official .news-card.featured{display:block;padding-bottom:0;border:0}body.ux-site.ssl-official .news-card.featured .news-copy{padding:18px 0 24px;border-bottom:1px solid #d4e0ef}body.ux-site.ssl-official .news-copy h3,body.ux-site.ssl-official .news-card.featured .news-copy h3{font-size:25px;line-height:1.24}body.ux-site.ssl-official .news-grid{gap:28px}body.ux-site.ssl-official .official-story-art{padding:20px}body.ux-site.ssl-official .official-story-results>div{margin-bottom:14px}body.ux-site.ssl-official .official-story-results>section{gap:8px}body.ux-site.ssl-official .official-story-results>section>div{padding:12px 6px;gap:5px}body.ux-site.ssl-official .official-story-results .ball.sm{width:27px;height:27px;flex-basis:27px;padding:3px}body.ux-site.ssl-official .official-story-results span{font-size:9px}body.ux-site.ssl-official .official-story-results b{font-size:24px}body.ux-site.ssl-official .official-story-results b i{padding:0 2px}body.ux-site.ssl-official .official-story-scorers>strong{font-size:26px;margin-bottom:10px}body.ux-site.ssl-official .official-story-scorers>section>div{padding:10px 0}body.ux-site.ssl-official .official-story-scorers>section>div>span{font-size:15px}body.ux-site.ssl-official .official-story-scorers small{font-size:11px}body.ux-site.ssl-official .official-story-scorers b{font-size:29px}body.ux-site.ssl-official .official-story-scorers .ball{width:38px;height:38px;flex-basis:38px}body.ux-site.ssl-official .official-story-season{gap:12px}body.ux-site.ssl-official .official-story-season>strong{font-size:49px}.editorial-club-marks{gap:7px}.editorial-club-marks .ball.sm{width:26px;height:26px;flex-basis:26px;padding:3px}body.ux-site.ssl-official .article-cover:has(>.news-photo-frame){aspect-ratio:4/3}}
+@media(max-width:560px){body.ux-site.ssl-official #video-results:has(>.instagram-card),body.ux-site.ssl-official .instagram-grid,.home-social-grid{grid-template-columns:minmax(0,1fr);gap:22px}.instagram-card-heading{font-size:13px;padding:13px 17px}body.ux-site.ssl-official .instagram-copy{padding:18px}body.ux-site.ssl-official .instagram-copy h3{font-size:22px}}
