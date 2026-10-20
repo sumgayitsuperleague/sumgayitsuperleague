@@ -52,7 +52,9 @@ export function installMusicPlayer(config){
     target.addEventListener('loadedmetadata',()=>{if(target===audio&&position&&Number.isFinite(target.duration))target.currentTime=Math.min(position,Math.max(0,target.duration-.2));},{once:true});
     target.addEventListener('ended',()=>{if(target===audio&&wantsPlay)advance();});
     target.addEventListener('error',()=>{if(target===audio)failed();});
-    target.addEventListener('pause',()=>{if(target===audio&&playing){playing=false;wantsPlay=false;draw();persist(false);}});
+    // Browsers may fire pause while firing ended. Keep the listener from clearing
+    // playback intent before ended advances to the next enabled recording.
+    target.addEventListener('pause',()=>{if(target===audio&&playing&&!target.ended){playing=false;wantsPlay=false;draw();persist(false);}});
    }
    const media=audio;await media.play();
    if(ticket!==generation||!wantsPlay){if(!wantsPlay||media!==audio)media.pause();return false;}
@@ -62,6 +64,7 @@ export function installMusicPlayer(config){
  };
  const change=async id=>{pause(false);release();current=tracks.find(t=>t.id===id)||current;position=0;draw();return start();};
  const advance=()=>{const next=nextTrack(tracks,current.id,config.shuffle);if(next)return change(next.id);};
+ // The button is the only visible music control; ending a track keeps playback intent.
  control.addEventListener('click',()=>{if(playing||busy)pause();else start();});
  document.addEventListener('click',e=>{if(e.target.closest('[data-watch-live],a[href*="youtube.com"],a[href*="youtu.be"]')&&(playing||busy))pause();});
  window.addEventListener('pagehide',()=>{persist();pause(false);});
