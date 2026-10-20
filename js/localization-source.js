@@ -10,6 +10,8 @@ export function localizationTargets(data) {
  const cms=data.cms;
  if(cms){
   for(const [section,fields] of Object.entries({home:['title','highlight','buttonLabel','announcement','featuredTitle','featuredText'],about:['title','subtitle','heading'],guide:['title','subtitle'],branding:['footerText','copyright'],seo:['title','description']}))for(const key of fields)add(cms[section],key,'cms.'+section+'.'+key,section+' · '+key,['about','guide'].includes(section)?section:'site');
+  for(const [section,fields] of Object.entries({final:['title','description','archiveTitle','recap','linkLabel'],lineup:['title','description'],quiz:['title','description']}))for(const key of fields)add(cms.fanZone?.[section],key,'fanZone.'+section+'.'+key,section+' · '+key,'community');
+  for(const q of list(cms.fanZone?.quiz?.questions)){for(const key of ['title','note'])add(q,key,'fanZone.question.'+q.id+'.'+key,'Viktorina · '+q.title,'community');for(let i=0;i<list(q.choices).length;i++)add(q.choices,i,'fanZone.question.'+q.id+'.choice.'+i,'Cavab · '+q.title,'community');}
   add(cms.stadium?.broadcast,'label','stadium.broadcast.label','YouTube canlı düyməsi','site');
   for(const track of list(cms.stadium?.music?.tracks))if(track)add(track,'title','stadium.track.'+track.id,'Musiqi · '+track.title,'site');
   add(cms.home?.matchCenter,'title','home.matchCenter.title','Matç mərkəzinin başlığı','site');
