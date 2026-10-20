@@ -2,6 +2,9 @@
 export const SPONSOR_TONES=['light','navy','blue','red','purple'];
 export const SPONSOR_SCALES=[100,125,150,175,200,225,250,275,300];
 export const SPONSOR_COPY=[
+ ['Sponsorlar','Sponsors','Спонсоры'],
+ ['Bütün sponsorlar','All partners','Все партнёры'],
+ ['Tərəfdaşlar tezliklə elan olunacaq.','Partners will be announced soon.','Партнёры будут объявлены позже.'],
  ['Sponsorlar və tərəfdaşlar','Sponsors and partners','Спонсоры и партнёры'],
  ['Tərəfdaşlarımız','Our partners','Наши партнёры'],
  ['Instagram səhifəsi','Instagram profile','Страница в Instagram'],

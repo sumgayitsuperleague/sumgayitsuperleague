@@ -16,6 +16,11 @@ export function kickoffText(match,now=Date.now()){
 }
 export function bindMobileExperience(ctx){
  if(document.querySelector('.mobile-dock'))document.body.classList.add('has-mobile-dock');
+ // The drawer hides the desktop 'More' summary. Its links must stay expanded
+ // while that summary is hidden, including after rotating a phone/tablet.
+ const more=document.querySelector('#links .more-menu'),viewport=window.matchMedia?.('(max-width: 1000px)');
+ if(more&&viewport){let forced=false,wasOpen=more.hasAttribute('open');const sync=()=>{if(viewport.matches&&!forced){wasOpen=more.hasAttribute('open');more.setAttribute('open','');forced=true;}else if(!viewport.matches&&forced){more.toggleAttribute('open',wasOpen);forced=false;}};sync();viewport.addEventListener?.('change',sync);}
+
  const nodes=[...document.querySelectorAll('[data-kickoff-hint]')];
  const draw=()=>nodes.forEach(el=>{const match=ctx.M.find(m=>m.id===el.dataset.kickoffHint);el.textContent=kickoffText(match);el.hidden=!el.textContent;});if(nodes.length){draw();setInterval(draw,60000);}
 }

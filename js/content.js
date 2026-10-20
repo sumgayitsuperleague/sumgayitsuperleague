@@ -2223,8 +2223,8 @@ window.CONTENT={
     "email": "info@sumgayitsuperleague.com",
     "address": "Sumqayıt, Azərbaycan",
     "hero": "Oyunlar, nəticələr və turnir cədvəli.",
-    "primary": "#215adc",
-    "accent": "#fc344b",
+    "primary": "#1c44be",
+    "accent": "#1c44be",
     "adminUrl": ""
   },
   "news": [
@@ -2881,6 +2881,7 @@ window.CONTENT={
       "featuredTitle": "Növbəti oyun",
       "featuredText": "",
       "showSideNews": true,
+      "showFinalStage": true,
       "showCommunity": false,
       "showGuidePromo": false,
       "showEntryLinks": false,
@@ -3349,10 +3350,10 @@ window.CONTENT={
       ]
     },
     "appearance": {
-      "background": "#f4f6fa",
+      "background": "#ffffff",
       "surface": "#ffffff",
-      "text": "#172640",
-      "muted": "#627189",
+      "text": "#142857",
+      "muted": "#536486",
       "font": "sourcesans",
       "headingFont": "sourcesans",
       "radius": 18,
@@ -3448,6 +3449,11 @@ window.CONTENT={
       {
         "id": "fans",
         "label": "Azarkeş mərkəzi",
+        "visible": true
+      },
+      {
+        "id": "sponsors",
+        "label": "Sponsorlar",
         "visible": true
       }
     ],
