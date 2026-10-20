@@ -1,3 +1,5 @@
+import {fanZoneSettings,finalContext} from './fan-zone-model.js';
+import {uiIcon} from './ui-icons.js';
 import {renderStadiumCarousel} from './stadium-view.js';
 import {stadiumSettings} from './stadium-source.js';
 import {liveClockHTML,liveStatusHTML,watchLiveHTML} from './live-match-view.js';
@@ -19,6 +21,14 @@ function panoramaEntrance(ctx,lead,side){
  const heading=`<header class="league-front-heading"><div class="league-entry-title"><h1>${esc(UI.t(H.title||ctx.S.name))}</h1>${H.highlight?`<p>${esc(UI.t(H.highlight))}</p>`:''}${H.buttonLabel?`<a class="panorama-primary" href="${esc(H.buttonUrl||'/oyunlar')}">${esc(UI.t(H.buttonLabel))}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></a>`:''}<a class="panorama-season" href="merhele.html">${esc(UI.t(L.season+' MÖVSÜMÜ'))}<span>${esc(UI.t(ordinal(L.edition||1)+' sezon'))}</span></a></div></header>`;
  return (lead||side?`<section class="league-entry league-entry--panorama"><div class="wrap"><div class="panorama-grid">${heading}<div class="panorama-stage">${lead}</div></div>${links}</div></section>`:'')+`<div data-panorama-editorial>${side?`<section class="league-editorial"><div class="wrap">${side}</div></section>`:''}</div>`;
 }
+export function renderHomeFinal(ctx){
+ const settings=fanZoneSettings(ctx.CMS.fanZone);if(!settings.final.enabled||!settings.final.showOnHome)return '';
+ const f=finalContext({league:ctx.L},settings),m=f.match,e=ctx.esc;
+ const title=f.state==='archived'?f.config.archiveTitle:f.config.title;
+ const clubs=m?`<span class="home-final-clubs">${ctx.ball(m.home,'sm')}<b>${e(ctx.T[m.home].name)}</b><i>${m.status==='planned'?'VS':m.hs+' : '+m.as}</i><b>${e(ctx.T[m.away].name)}</b>${ctx.ball(m.away,'sm')}</span>`:`<span class="home-final-pending">${e(UI.t('Final qarşılaşması hələ təyin edilməyib.'))}</span>`;
+ return `<section class="home-final-entry"><div class="wrap"><a class="home-final-card" href="/final"><span class="home-final-label">${uiIcon('trophy')}<span><small>${e(ctx.L.season)} · ${e(UI.t({upcoming:'Planlaşdırılıb',live:'Canlı',completed:'Tamamlanıb',archived:'Arxiv'}[f.state]))}</small><strong>${e(UI.t(title))}</strong></span></span>${clubs}<span class="home-final-open">${e(UI.t('Final səhifəsinə bax'))}${uiIcon('arrow')}</span></a></div></section>`;
+}
+
 export function renderLeagueEntrance(ctx){
  const {H,L,DONE,NEWS,T,esc,ball,fmtShort}=ctx,config=H.matchCenter,selection=selectHomeMatches(L,config),story=NEWS.find(n=>n.id===H.featuredNews)||NEWS[0],others=NEWS.filter(n=>n!==story).slice(0,2),round=+story?.id?.match(/^ssl-round(\d+)/)?.[1]||DONE.at(-1)?.round||1,matches=DONE.filter(m=>m.round===round),goals=matches.reduce((n,m)=>n+m.hs+m.as,0);
  const roundup=`<div class="round-art" aria-label="${esc(ordinal(round))} tur · ${goals} qol"><div class="round-art-top"><span>${esc(L.season)} MÖVSÜMÜ</span><span>SUMQAYIT / SUPER LİQASI</span></div><div class="round-art-title"><span>${ordinal(round)} TUR</span><strong>${goals}<small>QOL</small></strong></div><div class="round-art-results">${matches.map(m=>`<div>${ball(m.home,'sm')}<span>${esc(T[m.home].code)}</span><b>${m.hs}<i>:</i>${m.as}</b><span>${esc(T[m.away].code)}</span>${ball(m.away,'sm')}</div>`).join('')}</div><span class="round-art-bottom">${matches.length} OYUN <i></i> BİR LİQA</span></div>`;
@@ -30,10 +40,11 @@ export function renderLeagueEntrance(ctx){
  const side=H.showSideNews?`<div class="league-side-news"><div class="league-side-heading"><span>Xəbərlər</span><a href="xeberler.html">Hamısı ↗</a></div>${others.map(n=>`<a class="league-side-story" href="xeberler.html?id=${encodeURIComponent(n.id)}"><div><time datetime="${esc(n.date)}">${fmtShort(n.date)}</time><h3>${esc(n.title)}</h3></div><span class="story-arrow" aria-hidden="true">↗</span></a>`).join('')}${H.showGuidePromo?'<a class="learn-promo" href="minifutbol.html"><strong>Minifutbol bələdçisi</strong><b>↗</b></a>':''}</div>`:'';
  const presentation=stadiumSettings(ctx.CMS.stadium).motion.presentation,broadcast=presentation==='broadcast';
  const introduction=presentation==='official'?officialEntrance(ctx,lead,side):presentation==='arena'?arenaEntrance(ctx,lead,side):presentation==='panorama'?panoramaEntrance(ctx,lead,side):lead||side?`<section class="league-entry${broadcast?' league-entry--broadcast':''}"><div class="wrap"><div class="league-front-heading">${broadcast?`<div class="league-entry-title"><h1>${esc(UI.t(H.title||ctx.S.name))}</h1>${H.highlight?`<p>${esc(UI.t(H.highlight))}</p>`:''}</div>`:`<h1>${esc(ctx.S.name)}</h1>`}<a href="merhele.html">${esc(L.season)} MÖVSÜMÜ <i>·</i> ${ordinal(L.edition||1)} SEZON <span>↗</span></a></div><div class="league-news-layout ${side?'':'single-column'} ${lead?'':'side-only'}">${lead}${side}</div>${H.showEntryLinks?`<div class="league-entry-links">${[['cedvel.html','Turnir cədvəli'],['komandalar.html','Komandalar'],['merhele.html','Mövsüm mərkəzi']].map(([href,label])=>`<a href="${href}">${label}<span>↗</span></a>`).join('')}</div>`:''}</div></section>`:'';
+ const finalEntry=renderHomeFinal(ctx);
  const before=H.blockPosition==='beforeLead'&&H.leadType!=='custom'?custom:'',after=H.blockPosition==='afterLead'&&H.leadType!=='custom'?custom:'';
  // The secondary stories follow the compact match centre in Panorama.
  const split=introduction.indexOf('<div data-panorama-editorial>'),main=split<0?introduction:introduction.slice(0,split),editorial=split<0?'':introduction.slice(split);
- return ctx.CMS.stadium?.motion.featureFirst!==false?before+main+strip+(presentation==='arena'?recentMatchRail(ctx):'')+editorial+after:strip+before+main+editorial+after;
+ return ctx.CMS.stadium?.motion.featureFirst!==false?before+main+finalEntry+strip+(presentation==='arena'?recentMatchRail(ctx):'')+editorial+after:strip+before+main+finalEntry+editorial+after;
 }
 export function bindMatchCenter(ctx){
  const box=ctx.$('#entry-matches');if(!box)return;const select=ctx.$('#entry-round'),config=ctx.H.matchCenter;let userChoice=false;

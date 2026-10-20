@@ -1,17 +1,26 @@
 // Final hub, lineup builder and team quiz. No league records are mutated.
-export const FAN_FORMATIONS=Object.freeze({"1-2-1":[{"role":"gk","x":50,"y":86},{"role":"field","x":50,"y":65},{"role":"field","x":23,"y":42},{"role":"field","x":77,"y":42},{"role":"field","x":50,"y":19}],"2-2":[{"role":"gk","x":50,"y":86},{"role":"field","x":28,"y":63},{"role":"field","x":72,"y":63},{"role":"field","x":28,"y":28},{"role":"field","x":72,"y":28}],"1-1-2":[{"role":"gk","x":50,"y":86},{"role":"field","x":50,"y":65},{"role":"field","x":50,"y":44},{"role":"field","x":28,"y":20},{"role":"field","x":72,"y":20}]});
-export const FAN_PAGES=Object.freeze({"/final":"final","/ideal-beslik":"lineup","/viktorina":"quiz"});
+export const FAN_LINEUP_SIZE=6;
+export const FAN_FORMATIONS=Object.freeze({"2-2-1":[{"role":"gk","x":50,"y":86},{"role":"field","x":28,"y":65},{"role":"field","x":72,"y":65},{"role":"field","x":28,"y":41},{"role":"field","x":72,"y":41},{"role":"field","x":50,"y":17}],"2-1-2":[{"role":"gk","x":50,"y":86},{"role":"field","x":28,"y":65},{"role":"field","x":72,"y":65},{"role":"field","x":50,"y":41},{"role":"field","x":28,"y":17},{"role":"field","x":72,"y":17}],"1-3-1":[{"role":"gk","x":50,"y":86},{"role":"field","x":50,"y":65},{"role":"field","x":18,"y":41},{"role":"field","x":50,"y":41},{"role":"field","x":82,"y":41},{"role":"field","x":50,"y":17}]});
+const LEGACY_FORMATIONS=Object.freeze({'1-2-1':'1-3-1','2-2':'2-2-1','1-1-2':'2-1-2'});
+export const fanFormation=value=>LEGACY_FORMATIONS[value]||value;
+export const FAN_PAGES=Object.freeze({'/final':'final','/ideal-altiliq':'lineup','/viktorina':'quiz'});
 export function defaultFanZone(){
  return {version:1,showLinks:true,
-  final:{enabled:true,title:'Final mərkəzi',description:'',archiveTitle:'Mövsümün finalı',recap:'',cover:'',state:'auto',matchId:'',thirdPlaceId:'',championTeam:'',showCountdown:true,showJourney:true,showStats:true,showThirdPlace:true,showSponsors:true,linkLabel:'',linkUrl:''},
-  lineup:{enabled:true,title:'Öz ideal beşliyini qur',description:'Heyətlərdən bir qapıçı və dörd meydan oyunçusu seç.',defaultFormation:'1-2-1',formations:['1-2-1','2-2','1-1-2'],allowedTeams:[],hiddenPlayers:[],strictGoalkeeper:true,allowShare:true,allowDownload:true},
+  final:{enabled:true,showOnHome:true,title:'Final mərkəzi',description:'',archiveTitle:'Mövsümün finalı',recap:'',cover:'',state:'auto',matchId:'',thirdPlaceId:'',championTeam:'',showCountdown:true,showJourney:true,showStats:true,showThirdPlace:true,showSponsors:true,linkLabel:'',linkUrl:''},
+  lineup:{enabled:true,title:'Öz ideal altılığını qur',description:'Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.',defaultFormation:'2-2-1',formations:['2-2-1','2-1-2','1-3-1'],allowedTeams:[],hiddenPlayers:[],strictGoalkeeper:true,allowShare:true,allowDownload:true},
   quiz:{enabled:true,title:'Komandanı nə qədər tanıyırsan?',description:'Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.',autoQuestions:true,questionLimit:5,shuffle:true,allowTeamSelect:true,questions:[]}
  };
 }
 
 export function fanZoneSettings(value){
  const d=defaultFanZone(),v=value&&typeof value==='object'&&!Array.isArray(value)?value:{};
- return {...d,...v,final:{...d.final,...v.final},lineup:{...d.lineup,...v.lineup},quiz:{...d.quiz,...v.quiz}};
+ const lineup={...d.lineup,...v.lineup};
+ // Upgrade only the shipped five-player defaults; keep all organizer edits.
+ if(lineup.title==='Öz ideal beşliyini qur')lineup.title=d.lineup.title;
+ if(lineup.description==='Heyətlərdən bir qapıçı və dörd meydan oyunçusu seç.')lineup.description=d.lineup.description;
+ lineup.defaultFormation=fanFormation(lineup.defaultFormation);
+ if(Array.isArray(lineup.formations))lineup.formations=[...new Set(lineup.formations.map(fanFormation))];
+ return {...d,...v,final:{...d.final,...v.final},lineup,quiz:{...d.quiz,...v.quiz}};
 }
 
 export function validateFanZone(v,opts={}){
@@ -26,13 +35,13 @@ export function validateFanZone(v,opts={}){
   const c=v[name];
   if(!keys(c,Object.keys(d[name]))){check(false,name+': ayarlar düzgün deyil.');continue;}
   check(typeof c.enabled==='boolean'&&text(c.title,160,true)&&text(c.description,600),name+': başlıq və təqdimat düzgün deyil.');
-  for(const k of Object.keys(d[name]).filter(k=>typeof d[name][k]==='boolean'))check(typeof c[k]==='boolean',name+': görünmə ayarı düzgün deyil.');
+  for(const k of Object.keys(d[name]).filter(k=>typeof d[name][k]==='boolean'))check(typeof c[k]==='boolean'||name==='final'&&k==='showOnHome'&&c[k]===undefined,name+': görünmə ayarı düzgün deyil.');
  }
  const f=v.final;if(obj(f)){check(text(f.archiveTitle,160,true)&&text(f.recap,6000)&&image(f.cover),'Finalın arxiv mətni və ya şəkli düzgün deyil.');check(['auto','upcoming','live','completed','archived'].includes(f.state),'Finalın vəziyyəti düzgün deyil.');for(const k of ['matchId','thirdPlaceId','championTeam'])check(f[k]===''||id(f[k]),'Finalın oyun və ya komanda seçimi düzgün deyil.');check(text(f.linkLabel,80)&&link(f.linkUrl)&&Boolean(f.linkLabel.trim())===Boolean(f.linkUrl),'Əlavə keçid üçün həm ad, həm ünvan daxil et.');}
  const l=v.lineup;if(obj(l)){
-  check(Array.isArray(l.formations)&&l.formations.length>=1&&l.formations.length<=3&&new Set(l.formations).size===l.formations.length&&l.formations.every(x=>Object.hasOwn(FAN_FORMATIONS,x))&&l.formations.includes(l.defaultFormation),'Beşliyin düzülüşlərini və əsas düzülüşünü seç.');
-  check(Array.isArray(l.allowedTeams)&&l.allowedTeams.length<=64&&new Set(l.allowedTeams).size===l.allowedTeams.length&&l.allowedTeams.every(id),'Beşliyin komanda siyahısı düzgün deyil.');
-  check(Array.isArray(l.hiddenPlayers)&&l.hiddenPlayers.length<=500&&new Set(l.hiddenPlayers).size===l.hiddenPlayers.length&&l.hiddenPlayers.every(x=>text(x,220,true)),'Beşlikdə gizlədilən futbolçular düzgün deyil.');
+  check(Array.isArray(l.formations)&&l.formations.length>=1&&l.formations.length<=3&&new Set(l.formations).size===l.formations.length&&l.formations.every(x=>Object.hasOwn(FAN_FORMATIONS,fanFormation(x)))&&l.formations.includes(l.defaultFormation),'Altılığın düzülüşlərini və əsas düzülüşünü seç.');
+  check(Array.isArray(l.allowedTeams)&&l.allowedTeams.length<=64&&new Set(l.allowedTeams).size===l.allowedTeams.length&&l.allowedTeams.every(id),'Altılığın komanda siyahısı düzgün deyil.');
+  check(Array.isArray(l.hiddenPlayers)&&l.hiddenPlayers.length<=500&&new Set(l.hiddenPlayers).size===l.hiddenPlayers.length&&l.hiddenPlayers.every(x=>text(x,220,true)),'Altılıqda gizlədilən futbolçular düzgün deyil.');
  }
  const q=v.quiz;if(obj(q)){
   check(Number.isInteger(q.questionLimit)&&q.questionLimit>=1&&q.questionLimit<=20,'Testdə sual sayı 1–20 olmalıdır.');
@@ -82,7 +91,7 @@ export function eligibleFanPlayers(league,value){
 
 export function normalizeFanLineup(league,value,selection){
  const c=fanZoneSettings(value).lineup,players=new Map(eligibleFanPlayers(league,value).map(p=>[p.key,p])),seen=new Set(),ids=Array.isArray(selection)?selection:[];
- return Array.from({length:5},(_,i)=>{const p=players.get(ids[i]);if(!p||seen.has(p.key)||c.strictGoalkeeper&&(i===0?!p.gk:p.gk))return '';seen.add(p.key);return p.key;});
+ return Array.from({length:FAN_LINEUP_SIZE},(_,i)=>{const p=players.get(ids[i]);if(!p||seen.has(p.key)||c.strictGoalkeeper&&(i===0?!p.gk:p.gk))return '';seen.add(p.key);return p.key;});
 }
 
 export function shuffleFanItems(items,rng=Math.random){

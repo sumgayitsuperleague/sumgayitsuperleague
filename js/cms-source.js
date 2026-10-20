@@ -1,7 +1,7 @@
 import {fanZoneSettings,validateFanZone} from './fan-zone-model.js';
 import {stadiumSettings,validateStadium} from './stadium-source.js';
 // Structured site editing shared by the admin and public renderer.
-import {PAGE_ROUTES} from './routes-source.js';
+import {PAGE_ROUTES,canonicalPath} from './routes-source.js';
 import {defaultGuide} from './guide-source.js';
 import {defaultCommunity,instagramPostURL} from './community-source.js';
 import {defaultEditor,validateEditor,editorLinkOK} from './site-edit-source.js';
@@ -50,7 +50,7 @@ export const imagePath=x=>x===''||typeof x==='string'&&/^\/assets\/(?:logo\.png|
 export function safeLink(x) {
   if(x==='')return true;
   if(typeof x!=='string'||!text(x,1000))return false;
-  if(x.startsWith('/')&&!x.startsWith('//')&&!x.includes('\\')){const [path,query]=x.split('?');if(Object.hasOwn(PAGE_ROUTES,path)&&(!query||/^[a-zA-Z0-9_%=&.-]*$/.test(query)))return true;}
+  if(x.startsWith('/')&&!x.startsWith('//')&&!x.includes('\\')){const [path,query]=x.split('?');if(Object.hasOwn(PAGE_ROUTES,canonicalPath(path))&&(!query||/^[a-zA-Z0-9_%=&.-]*$/.test(query)))return true;}
   if(/^\/(?:[a-z0-9_-]+\.html(?:\?[a-zA-Z0-9_%=&.-]*)?|sehife\/[a-z0-9][a-z0-9-]{0,79})$/.test(x)||x==='/')return true;
   try{const u=new URL(x);return u.protocol==='https:'&&!u.username&&!u.password;}catch{return false;}
 }
