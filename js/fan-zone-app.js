@@ -62,7 +62,7 @@ async function fanLineupImage(data,settings,selected,formation,title,lang='az'){
  // Stadium light glow and a subtle technical grid behind the pitch.
  for(const lx of [50,1030]){const glow=x.createRadialGradient(lx,100,0,lx,100,620);glow.addColorStop(0,'rgba(162,209,255,.24)');glow.addColorStop(1,'rgba(162,209,255,0)');x.fillStyle=glow;x.fillRect(0,0,1080,1350);}
  x.strokeStyle='rgba(255,255,255,.035)';x.lineWidth=1;for(let n=0;n<1080;n+=48){x.beginPath();x.moveTo(n,0);x.lineTo(n,1350);x.stroke();}
- round(64,48,64,64,16,'#ffffff');
+ round(64,48,64,64,16,blue);
  try{const logo=await new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src='/assets/logo.png';});x.drawImage(logo,72,56,48,48);}catch{ x.fillStyle=blue;x.textAlign='center';x.font='900 24px '+font;x.fillText('SSL',96,88); }
  x.textAlign='left';x.fillStyle='#ffffff';x.font='800 26px '+font;x.fillText(data.site?.name||'Sumqayıt Super Liqası',146,76);x.fillStyle='#b1c3da';x.font='600 19px '+font;x.fillText(String(data.league.season)+' · '+fanText('Minifutbol',lang),146,104);
  round(864,53,152,45,22,'rgba(255,255,255,.09)');x.textAlign='center';x.fillStyle='#b6e6ce';x.font='800 22px '+font;x.fillText('1 + 5',940,83);
@@ -93,7 +93,7 @@ async function fanLineupImage(data,settings,selected,formation,title,lang='az'){
   const pill=Math.min(max,Math.max(112,x.measureText(name).width+28));round(px-pill/2,py+24,pill,39,8,'rgba(4,22,27,.86)');x.fillStyle='#ffffff';x.fillText(name,px,py+51);
   x.fillStyle='#c3e3d3';x.font='600 18px '+font;let club=p.teamName;while(x.measureText(club).width>max&&club.length>3)club=club.slice(0,-2);if(club!==p.teamName)club+='…';x.fillText(club,px,py+77);
  }
- x.textAlign='left';x.fillStyle='#b1c3da';x.font='600 20px '+font;x.fillText(location.host,64,1271);x.textAlign='right';x.fillStyle='#ffffff';x.font='800 25px '+font;x.fillText(formation,1016,1271);
+ x.textAlign='left';x.fillStyle='#b1c3da';x.font='600 20px '+font;x.fillText('sumgayitsuperleague.com',64,1271);x.textAlign='right';x.fillStyle='#ffffff';x.font='800 25px '+font;x.fillText(formation,1016,1271);
  return c;
 }
 
