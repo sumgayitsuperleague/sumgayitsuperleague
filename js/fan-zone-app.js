@@ -1,4 +1,5 @@
-import {arenaText,renderArenaPage,bindTimeline,bindPenalty} from './arena-experience.js';
+import {validateArenaFeatures} from './arena-model.js';
+import {arenaText,renderArenaPage,bindPenalty} from './arena-experience.js';
 import {FAN_LINEUP_SIZE,fanFormation,FAN_FORMATIONS,FAN_PAGES,localizedFanZone,finalContext,eligibleFanPlayers,normalizeFanLineup,fanQuizQuestions} from './fan-zone-model.js';
 const FAN_COPY={"Final mərkəzi":["Final centre","Центр финала"],"Mövsümün finalı":["Season final","Финал сезона"],"Öz ideal altılığını qur":["Build your ideal six","Собери свою шестёрку"],"Komandanı nə qədər tanıyırsan?":["How well do you know your club?","Насколько хорошо ты знаешь свою команду?"],"Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.":["Choose one goalkeeper and five outfield players from the squads.","Выбери одного вратаря и пяти полевых игроков из составов."],"Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.":["Choose a club and answer questions based on real league records.","Выбери команду и отвечай на вопросы по реальным данным лиги."],"Azarkeş mərkəzi":["Fan centre","Центр болельщиков"],"Final":["Final","Финал"],"İdeal altılıq":["Ideal six","Идеальная шестёрка"],"Viktorina":["Quiz","Викторина"],"Planlaşdırılıb":["Upcoming","Предстоит"],"Canlı":["Live","В прямом эфире"],"Tamamlanıb":["Completed","Завершён"],"Arxiv":["Archive","Архив"],"Çempion":["Champion","Чемпион"],"Tarix və saat təyin edilməyib":["Date and time to be confirmed","Дата и время пока не назначены"],"Final qarşılaşması hələ təyin edilməyib.":["The final fixture has not been set yet.","Финальный матч пока не назначен."],"Matç mərkəzi":["Match centre","Центр матча"],"Penaltilər":["Penalties","Пенальти"],"Üçüncülük oyunu":["Third-place match","Матч за третье место"],"Finala gedən yol":["Road to the final","Путь к финалу"],"Finaldan əvvəlki göstəricilər":["Record before the final","Показатели до финала"],"Oyun":["Matches","Матчи"],"Qələbə":["Wins","Победы"],"Vurulan qol":["Goals scored","Забитые голы"],"Buraxılan qol":["Goals conceded","Пропущенные голы"],"Yekun":["Recap","Итоги"],"Tərəfdaşlar":["Partners","Партнёры"],"Gün":["Days","Дни"],"Saat":["Hours","Часы"],"Dəqiqə":["Minutes","Минуты"],"Saniyə":["Seconds","Секунды"],"Qapıçı":["Goalkeeper","Вратарь"],"Meydan oyunçusu":["Outfield player","Полевой игрок"],"Düzülüş":["Formation","Расстановка"],"Altılığının adı":["Lineup name","Название шестёрки"],"Mənim ideal altılığım":["My ideal six","Моя идеальная шестёрка"],"Komanda":["Club","Команда"],"Bütün komandalar":["All clubs","Все команды"],"Futbolçu axtar":["Find a player","Найти игрока"],"Futbolçu seç":["Choose a player","Выбрать игрока"],"Seçilib":["Selected","Выбран"],"Başqa mövqedə seçilib":["Selected in another position","Выбран на другой позиции"],"Bu seçimə uyğun futbolçu yoxdur.":["No players match this selection.","Нет игроков для этого выбора."],"Seçimi sil":["Remove selection","Убрать выбор"],"Sıfırla":["Reset","Сбросить"],"Şəkli endir":["Download image","Скачать изображение"],"Keçidi kopyala":["Copy link","Копировать ссылку"],"Paylaş":["Share","Поделиться"],"Keçid kopyalandı.":["Link copied.","Ссылка скопирована."],"Keçidi bu sahədən kopyala.":["Copy the link from this field.","Скопируй ссылку из этого поля."],"Şəkil hazırlanır…":["Preparing image…","Создаём изображение…"],"Şəkil hazırdır.":["Image ready.","Изображение готово."],"Şəkil hazırlanmadı. Yenidən sına.":["Could not create the image. Try again.","Не удалось создать изображение. Попробуй ещё раз."],"Altı mövqenin hamısına futbolçu seç.":["Choose a player for all six positions.","Выбери игрока для каждой из шести позиций."],"Seçimin yalnız bu brauzerdə saxlanılır.":["Your selection is saved only in this browser.","Выбор сохраняется только в этом браузере."],"Başla":["Start","Начать"],"Sual":["Question","Вопрос"],"Düzgün cavablar":["Correct answers","Правильные ответы"],"Düzgün cavab":["Correct answer","Правильный ответ"],"Növbəti sual":["Next question","Следующий вопрос"],"Nəticəyə bax":["View result","Посмотреть результат"],"Test tamamlandı":["Quiz completed","Тест завершён"],"Yenidən başla":["Play again","Начать заново"],"Komandanı dəyiş":["Change club","Сменить команду"],"Bu seçim üçün hələ sual yoxdur.":["No questions are available for this selection yet.","Для этого выбора пока нет вопросов."],"Cavabların serverdə saxlanmır.":["Your answers are not stored on the server.","Ответы не сохраняются на сервере."],"Bölmə hazırda bağlıdır.":["This section is currently closed.","Раздел сейчас закрыт."],"Azarkeş seçimi":["Fan selection","Выбор болельщика"],"Son nəticə":["Result","Результат"],"Qeyd olunmuş oyun yoxdur.":["No completed games are recorded.","Нет записанных завершённых матчей."],"Şəkildə altılığın və liqanın adı göstəriləcək.":["The image includes your lineup and the league name.","На изображении будут название шестёрки и название лиги."]};
 Object.assign(FAN_COPY,{"Minifutbol":["Minifootball","Мини-футбол"],"Heyətini tamamla":["Complete your lineup","Собери состав"],"Mövqəni seç, futbolçunu əlavə et.":["Choose a position, then add a player.","Выбери позицию и добавь игрока."],"seçilib":["selected","выбрано"],"1 qapıçı · 5 meydan oyunçusu":["1 goalkeeper · 5 outfield players","1 вратарь · 5 полевых игроков"]});
@@ -15,7 +16,7 @@ function fanLogo(team){
 
 function renderFanLinks(data,lang='az'){
  const c=localizedFanZone(data.cms?.fanZone,data.locales,lang);if(!c.showLinks)return '';
- const entries=[['final','/final','01'],['lineup','/ideal-altiliq','02'],['quiz','/viktorina','03'],['penalty','/penalti-arenasi','04'],['timeline','/zaman-tuneli','05']].filter(([k])=>c[k].enabled);
+ const entries=[['final','/final','01'],['lineup','/ideal-altiliq','02'],['quiz','/viktorina','03'],['penalty','/penalti-arenasi','04']].filter(([k])=>c[k].enabled);
  return entries.length?'<nav class="fz-hub" aria-label="'+fanEscape(fanText('Azarkeş mərkəzi',lang))+'">'+entries.map(([k,path,n])=>'<a href="'+fanHref(path,lang)+'"><span>'+n+'</span><strong>'+fanEscape(fanText(c[k].title,lang))+'</strong><b aria-hidden="true">↗</b></a>').join('')+'</nav>':'';
 }
 
@@ -24,7 +25,7 @@ function renderFanPage(data,page,lang='az'){
  if(!config)return '';
  const links=renderFanLinks(data,lang);
  if(!config.enabled)return '<section class="sec fz-page"><div class="wrap"><h1>'+e(t(config.title))+'</h1><p>'+t('Bölmə hazırda bağlıdır.')+'</p><a class="btn sec" href="'+fanHref('/azarkes',lang)+'">'+t('Azarkeş mərkəzi')+'</a></div></section>';
- if(page==='penalty'||page==='timeline')return renderArenaPage(data,page,c,lang,links);
+ if(page==='penalty')return renderArenaPage(data,page,c,lang,links);
  let body='';
  if(page==='final'){
   const f=finalContext(data,c),m=f.match,state=t({upcoming:'Planlaşdırılıb',live:'Canlı',completed:'Tamamlanıb',archived:'Arxiv'}[f.state]),teamCard=id=>{const a=f.teams.get(id);return '<a class="fz-final-club" href="'+fanHref('/komanda?t='+encodeURIComponent(id),lang)+'"><img src="'+e(fanLogo(a))+'" alt=""><strong>'+e(a.name)+'</strong></a>';};
@@ -160,14 +161,16 @@ function bindFanQuiz(data,settings,lang){
  });home();
 }
 
-function mountFanZone(){
- const source=window.CONTENT;if(!source?.league)return;
+let arenaDispose=null;
+function mountFanZone(previewPenalty){
+ arenaDispose?.();arenaDispose=null;const original=window.CONTENT;
+ const source=previewPenalty?{...original,cms:{...original?.cms,fanZone:{...original?.cms?.fanZone,penalty:previewPenalty}}}:original;if(!source?.league)return;
  const lang=['en','ru'].includes(new URLSearchParams(location.search).get('lang'))?new URLSearchParams(location.search).get('lang'):'az',settings=localizedFanZone(source.cms?.fanZone,source.locales,lang);
- const path=document.body.dataset.previewPath||location.pathname,page=FAN_PAGES[path]||({'final':'final','lineup':'lineup','quiz':'quiz','penalty':'penalty','timeline':'timeline'}[document.body.dataset.page]);
+ const path=document.body.dataset.previewPath||location.pathname,page=FAN_PAGES[path]||({'final':'final','lineup':'lineup','quiz':'quiz','penalty':'penalty'}[document.body.dataset.page]);
  if(page){
   const app=document.querySelector('#app');if(!app)return;app.innerHTML=renderFanPage(source,page,lang);document.title=fanText(settings[page].title,lang)+' · '+(source.site?.name||'Sumqayıt Super Liqası');
   if(!settings[page].enabled)return;
-  if(page==='penalty')bindPenalty(source,settings,lang);if(page==='timeline')bindTimeline();
+  if(page==='penalty')arenaDispose=bindPenalty(source,settings,lang);
   if(page==='lineup')bindFanLineup(source,settings,lang);if(page==='quiz')bindFanQuiz(source,settings,lang);
   const countdown=document.querySelector('[data-fan-countdown]');if(countdown){const tick=()=>{let s=Math.max(0,Math.floor((Number(countdown.dataset.fanCountdown)-Date.now())/1000)),values=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];countdown.querySelectorAll('b').forEach((el,i)=>el.textContent=String(values[i]).padStart(2,'0'));};tick();const interval=setInterval(tick,1000);window.addEventListener('pagehide',()=>clearInterval(interval),{once:true});}
  }else if(document.body.dataset.page==='fans'){
@@ -178,4 +181,6 @@ function mountFanZone(){
  window.addEventListener('ssl-preferences-reset',()=>{try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key?.startsWith('ssl.fan.'))localStorage.removeItem(key);}}catch{}});
 }
 export {fanText,fanEscape,renderFanLinks,renderFanPage,mountFanZone};
-if(typeof window!=='undefined'&&typeof document!=='undefined'){if(document.readyState==='complete')mountFanZone();else document.addEventListener('DOMContentLoaded',mountFanZone,{once:true});}
+if(typeof window!=='undefined'&&typeof document!=='undefined'){if(document.readyState==='complete')mountFanZone();else document.addEventListener('DOMContentLoaded',()=>mountFanZone(),{once:true});}
+
+if(typeof window!=='undefined')window.addEventListener('message',event=>{if(document.body.dataset.previewPath!=='/penalti-arenasi'||event.source!==parent||event.origin!==location.origin||event.data?.type!=='ssl-arena-preview')return;if(validateArenaFeatures({penalty:event.data.penalty}).length===0)mountFanZone(event.data.penalty);});

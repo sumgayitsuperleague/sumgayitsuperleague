@@ -1,17 +1,13 @@
-# Penalti arenası və mövsümün zaman tuneli
+# Penalti arenası · klub dueli
 
-Yayım: 21 oktyabr 2026.
+21 oktyabr 2026.
 
-- `/penalti-arenasi`: istifadəyə başladıqda yüklənən Three.js mühərriki, sürüşdürmə və klaviatura idarəetməsi, cihazda saxlanan rekordlar, təkrar baxış və yüngül qrafika.
-- `/zaman-tuneli`: cari liqa məlumatlarından yaranan mövsüm fəsilləri, təşkilatçı redaktələri, yalnız yayımlanmış hekayələr və sürüşdürmə ilə naviqasiya.
-- Ana səhifədə hər iki bölməyə qısa keçidlər var.
+- Cari liqanın səkkiz komandasından öz klubunu və fərqli rəqibi seçmək mümkündür. Loqolar, forma rəngləri və stadion tamaşaçıları bu seçimə uyğunlaşır. Son seçim yalnız cihazda saxlanır.
+- Penalti dueli, seriya və məşq rejimləri var. Dueldə erkən qalib və bərabərlikdən sonra əlavə zərbələr hesablanır. Rəqibin zərbəsi də eyni fizika ilə oynanır.
+- Mövcud sponsorlar stadionun reklam panellərində və aşağıdakı idarə olunan lentdə göstərilir. Hərəkəti dayandırmaq və növbəti sponsora keçmək olar.
+- Admin panelində oyun qaydaları, əsas komandalar, reklamlar və saxlanılmamış dəyişikliklərin canlı ön baxışı var. Ümumi canlı redaktor bütün hazırkı azarkeş səhifələrinə bağlıdır.
+- Mövsümün zaman tuneli çıxarılıb. Köhnə ünvan Penalti arenasına yönləndirilir.
 
-## Yoxlama
+Liqa nəticələri, komandalar, sponsor siyahısı və digər məzmun bu kod yayımı ilə dəyişdirilmir. Qeydlər mövcud məlumat bazasında saxlanır.
 
-Admin repozitoriyasında 333 avtomatik test, mövcud azarkeş səhifələrinin brauzer yoxlaması və yeni arena/zaman tuneli brauzer yoxlaması keçib. WebGL, mobil toxunma, ekran istiqaməti, tam ekran, təkrar baxışın hesabı dəyişməməsi və qaralamaların məxfiliyi lokal sınaqlarla yoxlanıb.
-
-## Yayım ardıcıllığı
-
-Ön hissə `sumgayitsuperleague/sumgayitsuperleague` repozitoriyasının `main` budağından GitHub Pages-ə yayımlanır. Worker və onun öz resursları `sumgayitsuperleague/ssl-secure-admin` repozitoriyasının `main` budağından Cloudflare Workers Builds ilə yerləşdirilir. Tam yayımda hər iki hissənin yoxlaması izlənməlidir; təkcə budaq göstəricisini dəyişmək GitHub Pages qurmasını həmişə başlatmır.
-
-Canlı liqa məlumatları Worker-in mövcud bazasında qalır. Bu yayım üçün `js/content.js` və canlı admin məlumatları dəyişdirilməyib.
+Yayımda həm GitHub Pages, həm də Cloudflare Workers Builds yoxlanmalıdır. GitHub Pages qurmasını yalnız budaq göstəricisinin dəyişməsinə bağlamamaq üçün bu yayım qeydi Contents API ilə ayrıca yenilənir.

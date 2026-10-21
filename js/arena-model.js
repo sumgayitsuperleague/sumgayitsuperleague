@@ -1,11 +1,11 @@
 // Public game settings and real-record season chapters. No DOM and no writes.
-export const ARENA_PAGES=Object.freeze({'/penalti-arenasi':'penalty','/zaman-tuneli':'timeline'});
+export const ARENA_PAGES=Object.freeze({'/penalti-arenasi':'penalty'});
 export const seasonKey=league=>String(league?.season||'')+':'+(league?.edition||1);
 export function defaultArenaFeatures(){return {
- penalty:{enabled:true,showOnHome:true,title:'Penalti arenası',description:'Küncü seç. Topu sürüşdür. Seriyanı davam etdir.',difficulty:'normal',defaultMode:'streak',allowPractice:true,allowSound:true,allowReplay:true},
- timeline:{enabled:true,showOnHome:true,title:'Mövsümün zaman tuneli',description:'İlk fitdən finala. Bu mövsümün hekayəsini birlikdə yenidən yaşa.',autoMatches:true,cover:'/assets/editorial/ig-pitch.jpg',items:[],hiddenChapters:[]}
+ penalty:{enabled:true,showOnHome:true,title:'Penalti arenası',description:'Küncü seç. Topu sürüşdür. Seriyanı davam etdir.',difficulty:'normal',defaultMode:'duel',allowPractice:true,allowSound:true,allowReplay:true,allowDuel:true,showSponsors:true,sponsorMotion:true,defaultTeam:'',defaultOpponent:'',duelRounds:5},
+ timeline:{enabled:false,showOnHome:false,title:'Mövsümün zaman tuneli',description:'İlk fitdən finala. Bu mövsümün hekayəsini birlikdə yenidən yaşa.',autoMatches:true,cover:'/assets/editorial/ig-pitch.jpg',items:[],hiddenChapters:[]}
 };}
-export function arenaSettings(value){const d=defaultArenaFeatures();return {penalty:{...d.penalty,...value?.penalty},timeline:{...d.timeline,...value?.timeline}};}
+export function arenaSettings(value){const d=defaultArenaFeatures();return {penalty:{...d.penalty,...value?.penalty},timeline:{...d.timeline,...value?.timeline,enabled:false,showOnHome:false}};}
 export function validateArenaFeatures(value,{imagePath}={}){
  const errors=[],obj=x=>x&&typeof x==='object'&&!Array.isArray(x),txt=(x,n,required=false)=>typeof x==='string'&&x.length<=n&&(!required||!!x.trim())&&!/[<>\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(x),id=x=>typeof x==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(x),image=imagePath||((x)=>x===''||/^\/assets\/(?:logo\.png|(?:editorial|logos)\/[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp))$/.test(x)),check=(p,m)=>{if(!p&&errors.length<20)errors.push(m);},date=s=>s===''||/^\d{4}-\d\d-\d\d$/.test(s)&&Number.isFinite(Date.parse(s+'T12:00:00Z'))&&new Date(s+'T12:00:00Z').toISOString().slice(0,10)===s;
  const d=defaultArenaFeatures();
@@ -13,9 +13,10 @@ export function validateArenaFeatures(value,{imagePath}={}){
   const c=value?.[section];if(c===undefined)continue;
   if(!obj(c)||Object.keys(c).some(k=>!Object.hasOwn(d[section],k))){check(false,'Oyun və zaman tuneli ayarlarının quruluşu düzgün deyil.');continue;}
   check(txt(c.title,160,true)&&txt(c.description,600),section+': başlıq və təqdimat düzgün deyil.');
-  for(const k of Object.keys(d[section]).filter(k=>typeof d[section][k]==='boolean'))check(typeof c[k]==='boolean',section+': görünmə ayarı düzgün deyil.');
+  for(const k of Object.keys(d[section]).filter(k=>typeof d[section][k]==='boolean'))check(typeof c[k]==='boolean'||section==='penalty'&&['allowDuel','showSponsors','sponsorMotion'].includes(k)&&c[k]===undefined,section+': görünmə ayarı düzgün deyil.');
  }
- const p=value?.penalty;if(obj(p)){check(['easy','normal','hard'].includes(p.difficulty),'Penalti çətinliyini seç.');check(['streak','practice'].includes(p.defaultMode)&&!(p.defaultMode==='practice'&&!p.allowPractice),'Penalti oyun rejimi düzgün deyil.');}
+ const p=value?.penalty;if(obj(p)){check(['easy','normal','hard'].includes(p.difficulty),'Penalti çətinliyini seç.');check(['duel','streak','practice'].includes(p.defaultMode)&&!(p.defaultMode==='practice'&&!p.allowPractice)&&!(p.defaultMode==='duel'&&p.allowDuel===false),'Penalti oyun rejimi düzgün deyil.');}
+ if(obj(p)){for(const k of ['defaultTeam','defaultOpponent'])check(p[k]===undefined||p[k]===''||id(p[k]),'Əsas komanda seçimi düzgün deyil.');check(!p.defaultTeam||!p.defaultOpponent||p.defaultTeam!==p.defaultOpponent,'Komanda və rəqib fərqli olmalıdır.');check(p.duelRounds===undefined||[3,5,7].includes(p.duelRounds),'Duel üçün 3, 5 və ya 7 zərbə seç.');}
  const t=value?.timeline;if(obj(t)){
   check(image(t.cover),'Zaman tunelinin başlıq şəkli düzgün deyil.');
   check(Array.isArray(t.hiddenChapters)&&t.hiddenChapters.length<=160&&new Set(t.hiddenChapters).size===t.hiddenChapters.length&&t.hiddenChapters.every(x=>txt(x,160,true)),'Gizlədilən fəsillər düzgün deyil.');
@@ -29,10 +30,9 @@ export function validateArenaFeatures(value,{imagePath}={}){
  }
  return errors;
 }
-export function publicArenaFeatures(value){const c=arenaSettings(value);c.timeline={...c.timeline,items:c.timeline.enabled?c.timeline.items.filter(x=>x.published).map(x=>({...x})):[]};return c;}
+export function publicArenaFeatures(value){const c=arenaSettings(value);c.timeline={...c.timeline,items:[]};return c;}
 export function arenaLocaleTargets(value){
- const rows=[];for(const section of ['penalty','timeline'])for(const property of ['title','description'])if(value?.[section]?.[property])rows.push({parent:value[section],property,key:'fanZone.'+section+'.'+property,source:value[section][property],label:section+' · '+property,group:'community'});
- for(const item of value?.timeline?.items||[])for(const property of ['title','text','caption'])if(item[property])rows.push({parent:item,property,key:'fanZone.timeline.item.'+item.id+'.'+property,source:item[property],label:'Zaman tuneli · '+(item.title||item.anchor),group:'community'});
+ const rows=[];for(const section of ['penalty'])for(const property of ['title','description'])if(value?.[section]?.[property])rows.push({parent:value[section],property,key:'fanZone.'+section+'.'+property,source:value[section][property],label:section+' · '+property,group:'community'});
  return rows;
 }
 const ordinal=n=>n+'-'+({1:'ci',2:'ci',3:'cü',4:'cü',5:'ci',6:'cı',7:'ci',8:'ci',9:'cu'}[n%10]||'cu');
@@ -56,4 +56,27 @@ export function timelineChapters(data,value,{includeHidden=false,includeDrafts=f
  }
  chapters.sort((a,b)=>a.sort.localeCompare(b.sort)||a.id.localeCompare(b.id));
  return chapters.map(ch=>({...ch,hidden:c.hiddenChapters.includes(key+':'+ch.id)})).filter(ch=>includeHidden||!ch.hidden);
+}
+
+// Club and sponsor choices always come from the current organizer data.
+export function arenaTeams(data){
+ const seen=new Set();return (data.league?.teams||[]).filter(q=>q&&typeof q.id==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(q.id)&&!seen.has(q.id)&&seen.add(q.id)).map(q=>({id:q.id,name:String(q.name||q.id),code:String(q.code||q.name||q.id).slice(0,8),color:/^#[a-f0-9]{6}$/i.test(q.color||'')?q.color:'#2455ba',logo:/^[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(q.logo||'')?'/assets/logos/'+q.logo:'/assets/logo.png'}));
+}
+export function chooseArenaClubs(data,home='',away=''){
+ const teams=arenaTeams(data),a=teams.find(q=>q.id===home)||teams[0]||null,b=teams.find(q=>q.id===away&&q.id!==a?.id)||teams.find(q=>q.id!==a?.id)||null;return {teams,home:a,away:b};
+}
+export function arenaSponsors(data,value){
+ const c=arenaSettings(value).penalty,s=data.cms?.sponsors;if(!c.showSponsors||!s?.enabled)return [];
+ return (s.items||[]).filter(q=>q.visible&&/^\/assets\/(?:logos|editorial)\/[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(q.logo||'')).map(q=>({...q,url:/^https:\/\//.test(q.url||'')?q.url:'/sponsorlar'}));
+}
+export const createDuel=(rounds=5)=>({rounds:[3,5,7].includes(rounds)?rounds:5,home:[],away:[],winner:null});
+export function duelStatus(s){
+ const home=s.home.filter(q=>q==='goal').length,away=s.away.filter(q=>q==='goal').length,n=s.rounds,paired=s.home.length===s.away.length;
+ let winner=null;if(s.home.length>=n&&s.away.length>=n){if(paired&&home!==away)winner=home>away?'home':'away';}
+ else if(home>away+Math.max(0,n-s.away.length))winner='home';else if(away>home+Math.max(0,n-s.home.length))winner='away';
+ return {home,away,winner,turn:paired?'home':'away',suddenDeath:s.home.length>=n&&s.away.length>=n&&!winner,round:Math.min(s.home.length,s.away.length)+1};
+}
+export function recordDuelKick(s,side,result){
+ const state=duelStatus(s);if(state.winner||state.turn!==side||!['goal','save','post','miss'].includes(result))return s;
+ const next={...s,home:[...s.home],away:[...s.away]};next[side].push(result);next.winner=duelStatus(next).winner;return next;
 }
