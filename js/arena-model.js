@@ -2,7 +2,7 @@
 export const ARENA_PAGES=Object.freeze({'/penalti-arenasi':'penalty'});
 export const seasonKey=league=>String(league?.season||'')+':'+(league?.edition||1);
 export function defaultArenaFeatures(){return {
- penalty:{enabled:true,showOnHome:true,title:'Penalti arenası',description:'Küncü seç. Topu sürüşdür. Seriyanı davam etdir.',difficulty:'normal',defaultMode:'duel',allowPractice:true,allowSound:true,allowReplay:true,allowDuel:true,showSponsors:true,sponsorMotion:true,defaultTeam:'',defaultOpponent:'',duelRounds:5},
+ penalty:{enabled:true,showOnHome:true,title:'Penalti arenası',description:'Küncü seç. Topu sürüşdür. Seriyanı davam etdir.',difficulty:'normal',defaultMode:'duel',allowPractice:true,allowSound:true,allowReplay:true,allowDuel:true,allowCup:true,showSponsors:true,sponsorMotion:true,defaultTeam:'',defaultOpponent:'',duelRounds:5},
  timeline:{enabled:false,showOnHome:false,title:'Mövsümün zaman tuneli',description:'İlk fitdən finala. Bu mövsümün hekayəsini birlikdə yenidən yaşa.',autoMatches:true,cover:'/assets/editorial/ig-pitch.jpg',items:[],hiddenChapters:[]}
 };}
 export function arenaSettings(value){const d=defaultArenaFeatures();return {penalty:{...d.penalty,...value?.penalty},timeline:{...d.timeline,...value?.timeline,enabled:false,showOnHome:false}};}
@@ -13,9 +13,9 @@ export function validateArenaFeatures(value,{imagePath}={}){
   const c=value?.[section];if(c===undefined)continue;
   if(!obj(c)||Object.keys(c).some(k=>!Object.hasOwn(d[section],k))){check(false,'Oyun və zaman tuneli ayarlarının quruluşu düzgün deyil.');continue;}
   check(txt(c.title,160,true)&&txt(c.description,600),section+': başlıq və təqdimat düzgün deyil.');
-  for(const k of Object.keys(d[section]).filter(k=>typeof d[section][k]==='boolean'))check(typeof c[k]==='boolean'||section==='penalty'&&['allowDuel','showSponsors','sponsorMotion'].includes(k)&&c[k]===undefined,section+': görünmə ayarı düzgün deyil.');
+  for(const k of Object.keys(d[section]).filter(k=>typeof d[section][k]==='boolean'))check(typeof c[k]==='boolean'||section==='penalty'&&['allowDuel','allowCup','showSponsors','sponsorMotion'].includes(k)&&c[k]===undefined,section+': görünmə ayarı düzgün deyil.');
  }
- const p=value?.penalty;if(obj(p)){check(['easy','normal','hard'].includes(p.difficulty),'Penalti çətinliyini seç.');check(['duel','streak','practice'].includes(p.defaultMode)&&!(p.defaultMode==='practice'&&!p.allowPractice)&&!(p.defaultMode==='duel'&&p.allowDuel===false),'Penalti oyun rejimi düzgün deyil.');}
+ const p=value?.penalty;if(obj(p)){check(['easy','normal','hard'].includes(p.difficulty),'Penalti çətinliyini seç.');check(['duel','cup','streak','practice'].includes(p.defaultMode)&&!(p.defaultMode==='practice'&&!p.allowPractice)&&!(p.defaultMode==='duel'&&p.allowDuel===false)&&!(p.defaultMode==='cup'&&p.allowCup===false),'Penalti oyun rejimi düzgün deyil.');}
  if(obj(p)){for(const k of ['defaultTeam','defaultOpponent'])check(p[k]===undefined||p[k]===''||id(p[k]),'Əsas komanda seçimi düzgün deyil.');check(!p.defaultTeam||!p.defaultOpponent||p.defaultTeam!==p.defaultOpponent,'Komanda və rəqib fərqli olmalıdır.');check(p.duelRounds===undefined||[3,5,7].includes(p.duelRounds),'Duel üçün 3, 5 və ya 7 zərbə seç.');}
  const t=value?.timeline;if(obj(t)){
   check(image(t.cover),'Zaman tunelinin başlıq şəkli düzgün deyil.');
@@ -79,4 +79,24 @@ export function duelStatus(s){
 export function recordDuelKick(s,side,result){
  const state=duelStatus(s);if(state.winner||state.turn!==side||!['goal','save','post','miss'].includes(result))return s;
  const next={...s,home:[...s.home],away:[...s.away]};next[side].push(result);next.winner=duelStatus(next).winner;return next;
+}
+
+// A local, seeded eight-club cup. Organizer fixtures and league results are untouched.
+export function createArenaCup(teams,homeId,rivalId,seed=1){
+ const ids=[...new Set(teams.map(q=>q.id))];if(ids.length<8||!ids.includes(homeId))return null;
+ let state=seed>>>0||1;const rng=()=>((state=(Math.imul(state,1664525)+1013904223)>>>0)/4294967296);
+ const others=ids.filter(id=>id!==homeId&&id!==rivalId);for(let i=others.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[others[i],others[j]]=[others[j],others[i]];}
+ const lineup=[homeId,...(ids.includes(rivalId)&&rivalId!==homeId?[rivalId]:[]),...others].slice(0,8);
+ return {homeId,seed:seed>>>0,round:0,rounds:[Array.from({length:4},(_,i)=>({home:lineup[i*2],away:lineup[i*2+1],homeScore:null,awayScore:null,winner:null})),[],[]],eliminated:false,champion:null};
+}
+export function cupOpponent(cup){const m=cup?.rounds[cup.round]?.find(q=>q.home===cup.homeId||q.away===cup.homeId);return m?(m.home===cup.homeId?m.away:m.home):null;}
+export function advanceArenaCup(cup,duel){
+ const status=duelStatus(duel);if(!cup||cup.champion||cup.eliminated||!status.winner)return cup;
+ const current=cup.rounds[cup.round],own=current.find(q=>q.home===cup.homeId||q.away===cup.homeId);if(!own||own.winner)return cup;
+ let seed=(cup.seed+cup.round*7919)>>>0;const rng=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+ const rounds=cup.rounds.map(r=>r.map(m=>({...m}))),matches=rounds[cup.round];
+ for(const match of matches){if(match.home===cup.homeId||match.away===cup.homeId){const atHome=match.home===cup.homeId;match.homeScore=atHome?status.home:status.away;match.awayScore=atHome?status.away:status.home;match.winner=status.winner==='home'?cup.homeId:(atHome?match.away:match.home);}else{let s=createDuel(5);for(let i=0;!duelStatus(s).winner&&i<80;i++){const turn=duelStatus(s).turn;s=recordDuelKick(s,turn,i>60?(turn==='home'?'goal':'miss'):rng()<.76?'goal':'miss');}const result=duelStatus(s);match.homeScore=result.home;match.awayScore=result.away;match.winner=result.winner==='home'?match.home:match.away;}}
+ const winners=matches.map(m=>m.winner),won=status.winner==='home',final=cup.round===2;
+ if(!final)rounds[cup.round+1]=Array.from({length:winners.length/2},(_,i)=>({home:winners[i*2],away:winners[i*2+1],homeScore:null,awayScore:null,winner:null}));
+ return {...cup,rounds,round:won&&!final?cup.round+1:cup.round,eliminated:!won,champion:final?winners[0]:null};
 }

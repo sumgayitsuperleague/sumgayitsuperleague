@@ -3,14 +3,19 @@ export const PENALTY_FIELD=Object.freeze({halfWidth:2,height:2,post:.045,radius:
 export const PHYSICS_STEP=1/120;
 export const clamp=(n,a,b)=>Math.min(b,Math.max(a,Number.isFinite(n)?n:a));
 export function randomSequence(seed=1){let s=seed>>>0||1;return ()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
-export function makePenaltyShot({x=0,y=1,power=.75,spin=0,difficulty='normal',streak=0,seed=1,idle=0}={}){
+export function makePenaltyShot({x=0,y=1,power=.75,spin=0,difficulty='normal',streak=0,seed=1,idle=0,manualKeeper=false}={}){
  const f=PENALTY_FIELD,p=clamp(power,.3,1),vz=-(13+p*10),flight=f.distance/-vz,curve=clamp(spin,-1,1)*2.8,rng=randomSequence(seed),tier={easy:{delay:.27,speed:4.8,error:1.1},normal:{delay:.21,speed:5.7,error:.5},hard:{delay:.15,speed:6.7,error:.26}}[difficulty]||{delay:.21,speed:5.7,error:.5},targetX=clamp(x,-3.3,3.3),targetY=clamp(y,.02,3.4),initialX=Math.sin(idle*1.8)*.28;
- return {t:0,position:{x:0,y:f.radius,z:f.distance},velocity:{x:(targetX-.5*curve*flight*flight)/flight,y:(targetY-f.radius+.5*f.gravity*flight*flight)/flight,z:vz},curve,result:null,resolvedAt:0,impact:null,target:{x:targetX,y:targetY},keeper:{startX:initialX,delay:Math.max(.11,tier.delay-Math.min(streak,12)*.003),speed:tier.speed,targetX:clamp(targetX+(rng()-.5)*tier.error*2,-1.85,1.85),targetY:clamp(targetY+(rng()-.5)*tier.error,.25,1.8)},history:[]};
+ const shot={t:0,position:{x:0,y:f.radius,z:f.distance},velocity:{x:(targetX-.5*curve*flight*flight)/flight,y:(targetY-f.radius+.5*f.gravity*flight*flight)/flight,z:vz},curve,result:null,resolvedAt:0,impact:null,target:{x:targetX,y:targetY},keeper:{manual:manualKeeper,committed:false,startX:manualKeeper?0:initialX,delay:Math.max(.11,tier.delay-Math.min(streak,12)*.003),speed:tier.speed,targetX:clamp(targetX+(rng()-.5)*tier.error*2,-1.85,1.85),targetY:clamp(targetY+(rng()-.5)*tier.error,.25,1.8)},history:[]};
+ if(manualKeeper)Object.assign(shot.keeper,{delay:100,targetX:0,targetY:1,speed:8.6});return shot;
+}
+export function divePenaltyKeeper(shot,{x=0,y=1}={}){
+ if(!shot||shot.result||!shot.keeper.manual||shot.keeper.committed)return false;
+ Object.assign(shot.keeper,{committed:true,delay:shot.t,targetX:clamp(x,-1.65,1.65),targetY:clamp(y,.35,1.65)});return true;
 }
 export function keeperPose(shot,t=shot?.t||0,idle=0){
  if(!shot)return {x:Math.sin(idle*1.8)*.28,y:1.01,angle:0,reach:.15,dive:0,dir:0,handY:1.04};
  const k=shot.keeper,active=Math.max(0,t-k.delay),distance=k.targetX-k.startX,dir=Math.sign(distance)||1,duration=Math.max(.26,Math.abs(distance)/k.speed+.08),p=clamp(active/duration,0,1),e=1-Math.pow(1-p,2),dive=Math.min(1,Math.abs(distance)/.85)*e;
- return {x:k.startX+distance*e,y:1.01+Math.sin(p*Math.PI)*.22+(k.targetY-1)*.25*e,angle:-dir*dive*1.04,reach:e,dir,dive,handY:1.03+(k.targetY-1.03)*e};
+ return {x:k.startX+distance*e,y:1.01+Math.sin(p*Math.PI)*.22+(k.targetY-1)*(k.manual?.7:.25)*e,angle:-dir*dive*1.04,reach:e,dir,dive,handY:1.03+(k.targetY-1.03)*e};
 }
 function keeperHit(pos,pose){
  // The same torso and glove locations are used by the 3D and light renderers.
