@@ -1,3 +1,16 @@
+# Penalti arenası · SSL Kuboku
+
+21 oktyabr 2026.
+
+- Səkkiz cari klubla dörddəbir final, yarımfinal və finaldan ibarət yerli kubok rejimi əlavə edilib. İlk rəqibi oyunçu seçir, sonrakı rəqiblər turnir cədvəlindən gəlir.
+- Duel və kubokda rəqib vurarkən qapıçını oyunçu idarə edir. Hər zərbədə bir atılış var; nəticə və təkrar eyni fiziki hərəkətdən hesablanır. Telefon, siçan və klaviatura idarəsi mövcuddur.
+- Qurtarış, zərbə dəqiqliyi, kubok mükafatı və cihazda saxlanılan kubok sayı əlavə edilib. Zərbə izi və təkrar görüntüsü yenilənib; reklamlar cari sponsor siyahısından gəlir.
+- Admin panelində SSL Kuboku üçün aktivlik və əsas rejim seçimi var; saxlanılmamış dəyişikliklər qorunan ön baxışda görünür.
+
+Yoxlama: 338 avtomatik test, lokal WebGL və toxunma sınaqları, üç mərhələli kubok axını və Worker dry-run. Liqa məlumat bazası və giriş qaydaları bu kod yayımı ilə dəyişdirilmir.
+
+---
+
 # Penalti arenası · klub dueli
 
 21 oktyabr 2026.
