@@ -26,3 +26,5 @@ Liqa nəticələri, komandalar, sponsor siyahısı və digər məzmun bu kod yay
 Yayımda həm GitHub Pages, həm də Cloudflare Workers Builds yoxlanmalıdır. GitHub Pages qurmasını yalnız budaq göstəricisinin dəyişməsinə bağlamamaq üçün bu yayım qeydi Contents API ilə ayrıca yenilənir.
 
 Yayım yoxlamaları: 334 avtomatik test, hər iki lokal brauzer sınağı və Worker dry-run uğurludur.
+
+Canlı görünüş düzəlişi: kubok seçiləndə fokus meydançanı daxilən sürüşdürmür. Menyu 320, 390, 768 və 1440 piksel enlərdə tam görünməklə yoxlanıb.
