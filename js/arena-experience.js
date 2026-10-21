@@ -93,7 +93,7 @@ export function bindPenalty(data,settings,lang='az'){
   });
  };
  const tick=now=>{
-  if(destroyed)return;frameId=requestAnimationFrame(tick);const delta=Math.min(.05,Math.max(0,(now-lastTime)/1000||0));lastTime=now;if(!view||phase==='paused'||document.hidden)return;
+  if(destroyed)return;frameId=requestAnimationFrame(tick);const delta=Math.min(.25,Math.max(0,(now-lastTime)/1000||0));lastTime=now;if(!view||phase==='paused'||document.hidden)return;
   idle+=delta;
   if(phase==='flight'&&shot){accumulator+=delta;while(accumulator>=PHYSICS_STEP){stepPenaltyShot(shot);accumulator-=PHYSICS_STEP;}if(shot.result&&shot.t-shot.resolvedAt>.68)finish();}
   if(phase==='result'&&shot&&shot.t<2.5){accumulator+=delta;while(accumulator>=PHYSICS_STEP){stepPenaltyShot(shot);accumulator-=PHYSICS_STEP;}}
