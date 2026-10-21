@@ -1,3 +1,4 @@
+import {renderArenaHome} from './arena-experience.js';
 import {fanZoneSettings,finalContext} from './fan-zone-model.js';
 import {uiIcon} from './ui-icons.js';
 import {renderStadiumCarousel} from './stadium-view.js';
@@ -40,7 +41,7 @@ export function renderLeagueEntrance(ctx){
  const side=H.showSideNews?`<div class="league-side-news"><div class="league-side-heading"><span>Xəbərlər</span><a href="xeberler.html">Hamısı ↗</a></div>${others.map(n=>`<a class="league-side-story" href="xeberler.html?id=${encodeURIComponent(n.id)}"><div><time datetime="${esc(n.date)}">${fmtShort(n.date)}</time><h3>${esc(n.title)}</h3></div><span class="story-arrow" aria-hidden="true">↗</span></a>`).join('')}${H.showGuidePromo?'<a class="learn-promo" href="minifutbol.html"><strong>Minifutbol bələdçisi</strong><b>↗</b></a>':''}</div>`:'';
  const presentation=stadiumSettings(ctx.CMS.stadium).motion.presentation,broadcast=presentation==='broadcast';
  const introduction=presentation==='official'?officialEntrance(ctx,lead,side):presentation==='arena'?arenaEntrance(ctx,lead,side):presentation==='panorama'?panoramaEntrance(ctx,lead,side):lead||side?`<section class="league-entry${broadcast?' league-entry--broadcast':''}"><div class="wrap"><div class="league-front-heading">${broadcast?`<div class="league-entry-title"><h1>${esc(UI.t(H.title||ctx.S.name))}</h1>${H.highlight?`<p>${esc(UI.t(H.highlight))}</p>`:''}</div>`:`<h1>${esc(ctx.S.name)}</h1>`}<a href="merhele.html">${esc(L.season)} MÖVSÜMÜ <i>·</i> ${ordinal(L.edition||1)} SEZON <span>↗</span></a></div><div class="league-news-layout ${side?'':'single-column'} ${lead?'':'side-only'}">${lead}${side}</div>${H.showEntryLinks?`<div class="league-entry-links">${[['cedvel.html','Turnir cədvəli'],['komandalar.html','Komandalar'],['merhele.html','Mövsüm mərkəzi']].map(([href,label])=>`<a href="${href}">${label}<span>↗</span></a>`).join('')}</div>`:''}</div></section>`:'';
- const finalEntry=renderHomeFinal(ctx);
+ const finalEntry=renderHomeFinal(ctx)+renderArenaHome({league:ctx.L,cms:{fanZone:ctx.CMS.fanZone}},UI.LANG);
  const before=H.blockPosition==='beforeLead'&&H.leadType!=='custom'?custom:'',after=H.blockPosition==='afterLead'&&H.leadType!=='custom'?custom:'';
  // The secondary stories follow the compact match centre in Panorama.
  const split=introduction.indexOf('<div data-panorama-editorial>'),main=split<0?introduction:introduction.slice(0,split),editorial=split<0?'':introduction.slice(split);
