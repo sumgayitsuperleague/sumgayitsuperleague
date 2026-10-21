@@ -54,3 +54,6 @@ html.pa-game-expanded{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.pa-celebration{display:none!important}}
 .pa-new-features>button{display:flex;gap:9px;align-items:center;padding:9px 11px;border:1px solid #d4c38077;border-radius:7px;color:#c3ad71;background:#c5b4750d;font:inherit;font-size:9px;text-align:left;cursor:pointer}.pa-new-features>button:hover,.pa-shell[data-mode=cup] .pa-new-features>button{background:#c5b47524;border-color:#d4c380}.pa-new-features>button b{color:#eedba8}@media(max-width:760px){.pa-new-features>button{padding:7px 8px;font-size:8px;gap:7px}}
 .pa-shell[data-turn=away] .pa-stage[data-outcome=goal]:not([data-winner=home]) .pa-result>strong{color:#ffb1a4}.pa-shell[data-turn=away] .pa-stage[data-outcome=save] .pa-result>strong{color:#d1ed9a}@media(max-width:360px){.pa-score-club strong{font-size:10px;overflow-wrap:normal;word-break:normal}}
+
+/* Focus and browser scrolling must never pan the clipped game surface. */
+.pa-stage{overflow:clip}

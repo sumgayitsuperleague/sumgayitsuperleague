@@ -171,7 +171,7 @@ export function bindPenalty(data,settings,lang='az'){
  const hidden=()=>{if(document.hidden)pause();};document.addEventListener('visibilitychange',hidden);
  const visibility=new IntersectionObserver(entries=>{if(entries[0]&&!entries[0].isIntersecting&&!expanded)pause();},{threshold:0});visibility.observe(stage);
  get('difficulty').onchange=get('mode').onchange=()=>{difficulty=get('difficulty').value;mode=get('mode').value;best=readBest();stats();};
- if(get('cup-mode'))get('cup-mode').onclick=()=>{get('mode').value='cup';mode='cup';best=readBest();stats();announce(t('3 mərhələ. Bir kubok.'));get('mode').focus();};
+ if(get('cup-mode'))get('cup-mode').onclick=()=>{get('mode').value='cup';mode='cup';best=readBest();stats();announce(t('3 mərhələ. Bir kubok.'));get('mode').focus({preventScroll:true});};
  const clearRecord=()=>{best=0;stats();};window.addEventListener('ssl-preferences-reset',clearRecord);
  const onPageHide=event=>{if(event.persisted)pause();else dispose();};
  const dispose=()=>{destroyed=true;window.removeEventListener('pagehide',onPageHide);cancelAnimationFrame(frameId);visibility.disconnect();view?.destroy();audio?.close().catch(()=>{});document.documentElement.classList.remove('pa-game-expanded');document.removeEventListener('fullscreenchange',fullscreenChanged);document.removeEventListener('visibilitychange',hidden);window.removeEventListener('ssl-preferences-reset',clearRecord);};
