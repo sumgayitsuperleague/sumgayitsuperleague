@@ -60,7 +60,7 @@ export function timelineChapters(data,value,{includeHidden=false,includeDrafts=f
 
 // Club and sponsor choices always come from the current organizer data.
 export function arenaTeams(data){
- const seen=new Set();return (data.league?.teams||[]).filter(q=>q&&typeof q.id==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(q.id)&&!seen.has(q.id)&&seen.add(q.id)).map(q=>({id:q.id,name:String(q.name||q.id),code:String(q.code||q.name||q.id).slice(0,8),color:/^#[a-f0-9]{6}$/i.test(q.color||'')?q.color:'#2455ba',logo:/^[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(q.logo||'')?'/assets/logos/'+q.logo:'/assets/logo.png'}));
+ const seen=new Set();return (data.league?.teams||[]).filter(q=>q&&typeof q.id==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(q.id)&&!seen.has(q.id)&&seen.add(q.id)).map(q=>({id:q.id,name:String(q.name||q.id),group:String(q.group||'').trim(),code:String(q.code||q.name||q.id).slice(0,8),color:/^#[a-f0-9]{6}$/i.test(q.color||'')?q.color:'#2455ba',logo:/^[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(q.logo||'')?'/assets/logos/'+q.logo:'/assets/logo.png'}));
 }
 export function chooseArenaClubs(data,home='',away=''){
  const teams=arenaTeams(data),a=teams.find(q=>q.id===home)||teams[0]||null,b=teams.find(q=>q.id===away&&q.id!==a?.id)||teams.find(q=>q.id!==a?.id)||null;return {teams,home:a,away:b};
@@ -101,36 +101,63 @@ export function advanceArenaCup(cup,duel){
  return {...cup,rounds,round:won&&!final?cup.round+1:cup.round,eliminated:!won,champion:final?winners[0]:null};
 }
 
-// Eight clubs, one match per pairing, seven rounds. This is an on-device game season.
-export function createArenaLeague(teams,homeId,rivalId,seed=1){
- const cup=createArenaCup(teams,homeId,rivalId,seed);if(!cup)return null;
- const ids=cup.rounds[0].flatMap(m=>[m.home,m.away]),ring=[ids[0],...ids.slice(2),ids[1]],rounds=[];
- for(let r=0;r<7;r++){rounds.push(Array.from({length:4},(_,i)=>{const a=ring[i],b=ring[7-i];return {home:(r+i)%2?b:a,away:(r+i)%2?a:b,homeScore:null,awayScore:null,winner:null};}));ring.splice(1,0,ring.pop());}
- return {homeId,teamIds:ids,seed:seed>>>0,round:0,rounds,complete:false,champions:[]};
+// Local competition follows the organizer's two groups and six home/away matchdays.
+// Results belong to this device only; they never enter the real league records.
+const emptyFixture=(home,away,group='')=>({home,away,group,homeScore:null,awayScore:null,winner:null});
+function leagueGroups(teams){
+ const groups=new Map();for(const team of teams){const id=String(team.group||'').trim();if(!id)return null;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(team.id);}
+ const result=[...groups].sort(([a],[b])=>a.localeCompare(b)).map(([id,teamIds])=>({id,teamIds}));return teams.length===8&&result.length===2&&result.every(g=>g.teamIds.length===4)?result:null;
+}
+function groupSchedule(groups,matches){
+ const membership=new Map(groups.flatMap(g=>g.teamIds.map(id=>[id,g.id]))),rounds=Array.from({length:6},()=>[]);
+ for(const m of matches||[]){if(stage(m)!=='group'||!Number.isInteger(m.round)||m.round<1||m.round>6||!membership.has(m.home)||membership.get(m.home)!==membership.get(m.away)||m.home===m.away)continue;rounds[m.round-1].push(emptyFixture(m.home,m.away,membership.get(m.home)));}
+ const pairs=rounds.flat().map(m=>m.home+':'+m.away);
+ if(rounds.every(r=>r.length===4&&new Set(r.flatMap(m=>[m.home,m.away])).size===8)&&pairs.length===24&&new Set(pairs).size===24)return rounds;
+ // A valid group draw can also be used before the organizer publishes the calendar.
+ for(const round of rounds)round.length=0;
+ for(const group of groups){const ring=[...group.teamIds];for(let r=0;r<3;r++){for(let i=0;i<2;i++){const a=ring[i],b=ring[3-i],home=(r+i)%2?b:a,away=home===a?b:a;rounds[r].push(emptyFixture(home,away,group.id));rounds[r+3].push(emptyFixture(away,home,group.id));}ring.splice(1,0,ring.pop());}}
+ return rounds;
+}
+export function createArenaLeague(teams,homeId,_rivalId,seed=1,{matches=[]}={}){
+ const groups=leagueGroups(teams);if(!groups||!teams.some(q=>q.id===homeId))return null;
+ return {version:2,homeId,teamIds:groups.flatMap(g=>g.teamIds),groups,seed:seed>>>0,round:0,rounds:[...groupSchedule(groups,matches),[],[]],complete:false,eliminated:false,groupPlace:null,placement:null,champion:null,champions:[]};
 }
 export function leagueOpponent(league){const m=league?.rounds[league.round]?.find(q=>q.home===league.homeId||q.away===league.homeId);return m?(m.home===league.homeId?m.away:m.home):null;}
-export function arenaLeagueTable(league){
- const rows=new Map(league.teamIds.map(id=>[id,{id,played:0,won:0,drawn:0,lost:0,for:0,against:0,difference:0,points:0}]));
- for(const m of league.rounds.flat()){if(m.homeScore===null||m.awayScore===null)continue;const a=rows.get(m.home),b=rows.get(m.away);a.played++;b.played++;a.for+=m.homeScore;a.against+=m.awayScore;b.for+=m.awayScore;b.against+=m.homeScore;if(m.homeScore===m.awayScore){a.drawn++;b.drawn++;a.points++;b.points++;}else{const winner=m.homeScore>m.awayScore?a:b,loser=winner===a?b:a;winner.won++;winner.points+=3;loser.lost++;}}
- const compare=(a,b)=>b.points-a.points||b.difference-a.difference||b.for-a.for||b.won-a.won;
- const sorted=[...rows.values()].map(q=>({...q,difference:q.for-q.against})).sort((a,b)=>compare(a,b)||a.id.localeCompare(b.id));
- for(let i=0;i<sorted.length;i++)sorted[i].rank=i&&compare(sorted[i-1],sorted[i])===0?sorted[i-1].rank:i+1;return sorted;
+export function leagueStage(league,round=league?.round||0){if(round<6)return 'group';if(round===6)return 'semifinal';const own=league?.rounds[7]?.find(m=>m.home===league.homeId||m.away===league.homeId);return own?.group==='third-place'?'third-place':'final';}
+export function arenaLeagueTable(league,groupId){
+ if(!league)return [];const rows=new Map(league.teamIds.map(id=>[id,{id,group:league.groups.find(g=>g.teamIds.includes(id)).id,played:0,won:0,drawn:0,lost:0,for:0,against:0,difference:0,points:0}])),played=league.rounds.slice(0,6).flat().filter(m=>m.homeScore!==null&&m.awayScore!==null);
+ const add=(map,m)=>{const a=map.get(m.home),b=map.get(m.away);if(!a||!b)return;a.played++;b.played++;a.for+=m.homeScore;a.against+=m.awayScore;b.for+=m.awayScore;b.against+=m.homeScore;if(m.homeScore===m.awayScore){a.drawn++;b.drawn++;a.points++;b.points++;}else{const winner=m.homeScore>m.awayScore?a:b,loser=winner===a?b:a;winner.won++;winner.points+=3;loser.lost++;}};
+ for(const m of played)add(rows,m);for(const row of rows.values())row.difference=row.for-row.against;
+ const primary=(a,b)=>b.points-a.points||b.difference-a.difference||b.for-a.for||a.against-b.against||b.won-a.won;
+ const drawOrder=id=>{let n=league.seed;for(const char of id)n=(Math.imul(n^char.charCodeAt(0),16777619))>>>0;return n;};
+ return league.groups.filter(g=>!groupId||g.id===groupId).flatMap(g=>{
+  const sorted=g.teamIds.map(id=>rows.get(id)).sort(primary),result=[];
+  for(let i=0;i<sorted.length;){let end=i+1;while(end<sorted.length&&primary(sorted[i],sorted[end])===0)end++;const tied=sorted.slice(i,end),ids=new Set(tied.map(q=>q.id)),mini=new Map(tied.map(q=>[q.id,{...q,played:0,won:0,drawn:0,lost:0,for:0,against:0,points:0}]));for(const m of played)if(ids.has(m.home)&&ids.has(m.away))add(mini,m);
+   tied.sort((a,b)=>{const x=mini.get(a.id),y=mini.get(b.id);return y.points-x.points||(y.for-y.against)-(x.for-x.against)||y.for-x.for||drawOrder(a.id)-drawOrder(b.id)||a.id.localeCompare(b.id);});result.push(...tied);i=end;
+  }return result.map((q,i)=>({...q,rank:i+1,qualifying:i<2}));
+ });
+}
+function finishLeagueRound(league){
+ const next={...league};if(next.round<5){next.round++;return next;}
+ if(next.round===5){const [a,b]=next.groups.map(g=>arenaLeagueTable(next,g.id));next.groupPlace=[...a,...b].find(q=>q.id===next.homeId).rank;next.rounds[6]=[emptyFixture(a[0].id,b[1].id,'semifinal'),emptyFixture(a[1].id,b[0].id,'semifinal')];next.eliminated=next.groupPlace>2;next.complete=next.eliminated;next.round=next.eliminated?5:6;return next;}
+ if(next.round===6){const semis=next.rounds[6],loser=m=>m.winner===m.home?m.away:m.home;next.rounds[7]=[emptyFixture(semis[0].winner,semis[1].winner,'final'),emptyFixture(loser(semis[0]),loser(semis[1]),'third-place')];next.round=7;return next;}
+ const final=next.rounds[7][0],third=next.rounds[7][1];next.champion=final.winner;next.champions=[final.winner];next.placement=final.winner===next.homeId?1:[final.home,final.away].includes(next.homeId)?2:third.winner===next.homeId?3:4;next.complete=true;return next;
 }
 export function advanceArenaLeague(league,duel){
- const status=duelStatus(duel,{allowDraw:true});if(!league||league.complete||!status.winner)return league;
+ if(!league||league.complete)return league;const allowDraw=league.round<6,status=duelStatus(duel,{allowDraw});if(!status.winner)return league;
  const own=league.rounds[league.round]?.find(q=>q.home===league.homeId||q.away===league.homeId);if(!own||own.winner)return league;
  let seed=(league.seed+league.round*7919)>>>0;const rng=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296),rounds=league.rounds.map(r=>r.map(m=>({...m})));
- for(const m of rounds[league.round]){if(m.home===league.homeId||m.away===league.homeId){const atHome=m.home===league.homeId;m.homeScore=atHome?status.home:status.away;m.awayScore=atHome?status.away:status.home;}else{m.homeScore=0;m.awayScore=0;for(let i=0;i<duel.rounds;i++){if(rng()<.75)m.homeScore++;if(rng()<.75)m.awayScore++;}}m.winner=m.homeScore===m.awayScore?'draw':m.homeScore>m.awayScore?m.home:m.away;}
- const complete=league.round===6,next={...league,rounds,round:complete?6:league.round+1,complete,champions:[]};if(complete)next.champions=arenaLeagueTable(next).filter(q=>q.rank===1).map(q=>q.id);return next;
+ for(const m of rounds[league.round]){if(m.home===league.homeId||m.away===league.homeId){const atHome=m.home===league.homeId;m.homeScore=atHome?status.home:status.away;m.awayScore=atHome?status.away:status.home;}else{m.homeScore=0;m.awayScore=0;for(let i=0;i<duel.rounds;i++){if(rng()<.75)m.homeScore++;if(rng()<.75)m.awayScore++;}if(!allowDraw)while(m.homeScore===m.awayScore){if(rng()<.75)m.homeScore++;if(rng()<.75)m.awayScore++;}}
+  m.winner=m.homeScore===m.awayScore?'draw':m.homeScore>m.awayScore?m.home:m.away;
+ }return finishLeagueRound({...league,rounds});
 }
-// Only complete matchdays can be resumed; rebuild the schedule from current clubs.
-export function restoreArenaLeague(value,teams,homeId){
- if(!value||value.homeId!==homeId||!Array.isArray(value.teamIds)||value.teamIds.length!==8||!Number.isInteger(value.seed)||value.seed<0||value.seed>4294967295)return null;
- const fresh=createArenaLeague(teams,homeId,value.teamIds[1],value.seed);if(!fresh||JSON.stringify(fresh.teamIds)!==JSON.stringify(value.teamIds)||!Array.isArray(value.rounds)||value.rounds.length!==7)return null;
- let completed=0,emptySeen=false;
- for(let r=0;r<7;r++){if(!Array.isArray(value.rounds[r])||value.rounds[r].length!==4)return null;let played=0;
-  for(let i=0;i<4;i++){const raw=value.rounds[r][i],expected=fresh.rounds[r][i];if(!raw||raw.home!==expected.home||raw.away!==expected.away)return null;const a=raw.homeScore,b=raw.awayScore;if(a===null&&b===null)continue;if(![a,b].every(n=>Number.isInteger(n)&&n>=0&&n<=7))return null;played++;Object.assign(expected,{homeScore:a,awayScore:b,winner:a===b?'draw':a>b?expected.home:expected.away});}
-  if(played!==0&&played!==4||played&&emptySeen)return null;if(played)completed++;else emptySeen=true;
- }
- fresh.round=Math.min(6,completed);fresh.complete=completed===7;if(fresh.complete)fresh.champions=arenaLeagueTable(fresh).filter(q=>q.rank===1).map(q=>q.id);return fresh;
+// Resume only complete consecutive matchdays and rebuild all qualification decisions.
+export function restoreArenaLeague(value,teams,homeId,options={}){
+ if(value?.version!==2||value.homeId!==homeId||!Number.isInteger(value.seed)||value.seed<0||value.seed>4294967295||!Array.isArray(value.rounds)||value.rounds.length!==8)return null;
+ let fresh=createArenaLeague(teams,homeId,'',value.seed,options);if(!fresh||JSON.stringify(fresh.teamIds)!==JSON.stringify(value.teamIds)||JSON.stringify(fresh.groups)!==JSON.stringify(value.groups))return null;let emptySeen=false;
+ for(let r=0;r<8;r++){const raw=value.rounds[r],expected=fresh.rounds[r];if(!Array.isArray(raw)||raw.length!==expected.length)return null;let played=0;
+  for(let i=0;i<expected.length;i++){const m=raw[i],q=expected[i];if(!m||m.home!==q.home||m.away!==q.away||m.group!==q.group)return null;const a=m.homeScore,b=m.awayScore;if(a===null&&b===null)continue;if(![a,b].every(n=>Number.isInteger(n)&&n>=0&&n<=(r<6?7:200))||r>=6&&a===b)return null;played++;Object.assign(q,{homeScore:a,awayScore:b,winner:a===b?'draw':a>b?q.home:q.away});}
+  if(played&&(played!==expected.length||emptySeen||fresh.complete||fresh.round!==r))return null;
+  if(played)fresh=finishLeagueRound(fresh);else emptySeen=true;
+ }return fresh;
 }

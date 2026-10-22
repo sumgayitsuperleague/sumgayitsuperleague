@@ -14,6 +14,7 @@ export function divePenaltyKeeper(shot,{x=0,y=1}={}){
 }
 export function keeperPose(shot,t=shot?.t||0,idle=0){
  if(!shot)return {x:Math.sin(idle*1.8)*.28,y:1.01,angle:0,reach:.15,dive:0,dir:0,handY:1.04};
+ if(shot.saveKind==='catch'&&t>=shot.resolvedAt){const pose={...shot.catchPose},p=clamp((t-shot.resolvedAt)/.22,0,1),e=p*p*(3-2*p);pose.angle*=1-e*.45;pose.hold={x:shot.impact.x+(pose.x-shot.impact.x)*e,y:shot.impact.y+(pose.y+.15-shot.impact.y)*e,z:.52};return pose;}
  const k=shot.keeper,active=Math.max(0,t-k.delay),distance=k.targetX-k.startX,dir=Math.sign(distance)||1,duration=Math.max(.26,Math.abs(distance)/k.speed+.08),p=clamp(active/duration,0,1),e=1-Math.pow(1-p,2),dive=Math.min(1,Math.abs(distance)/.85)*e;
  return {x:k.startX+distance*e,y:1.01+Math.sin(p*Math.PI)*.22+(k.targetY-1)*(k.manual?.7:.25)*e,angle:-dir*dive*1.04,reach:e,dir,dive,handY:1.03+(k.targetY-1.03)*e};
 }
@@ -27,11 +28,12 @@ function keeperHit(pos,pose){
 export function stepPenaltyShot(shot,dt=PHYSICS_STEP,{keeper=true}={}){
  const f=PENALTY_FIELD;dt=clamp(dt,0,1/30);if(!dt)return shot;
  const prev={...shot.position},p=shot.position,v=shot.velocity;shot.t+=dt;
+ if(shot.saveKind==='catch'){Object.assign(p,keeperPose(shot).hold);Object.assign(v,{x:0,y:0,z:0});if(shot.history.length<600)shot.history.push({t:shot.t,position:{...p},pose:keeperPose(shot)});return shot;}
  p.x+=v.x*dt+.5*shot.curve*dt*dt;v.x+=shot.curve*dt;p.y+=v.y*dt-.5*f.gravity*dt*dt;v.y-=f.gravity*dt;p.z+=v.z*dt;
  const crossing=z=>prev.z>z&&p.z<=z;
  const at=z=>{const a=(prev.z-z)/(prev.z-p.z);return {x:prev.x+(p.x-prev.x)*a,y:prev.y+(p.y-prev.y)*a,z};};
  const resolve=(result,hit)=>{shot.result=result;shot.resolvedAt=shot.t;shot.impact=hit;};
- if(!shot.result&&keeper&&crossing(f.keeperZ)){const hit=at(f.keeperZ),pose=keeperPose(shot);if(keeperHit(hit,pose)){resolve('save',hit);v.z=Math.abs(v.z)*.2;v.x+=(hit.x-pose.x)*5;v.y=Math.max(v.y,1.5);}}
+ if(!shot.result&&keeper&&crossing(f.keeperZ)){const hit=at(f.keeperZ),pose=keeperPose(shot);if(keeperHit(hit,pose)){resolve('save',hit);const caught=Math.abs(hit.x-pose.x)<.26&&Math.abs(hit.y-pose.y)<.36&&Math.abs(pose.angle)<.5;shot.saveKind=caught?'catch':'parry';if(caught){shot.catchPose={...pose};Object.assign(p,keeperPose(shot).hold);Object.assign(v,{x:0,y:0,z:0});}else{v.z=Math.abs(v.z)*.2;v.x+=(hit.x-pose.x)*5;v.y=Math.max(v.y,1.5);}}}
  if(!shot.result&&crossing(0)){
   const hit=at(0),post=Math.abs(Math.abs(hit.x)-f.halfWidth)<=f.post+f.radius&&hit.y<=f.height+f.radius&&hit.y>=0,bar=Math.abs(hit.y-f.height)<=f.post+f.radius&&Math.abs(hit.x)<=f.halfWidth+f.radius;
   if(post||bar){resolve('post',hit);v.z=Math.abs(v.z)*.3;if(post)v.x=-v.x*.6;else v.y=-Math.abs(v.y)*.6;}
