@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {defaultStadium} from './stadium-source.js';
 import {uiIcon} from './ui-icons.js';
 import {clockText,eventTime,liveLabel,liveStreamURL,validateMatchClock} from './match-live-source.js';
@@ -42,7 +43,7 @@ export function installMatchLive(ctx){
  const tick=()=>{for(const el of $$('[data-live-clock]')){const match=M.find(m=>m.id===el.dataset.liveClock);if(match?.status==='live')el.textContent=clockText(match,liveNow());}const note=$('[data-live-note]'),match=note&&M.find(m=>m.id===note.dataset.liveNote);if(note&&match){note.textContent=connectionNote(match);note.hidden=!note.textContent;}};
  const receive=value=>{
   const update=value?.match;if(!update||!['planned','live','done'].includes(update.status)||!Number.isInteger(update.hs)||!Number.isInteger(update.as)||!Array.isArray(update.goals)||!Array.isArray(update.cards)||!update.clock||validateMatchClock(update.clock,update.status).length)return false;
-  const match=M.find(m=>m.id===update.id);if(!match||JSON.stringify(update.penalties)!==JSON.stringify(match.penalties)||update.home!==match.home||update.away!==match.away||update.status==='done'||match.status==='done'||['stage','round','leg','date','time','venue'].some(key=>update[key]!==match[key]))return false;
+  const match=M.find(m=>m.id===update.id);const statisticsChanged=match&&JSON.stringify([match.goals,match.cards,match.mvp])!==JSON.stringify([update.goals,update.cards,update.mvp]);if(!match||JSON.stringify(update.penalties)!==JSON.stringify(match.penalties)||update.home!==match.home||update.away!==match.away||update.status==='done'||match.status==='done'||['stage','round','leg','date','time','venue'].some(key=>update[key]!==match[key]))return false;
   if(Number.isFinite(value.serverNow))window.__sslServerOffset=value.serverNow-Date.now();
   for(const key of ['status','hs','as','clock','goals','cards','mvp','streamUrl'])if(Object.hasOwn(update,key))match[key]=structuredClone(update[key]);
   const original=window.CONTENT?.league?.matches.find(m=>m.id===match.id);if(original&&original!==match)Object.assign(original,structuredClone(match));const page=$('[data-live-page="'+match.id+'"]');if(page&&page.dataset.matchStatus!==match.status){page.dataset.matchStatus=match.status;const heading=$('.match-events-heading');if(heading)heading.innerHTML=eventsHeading(match);}
@@ -56,8 +57,8 @@ export function installMatchLive(ctx){
   const broadcastBox=$('[data-live-broadcast="'+match.id+'"]');if(broadcastBox)broadcastBox.innerHTML=broadcastHTML(match,match.streamUrl||ctx.videoForMatch(match.id)?.url,broadcast);
   const note=$('[data-live-note="'+match.id+'"]');if(note){note.textContent=connectionNote(match);note.hidden=!note.textContent;}filterEvents();
   for(const spotlight of $$('[data-featured-match]'))if(spotlight.dataset.featuredMatch===match.id){const score=spotlight.querySelector('.selected-match-score>strong');if(score)score.innerHTML=`${match.hs}<i>:</i>${match.as}<small>${liveStatusHTML(match)}</small>${liveClockHTML(match)}`;}
-  drawBanner();tick();window.dispatchEvent(new window.Event('ssl-match-live-change'));UI.enhanceRoot(document.querySelector('#app'));return true;
+  drawBanner();tick();window.dispatchEvent(new window.Event('ssl-match-live-change'));UI.enhanceRoot(document.querySelector('#app'));if(statisticsChanged&&['scorers','players','player','team','compare'].includes(document.body.dataset.page))window.SSL_SITE?.refreshLocal();return true;
  };
- document.addEventListener('click',event=>{const b=event.target.closest('[data-match-filter]');if(!b)return;for(const button of $$('[data-match-filter]'))button.setAttribute('aria-pressed',String(button===b));filterEvents();});
- window.SSL_MATCH_LIVE={apply:receive};drawBanner();tick();window.addEventListener('ssl-live-connection',tick);setInterval(tick,1000);return {tick};
+ pageListen(document,'click',event=>{const b=event.target.closest('[data-match-filter]');if(!b)return;for(const button of $$('[data-match-filter]'))button.setAttribute('aria-pressed',String(button===b));filterEvents();});
+ window.SSL_MATCH_LIVE={apply:receive};drawBanner();tick();pageListen(window,'ssl-live-connection',tick);pageInterval(tick,1000);return {tick};
 }

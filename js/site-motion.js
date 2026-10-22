@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {animate,inView,hover,press,spring,scroll} from './motion-runtime.js';
 export const motionRuntime={animate,inView,hover,press,spring,scroll};
 export const EASE_OUT=[.23,1,.32,1];
@@ -67,7 +68,7 @@ export function installSiteMotion(options={},env={}){
   const progress=doc.createElement('div');progress.className='ux-reading-progress';progress.setAttribute('aria-hidden','true');progress.innerHTML='<i></i>';body.append(progress);const bar=progress.firstElementChild;
   let pending=false;const draw=()=>{pending=false;const height=doc.documentElement.scrollHeight-win.innerHeight;bar.style.transform=`scaleX(${height>0?Math.min(1,Math.max(0,(win.scrollY||0)/height)):0})`;};
   const onScroll=()=>{if(!pending){pending=true;(win.requestAnimationFrame||((fn)=>fn()))(draw);}};
-  win.addEventListener('scroll',onScroll,{passive:true});win.addEventListener('resize',onScroll,{passive:true});draw();
+  pageListen(win,'scroll',onScroll,{passive:true});pageListen(win,'resize',onScroll,{passive:true});draw();
   cleanups.push(()=>{win.removeEventListener('scroll',onScroll);win.removeEventListener('resize',onScroll);progress.remove();});
  }
  if(win.MutationObserver){observer=new win.MutationObserver(records=>{
@@ -77,7 +78,7 @@ export function installSiteMotion(options={},env={}){
  const cleanup=()=>{if(disposed)return;disposed=true;observer?.disconnect();for(const stop of cleanups)stop?.();for(const [el,control] of active){control?.stop?.();restore(el,base(el));}active.clear();body.dataset.motionEngine='off';};
  const preference=win.matchMedia?.('(prefers-reduced-motion: reduce)'),changed=e=>{if(e.matches)cleanup();};
  preference?.addEventListener?.('change',changed);cleanups.push(()=>preference?.removeEventListener?.('change',changed));
- win.addEventListener('pagehide',e=>{if(e.persisted){for(const c of active.values())c.pause?.();}else cleanup();});
- win.addEventListener('pageshow',e=>{if(e.persisted)for(const c of active.values())c.play?.();});
+ pageListen(win,'pagehide',e=>{if(e.persisted){for(const c of active.values())c.pause?.();}else cleanup();});
+ pageListen(win,'pageshow',e=>{if(e.persisted)for(const c of active.values())c.play?.();});
  return cleanup;
 }

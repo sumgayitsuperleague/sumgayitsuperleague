@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {validateArenaFeatures} from './arena-model.js';
 import {arenaText,renderArenaPage,bindPenalty} from './arena-experience.js';
 import {FAN_LINEUP_SIZE,fanFormation,FAN_FORMATIONS,FAN_PAGES,localizedFanZone,finalContext,eligibleFanPlayers,normalizeFanLineup,fanQuizQuestions} from './fan-zone-model.js';
@@ -131,7 +132,7 @@ function bindFanLineup(data,settings,lang){
   }
   if(b.hasAttribute('data-fan-download')){
    b.disabled=true;status.textContent=t('Şəkil hazırlanır…');
-   try{const canvas=await fanLineupImage(data,settings,selection,formation,title.value||t('Mənim ideal altılığım'),lang),blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('Image failed');const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='sumqayit-ideal-altiliq.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);status.textContent=t('Şəkil hazırdır.');}catch{status.textContent=t('Şəkil hazırlanmadı. Yenidən sına.');}finally{b.disabled=!selection.every(Boolean);}
+   try{const canvas=await fanLineupImage(data,settings,selection,formation,title.value||t('Mənim ideal altılığım'),lang),blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('Image failed');const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='sumqayit-ideal-altiliq.png';a.click();pageTimeout(()=>URL.revokeObjectURL(url),2000);status.textContent=t('Şəkil hazırdır.');}catch{status.textContent=t('Şəkil hazırlanmadı. Yenidən sına.');}finally{b.disabled=!selection.every(Boolean);}
   }
  });
  box.querySelector('#fan-formation').onchange=event=>{formation=event.target.value;drawPitch();};
@@ -170,17 +171,17 @@ function mountFanZone(previewPenalty){
  if(page){
   const app=document.querySelector('#app');if(!app)return;app.innerHTML=renderFanPage(source,page,lang);document.title=fanText(settings[page].title,lang)+' · '+(source.site?.name||'Sumqayıt Super Liqası');
   if(!settings[page].enabled)return;
-  if(page==='penalty')arenaDispose=bindPenalty(source,settings,lang);
+  if(page==='penalty'){arenaDispose=bindPenalty(source,settings,lang);const stop=arenaDispose;onPageCleanup(()=>{stop?.();if(arenaDispose===stop)arenaDispose=null;});}
   if(page==='lineup')bindFanLineup(source,settings,lang);if(page==='quiz')bindFanQuiz(source,settings,lang);
-  const countdown=document.querySelector('[data-fan-countdown]');if(countdown){const tick=()=>{let s=Math.max(0,Math.floor((Number(countdown.dataset.fanCountdown)-Date.now())/1000)),values=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];countdown.querySelectorAll('b').forEach((el,i)=>el.textContent=String(values[i]).padStart(2,'0'));};tick();const interval=setInterval(tick,1000);window.addEventListener('pagehide',()=>clearInterval(interval),{once:true});}
+  const countdown=document.querySelector('[data-fan-countdown]');if(countdown){const tick=()=>{let s=Math.max(0,Math.floor((Number(countdown.dataset.fanCountdown)-Date.now())/1000)),values=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];countdown.querySelectorAll('b').forEach((el,i)=>el.textContent=String(values[i]).padStart(2,'0'));};tick();const interval=pageInterval(tick,1000);pageListen(window,'pagehide',()=>clearInterval(interval),{once:true});}
  }else if(document.body.dataset.page==='fans'){
   const old=document.querySelector('.league-quiz'),links=renderFanLinks(source,lang);if(old){old.outerHTML=links;}else{const parent=document.querySelector('.fan-centre-top')?.parentElement;if(parent&&!parent.querySelector('.fz-hub'))parent.insertAdjacentHTML('beforeend',links);}
  }
  const footer=document.querySelector('footer .wrap')||document.querySelector('footer');
  if(footer&&settings.showLinks&&!footer.querySelector('.fz-footer-links')){const nav=document.createElement('nav');nav.className='fz-footer-links';nav.setAttribute('aria-label',fanText('Azarkeş mərkəzi',lang));nav.innerHTML=Object.entries(FAN_PAGES).filter(([,id])=>settings[id].enabled).map(([url,id])=>'<a href="'+fanHref(url,lang)+'">'+fanEscape(fanText(settings[id].title,lang))+'</a>').join('');footer.append(nav);}
- window.addEventListener('ssl-preferences-reset',()=>{try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key?.startsWith('ssl.fan.'))localStorage.removeItem(key);}}catch{}});
+ pageListen(window,'ssl-preferences-reset',()=>{try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key?.startsWith('ssl.fan.'))localStorage.removeItem(key);}}catch{}});
 }
 export {fanText,fanEscape,renderFanLinks,renderFanPage,mountFanZone};
-if(typeof window!=='undefined'&&typeof document!=='undefined'){if(document.readyState==='complete')mountFanZone();else document.addEventListener('DOMContentLoaded',()=>mountFanZone(),{once:true});}
+if(typeof window!=='undefined'&&typeof document!=='undefined'){if(document.readyState==='complete'){if(!window.SSL_SITE)mountFanZone();}else pageListen(document,'DOMContentLoaded',()=>{if(!window.SSL_SITE)mountFanZone();},{once:true});}
 
-if(typeof window!=='undefined')window.addEventListener('message',event=>{if(document.body.dataset.previewPath!=='/penalti-arenasi'||event.source!==parent||event.origin!==location.origin||event.data?.type!=='ssl-arena-preview')return;if(validateArenaFeatures({penalty:event.data.penalty}).length===0)mountFanZone(event.data.penalty);});
+if(typeof window!=='undefined')pageListen(window,'message',event=>{if(document.body.dataset.previewPath!=='/penalti-arenasi'||event.source!==parent||event.origin!==location.origin||event.data?.type!=='ssl-arena-preview')return;if(validateArenaFeatures({penalty:event.data.penalty}).length===0)mountFanZone(event.data.penalty);});

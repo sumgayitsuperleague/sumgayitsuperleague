@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {READABILITY_COPY} from './readability-copy.js';
 import {PLAYER_DUEL_COPY} from './player-duel-copy.js';
 import {STADIUM_COPY} from './stadium-source.js';
@@ -13,7 +14,8 @@ import {localizedContent} from './localization-source.js';
 import {canonicalPath,languageHref,siteAnchor} from './routes-source.js';
 export const LANGUAGE_NAMES={az:'Azərbaycan dili',ru:'Русский',en:'English'};
 export function languageFrom(search,storage){const q=new URLSearchParams(search).get('lang');if(['az','ru','en'].includes(q))return q;try{const saved=storage?.getItem('ssl.language.v1');if(['az','ru','en'].includes(saved))return saved;}catch{}return 'az';}
-export const LANG=languageFrom(location.search,typeof localStorage==='undefined'?null:localStorage);
+export let LANG=languageFrom(location.search,typeof localStorage==='undefined'?null:localStorage);
+export function configureLanguage(){LANG=languageFrom(location.search,typeof localStorage==='undefined'?null:localStorage);}
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS,['Final mərkəzi','Final centre','Центр финала'],['Final səhifəsinə bax','Explore the final','Открыть финал'],['Final qarşılaşması hələ təyin edilməyib.','The final fixture has not been set yet.','Финальный матч пока не назначен.']];
@@ -64,7 +66,7 @@ export function enhanceRoot(root=document.body,force=false){
 }
 export function installLanguage(){
  document.documentElement.lang=LANG;enhanceRoot();
- document.addEventListener('click',event=>{const button=event.target.closest('[data-language]');if(!button)return;const language=button.dataset.language;if(!['az','ru','en'].includes(language)||language===LANG)return;try{localStorage.setItem('ssl.language.v1',language);}catch{}location.href=languageHref(location.href,language);});
- if(typeof MutationObserver!=='undefined'){let pending=false;new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length||r.type==='characterData'))return;pending=true;queueMicrotask(()=>{pending=false;enhanceRoot();});}).observe(document.body,{childList:true,subtree:true,characterData:true});}
+ pageListen(document,'click',event=>{const button=event.target.closest('[data-language]');if(!button)return;const language=button.dataset.language;if(!['az','ru','en'].includes(language)||language===LANG)return;try{localStorage.setItem('ssl.language.v1',language);}catch{}const href=languageHref(location.href,language);if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;});
+ if(typeof MutationObserver!=='undefined'){let pending=false;const observer=new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length||r.type==='characterData'))return;pending=true;queueMicrotask(()=>{pending=false;enhanceRoot();});});observer.observe(document.body,{childList:true,subtree:true,characterData:true});onPageCleanup(()=>observer.disconnect());}
  document.title=t(document.title);
 }

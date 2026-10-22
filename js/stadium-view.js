@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import * as UI from './i18n.js';
 import {installOfficialGround} from './official-view.js';
 import {installProjectedStadium} from './projected-stadium.js';
@@ -32,16 +33,16 @@ export function installStadium(ctx){
  const settings=stadiumSettings(ctx.CMS.stadium),reduced=settings.motion.enabled===false||!!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,preview=!!document.body.dataset.previewPath;
  document.body.classList.add('ssl-official');document.body.dataset.stadiumPresentation=settings.motion.presentation;document.body.dataset.stadiumScene=settings.motion.scene;
  document.body.dataset.stadiumMotion=reduced?'none':settings.motion.transition;
- if(settings.motion.presentation==='official')installOfficialGround(document.querySelector('.league-entry--official'));
+ if(settings.motion.presentation==='official')onPageCleanup(installOfficialGround(document.querySelector('.league-entry--official')));
  document.body.classList.toggle('stadium-depth',settings.motion.depth&&!reduced);
  document.body.classList.toggle('football-cursor',settings.cursor.mode==='football');document.body.dataset.footballSize=String(settings.cursor.size);
  if(settings.clock.enabled){const place=document.querySelector('.utility-season');if(place&&!place.querySelector('[data-baku-clock]')){
   place.insertAdjacentHTML('beforeend','<span class="baku-clock"><time data-baku-clock aria-live="off"></time><span aria-hidden="true">UTC+4</span></span>');
-  const draw=()=>{const time=place.querySelector('[data-baku-clock]');if(time){const now=Date.now()+(Number(window.__sslServerOffset)||0);time.dateTime=new Date(now).toISOString();time.textContent=bakuTime(now,settings.clock);}};draw();setInterval(draw,1000);
+  const draw=()=>{const time=place.querySelector('[data-baku-clock]');if(time){const now=Date.now()+(Number(window.__sslServerOffset)||0);time.dateTime=new Date(now).toISOString();time.textContent=bakuTime(now,settings.clock);}};draw();pageInterval(draw,1000);
  }}
- if(settings.cursor.touch&&!preview&&!reduced)document.addEventListener('pointerdown',event=>{
+ if(settings.cursor.touch&&!preview&&!reduced)pageListen(document,'pointerdown',event=>{
   if(!['touch','pen'].includes(event.pointerType)||event.target.closest('input,select,textarea,[data-stadium-player]'))return;
-  const ball=document.createElement('span');ball.className='football-tap';ball.setAttribute('aria-hidden','true');ball.style.left=event.clientX+'px';ball.style.top=event.clientY+'px';ball.style.width=ball.style.height=settings.cursor.size+'px';document.body.append(ball);const all=document.querySelectorAll('.football-tap');if(all.length>5)all[0].remove();ball.addEventListener('animationend',()=>ball.remove(),{once:true});setTimeout(()=>ball.remove(),700);
+  const ball=document.createElement('span');ball.className='football-tap';ball.setAttribute('aria-hidden','true');ball.style.left=event.clientX+'px';ball.style.top=event.clientY+'px';ball.style.width=ball.style.height=settings.cursor.size+'px';document.body.append(ball);const all=document.querySelectorAll('.football-tap');if(all.length>5)all[0].remove();ball.addEventListener('animationend',()=>ball.remove(),{once:true});pageTimeout(()=>ball.remove(),700);
  },{passive:true});
  if(!['official','arena'].includes(settings.motion.presentation)&&settings.motion.depth&&!reduced&&window.matchMedia?.('(hover: hover) and (pointer: fine)').matches){
   for(const card of document.querySelectorAll('.stadium-carousel,.about-identity')){
@@ -51,25 +52,26 @@ export function installStadium(ctx){
    card.addEventListener('pointerleave',()=>{point={x:0,y:0};card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg');});
   }
  }
- const updateCarousel=()=>{for(const card of document.querySelectorAll('[data-carousel-match]')){const match=ctx.M?.find(m=>m.id===card.dataset.carouselMatch);if(!match)continue;card.querySelector('.stadium-slide-teams>strong').innerHTML=(match.status==='planned'?'VS':match.hs+' : '+match.as)+(match.penalties?`<small class="penalty-score">${esc(UI.t('Penaltilər'))}: ${match.penalties.home} : ${match.penalties.away}</small>`:'');card.querySelector('[data-slide-caption]').textContent=UI.t(matchCaption(match));}};window.addEventListener('ssl-match-live-change',updateCarousel);
+ const updateCarousel=()=>{for(const card of document.querySelectorAll('[data-carousel-match]')){const match=ctx.M?.find(m=>m.id===card.dataset.carouselMatch);if(!match)continue;card.querySelector('.stadium-slide-teams>strong').innerHTML=(match.status==='planned'?'VS':match.hs+' : '+match.as)+(match.penalties?`<small class="penalty-score">${esc(UI.t('Penaltilər'))}: ${match.penalties.home} : ${match.penalties.away}</small>`:'');card.querySelector('[data-slide-caption]').textContent=UI.t(matchCaption(match));}};pageListen(window,'ssl-match-live-change',updateCarousel);
  const carousel=document.querySelector('.stadium-carousel');if(carousel){
-  installCarousel(carousel,settings.motion,reduced);
-  if(settings.motion.presentation==='arena'){installProjectedStadium(carousel,settings.motion,{reduced});installSceneControls(carousel,settings.motion,reduced);}
+  onPageCleanup(installCarousel(carousel,settings.motion,reduced));
+  if(settings.motion.presentation==='arena'){onPageCleanup(installProjectedStadium(carousel,settings.motion,{reduced}));installSceneControls(carousel,settings.motion,reduced);}
   if(!['official','arena'].includes(settings.motion.presentation)&&settings.motion.depth&&!reduced&&!preview&&(settings.motion.mobile3d!==false||!window.matchMedia?.('(max-width: 760px)').matches)&&typeof window.requestAnimationFrame==='function'){
+   const scope=pageScope();
    const sceneURL=new URL('/js/stadium-scene-runtime.js?v=20261016a',location.origin);
    let sceneVisible=typeof window.IntersectionObserver!=='function',loaded=false,sceneTimer=null;
-   const cleanup=()=>{clearTimeout(sceneTimer);sceneObserver?.disconnect();carousel.removeEventListener('ssl-slide-change',schedule);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);};
+   const cleanup=()=>{clearTimeout(sceneTimer);sceneObserver?.disconnect();carousel.removeEventListener('ssl-slide-change',schedule);document.removeEventListener('visibilitychange',schedule);window.removeEventListener('pageshow',schedule);};onPageCleanup(cleanup);
    const needed=()=>sceneVisible&&!document.hidden&&!!carousel.querySelector('.stadium-slide.is-current [data-stadium-canvas]');
-   const schedule=()=>{if(loaded||sceneTimer||!needed())return;sceneTimer=setTimeout(()=>{sceneTimer=null;if(!needed())return;loaded=true;cleanup();
+   const schedule=()=>{if(loaded||sceneTimer||!needed())return;sceneTimer=pageTimeout(()=>{sceneTimer=null;if(!needed())return;loaded=true;cleanup();
     if(window.navigator?.connection?.saveData||!supportsStadium3D(document)){carousel.dataset.sceneEngine='fallback';return;}
-    import(sceneURL.href).then(module=>module.installStadiumScene(carousel,settings.motion,motionRuntime)).catch(()=>{carousel.dataset.sceneEngine='fallback';});
+    import(sceneURL.href).then(module=>{if(!scope?.disposed){const dispose=module.installStadiumScene(carousel,settings.motion,motionRuntime);onPageCleanup(dispose,scope);}}).catch(()=>{carousel.dataset.sceneEngine='fallback';});
    },200);};
    const sceneObserver=typeof window.IntersectionObserver==='function'?new window.IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;schedule();},{threshold:.05}):null;sceneObserver?.observe(carousel);
-   carousel.addEventListener('ssl-slide-change',schedule);document.addEventListener('visibilitychange',schedule);window.addEventListener('pageshow',schedule);
-   window.addEventListener('pagehide',event=>{clearTimeout(sceneTimer);sceneTimer=null;if(!event.persisted)cleanup();});schedule();
+   carousel.addEventListener('ssl-slide-change',schedule);pageListen(document,'visibilitychange',schedule);pageListen(window,'pageshow',schedule);
+   pageListen(window,'pagehide',event=>{clearTimeout(sceneTimer);sceneTimer=null;if(!event.persisted)cleanup();});schedule();
   }
  }
- if(settings.music.enabled&&!preview)installMusicPlayer(settings.music);
+ if(!preview)installMusicPlayer(settings.music);
 }
 function installSceneControls(carousel,options,reduced){
  const names=[['stand','Tribunadan'],['touchline','Yan xətdən'],['aerial','Yuxarıdan']];
@@ -91,7 +93,7 @@ export function installCarousel(carousel,options,reduced){
   for(const dot of carousel.querySelectorAll('[data-stadium-go]'))dot.setAttribute('aria-pressed',String(Number(dot.dataset.stadiumGo)===current));
   carousel.querySelector('[data-stadium-count]').textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');cycle=!cycle;carousel.classList.toggle('is-cycle-even',cycle);carousel.dispatchEvent(new window.Event('ssl-slide-change'));
  };
- const restart=()=>{if(timer)clearInterval(timer);timer=setInterval(()=>{
+ const restart=()=>{if(timer)clearInterval(timer);timer=pageInterval(()=>{
   const focused=document.activeElement,reading=focused&&carousel.contains(focused)&&!focused.closest('[data-stadium-action],[data-stadium-go]');
   if(visible&&!paused&&!hover&&!document.hidden&&!reading)show(current+1);
  },options.interval*1000);};
@@ -102,12 +104,12 @@ export function installCarousel(carousel,options,reduced){
  carousel.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();show(current+(e.key==='ArrowRight'?1:-1),{instant:true});restart();}});
  carousel.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;hover=true;pauseUI();});carousel.addEventListener('pointerleave',()=>{hover=false;pauseUI();restart();});
  carousel.addEventListener('pointerdown',e=>{suppressClick=false;if(e.pointerType==='touch'&&!e.target.closest('button,input,select,textarea'))start={x:e.clientX,y:e.clientY};},{passive:true});
- carousel.addEventListener('pointerup',e=>{if(start){const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)>45&&Math.abs(dy)<Math.abs(dx)*.65){show(current+(dx<0?1:-1));suppressClick=true;setTimeout(()=>{suppressClick=false;},400);restart();}start=null;}},{passive:true});
+ carousel.addEventListener('pointerup',e=>{if(start){const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)>45&&Math.abs(dy)<Math.abs(dx)*.65){show(current+(dx<0?1:-1));suppressClick=true;pageTimeout(()=>{suppressClick=false;},400);restart();}start=null;}},{passive:true});
  carousel.addEventListener('pointercancel',()=>{start=null;});
  show(0,{initial:true});pauseUI();restart();
  let visible=true;const visibility=typeof window.IntersectionObserver==='function'?new window.IntersectionObserver(entries=>{visible=entries[0].isIntersecting;carousel.classList.toggle('is-offscreen',!visible);},{threshold:.01}):null;visibility?.observe(carousel);
- const hidden=()=>carousel.classList.toggle('is-page-hidden',document.hidden);document.addEventListener('visibilitychange',hidden);hidden();
+ const hidden=()=>carousel.classList.toggle('is-page-hidden',document.hidden);pageListen(document,'visibilitychange',hidden);hidden();
  const stop=()=>{clearInterval(timer);railAnimation?.stop?.();heroAnimation?.stop?.();visibility?.disconnect();document.removeEventListener('visibilitychange',hidden);};
- window.addEventListener('pagehide',e=>{if(!e.persisted)stop();});
+ pageListen(window,'pagehide',e=>{if(!e.persisted)stop();});
  return stop;
 }

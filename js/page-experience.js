@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import * as UI from './i18n.js';
 import {POLICY_SLUGS} from './routes-source.js';
 export function installPageExperience(ctx){
@@ -12,7 +13,7 @@ export function installPageExperience(ctx){
   return head(esc(page.title),esc(page.description))+`<section class="sec"><div class="wrap ${outline?'policy-page-layout':''}"><article class="cms-content cms-blocks ${policy?'policy-article':''}">${blocks}${preferences}</article>${outline}</div></section>`;
  };
  const originalBind=P.news?.init;
- document.addEventListener('click',async event=>{
+ pageListen(document,'click',async event=>{
   const reset=event.target.closest('[data-reset-preferences]');if(reset){
    for(const key of ['ssl.language.v1','ssl.favoriteTeam.v1','ssl.savedVideos.v1'])try{localStorage.removeItem(key);}catch{}
    window.dispatchEvent(new window.Event('ssl-preferences-reset'));const status=document.querySelector('#preferences-status');if(status)status.textContent=UI.t('Seçimlər sıfırlandı.');return;

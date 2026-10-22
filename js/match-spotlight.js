@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {liveClockHTML,liveStatusHTML} from './live-match-view.js';
 import {calendarEvent} from './calendar-source.js';
 export {calendarEvent} from './calendar-source.js';
@@ -11,8 +12,8 @@ export function matchSpotlight(ctx,options={},large=false){
 }
 
 export function installMatchActions(ctx){
- document.addEventListener('click',async event=>{
-  const calendar=event.target.closest('[data-calendar-match]');if(calendar){const m=ctx.M.find(m=>m.id===calendar.dataset.calendarMatch),content=calendarEvent(m,ctx.T,ctx.S.name);if(!content)return;const href=URL.createObjectURL(new Blob([content],{type:'text/calendar;charset=utf-8'})),a=document.createElement('a');a.href=href;a.download='ssl-'+m.id+'.ics';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1000);}
+ pageListen(document,'click',async event=>{
+  const calendar=event.target.closest('[data-calendar-match]');if(calendar){const m=ctx.M.find(m=>m.id===calendar.dataset.calendarMatch),content=calendarEvent(m,ctx.T,ctx.S.name);if(!content)return;const href=URL.createObjectURL(new Blob([content],{type:'text/calendar;charset=utf-8'})),a=document.createElement('a');a.href=href;a.download='ssl-'+m.id+'.ics';document.body.append(a);a.click();a.remove();pageTimeout(()=>URL.revokeObjectURL(href),1000);}
   const share=event.target.closest('[data-share-match]');if(share){const link=new URL('/matc?id='+encodeURIComponent(share.dataset.shareMatch),'https://sumgayitsuperleague.com');if(UI.LANG!=='az')link.searchParams.set('lang',UI.LANG);try{await navigator.clipboard.writeText(link.href);ctx.$('#match-action-status').textContent=UI.t('Oyun linki kopyalandı.');}catch{ctx.$('#match-action-status').textContent=UI.t('Linki ünvan sətrindən kopyalaya bilərsən.');}}
  });
 }

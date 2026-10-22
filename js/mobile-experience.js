@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import * as UI from './i18n.js';
 const icons={teams:'<path d="M12 3 3 6v6c0 4 4 7 9 9 5-2 9-5 9-9V6Z"/><path d="m9 10 3-2 3 2-1 4h-4Z"/>',home:'<path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/>',games:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18M7 14h3M14 14h3M7 17h3"/>',table:'<path d="M5 4h14v16H5Z M5 9h14M10 4v16M5 14h14"/>',media:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3Z"/>',fans:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 6"/>'};
 export function mobileNavigation(ctx){
@@ -22,5 +23,5 @@ export function bindMobileExperience(ctx){
  if(more&&viewport){let forced=false,wasOpen=more.hasAttribute('open');const sync=()=>{if(viewport.matches&&!forced){wasOpen=more.hasAttribute('open');more.setAttribute('open','');forced=true;}else if(!viewport.matches&&forced){more.toggleAttribute('open',wasOpen);forced=false;}};sync();viewport.addEventListener?.('change',sync);}
 
  const nodes=[...document.querySelectorAll('[data-kickoff-hint]')];
- const draw=()=>nodes.forEach(el=>{const match=ctx.M.find(m=>m.id===el.dataset.kickoffHint);el.textContent=kickoffText(match);el.hidden=!el.textContent;});if(nodes.length){draw();setInterval(draw,60000);}
+ const draw=()=>nodes.forEach(el=>{const match=ctx.M.find(m=>m.id===el.dataset.kickoffHint);el.textContent=kickoffText(match);el.hidden=!el.textContent;});if(nodes.length){draw();pageInterval(draw,60000);}
 }

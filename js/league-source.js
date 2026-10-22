@@ -16,9 +16,12 @@ export function standings(league,group) {
   for(let i=0;i<rows.length;){let j=i+1;while(j<rows.length&&key(rows[i]).join()===key(rows[j]).join())j++;if(j-i>1){const tied=rows.slice(i,j),ids=new Set(tied.map(r=>r.id)),h=new Map(tied.map(r=>[r.id,{x:0,tf:0,vq:0}]));for(const m of matches){if(!ids.has(m.home)||!ids.has(m.away))continue;const a=h.get(m.home),b=h.get(m.away);a.tf+=m.hs-m.as;b.tf+=m.as-m.hs;a.vq+=m.hs;b.vq+=m.as;if(m.hs>m.as)a.x+=3;else if(m.hs<m.as)b.x+=3;else{a.x++;b.x++;}}tied.sort((a,b)=>h.get(b.id).x-h.get(a.id).x||h.get(b.id).tf-h.get(a.id).tf||h.get(b.id).vq-h.get(a.id).vq||teams.find(t=>t.id===a.id).name.localeCompare(teams.find(t=>t.id===b.id).name,'az'));rows.splice(i,j-i,...tied);}i=j;}
   rows.forEach((r,i)=>r.rank=i+1);return rows;
 }
+export const recordedMatch=m=>!m.qualificationPending&&['live','done'].includes(m.status);
+export function canonicalPlayerName(teams,teamId,name){const key=playerKey(name);return teams.find(t=>t.id===teamId)?.players.find(p=>playerKey(p.name)===key)?.name||playerName(name);}
+export function playerGoals(league,teamId,name){const key=playerKey(name);return league.matches.filter(m=>recordedMatch(m)&&[m.home,m.away].includes(teamId)).flatMap(m=>(m.goals||[]).filter(g=>!g.og&&!g.unk&&g.p&&g.t===teamId&&playerKey(g.p)===key).map(g=>({m,g})));}
 export function scorers(league) {
   const names=new Map(league.teams.map(t=>[t.id,new Map(t.players.map(p=>[playerKey(p.name),playerName(p.name)]))])),by=new Map();
-  for(const m of league.matches.filter(m=>m.status==='done'))for(const g of m.goals){if(g.og||g.unk||!g.p)continue;const key=playerKey(g.p)+'|'+g.t;let row=by.get(key);if(!row){row={p:playerName(g.p),t:g.t,g:0,games:new Set()};by.set(key,row);}row.g++;row.games.add(m.id);}
+  for(const m of league.matches.filter(recordedMatch))for(const g of m.goals){if(g.og||g.unk||!playerName(g.p)||![m.home,m.away].includes(g.t)||!names.has(g.t))continue;const key=playerKey(g.p)+'|'+g.t;let row=by.get(key);if(!row){row={p:names.get(g.t).get(playerKey(g.p))||playerName(g.p),t:g.t,g:0,games:new Set()};by.set(key,row);}row.g++;row.games.add(m.id);}
   const rows=[...by.values()].map(r=>({p:r.p,t:r.t,g:r.g,mp:r.games.size})).sort((a,b)=>b.g-a.g||a.mp-b.mp||a.p.localeCompare(b.p,'az'));rows.forEach(r=>r.rank=1+rows.filter(x=>x.g>r.g).length);return rows;
 }
 export function teamSummary(league,id) {
@@ -33,7 +36,7 @@ export function playerSummary(league,teamId,name) {
  const result={goals:0,scoringGames:0,mvp:0,yellow:0,red:0};
  const belongs=event=>!!event&&event.t===teamId&&playerKey(event.p)===key;
  for(const match of league.matches){
-  if(match.status!=='done'||![match.home,match.away].includes(teamId))continue;
+  if(!recordedMatch(match)||![match.home,match.away].includes(teamId))continue;
   const goals=(match.goals||[]).filter(g=>!g.og&&!g.unk&&belongs(g)).length;
   result.goals+=goals;result.scoringGames+=goals>0;
   result.mvp+=belongs(match.mvp);

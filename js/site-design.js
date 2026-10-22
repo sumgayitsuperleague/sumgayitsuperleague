@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {editorStyleSheet,editorPath} from './site-edit-source.js';
 import * as UI from './i18n.js';
 export function installSiteDesign(initial,source){
@@ -18,7 +19,7 @@ export function installSiteDesign(initial,source){
 
  }
  function update(next){editor=next;UI.configureEditorTexts(editor,source,path);UI.enhanceRoot(document.body,true);apply();}
- apply();if(typeof MutationObserver!=='undefined')new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length))return;pending=true;queueMicrotask(()=>{pending=false;apply();});}).observe(document.body,{childList:true,subtree:true});
- if(typeof addEventListener==='function')addEventListener('resize',()=>apply());
+ apply();if(typeof MutationObserver!=='undefined'){const observer=new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length))return;pending=true;queueMicrotask(()=>{pending=false;apply();});});observer.observe(document.body,{childList:true,subtree:true});onPageCleanup(()=>observer.disconnect());}
+ if(typeof addEventListener==='function')pageListen(window,'resize',()=>apply());
  window.SSL_SITE_VIEW={sourceText:UI.sourceText,updateEditor:update,sections,path};return {apply,update,sections};
 }

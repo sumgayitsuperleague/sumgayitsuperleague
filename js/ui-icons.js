@@ -1,3 +1,4 @@
+import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 // One authored stroke family for public controls and the protected editor.
 const paths={
  search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
@@ -21,5 +22,5 @@ export function installConsistentIcons(doc=document,{admin=false}={}){
   }
   if(admin)for(const b of doc.querySelectorAll('#navigation button[data-page]')){const span=b.querySelector('span');if(span&&!span.querySelector('svg'))span.innerHTML=uiIcon(pages[b.dataset.page]||'grid');}
  };
- scan(doc.body);const observer=typeof window.MutationObserver==='function'?new window.MutationObserver(records=>{for(const record of records){if(record.type==='characterData')scan(record.target);else for(const node of record.addedNodes)scan(node);}}):null;observer?.observe(doc.body,{subtree:true,childList:true,characterData:true});window.addEventListener('pagehide',e=>{if(!e.persisted)observer?.disconnect();});return ()=>observer?.disconnect();
+ scan(doc.body);const observer=typeof window.MutationObserver==='function'?new window.MutationObserver(records=>{for(const record of records){if(record.type==='characterData')scan(record.target);else for(const node of record.addedNodes)scan(node);}}):null;observer?.observe(doc.body,{subtree:true,childList:true,characterData:true});pageListen(window,'pagehide',e=>{if(!e.persisted)observer?.disconnect();});return ()=>observer?.disconnect();
 }
