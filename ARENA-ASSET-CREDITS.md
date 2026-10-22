@@ -4,19 +4,43 @@ The arena runs on the existing, self-hosted Three.js 0.186.1 WebGL renderer.
 Unity's current web and rendering documentation was reviewed when selecting the
 implementation. This release does not include Unity or claim literal “5D”.
 
-## Quaternius humanoid base
+## Current footballer — Innerscene / MakeHuman
 
-- Author: Quaternius; pack: Universal Base Characters, free Standard edition.
-- Original: https://quaternius.com/packs/universalbasecharacters.html
-- Download and license: https://quaternius.itch.io/universal-base-characters
-- Model: `Superhero_Male_FullBody` (13k triangles, 65-bone humanoid rig).
-- License: CC0 1.0, original notice in `assets/arena/quaternius-license.txt`.
-- Public redistribution used: https://github.com/programasweights/avatar/blob/main/public/assets/character.glb
-- Verified Git blob: `b3fd79533fdb9fcedd077744f7e120920eb6cc97` (741320 bytes).
-- Only the CC0 base mesh, skin weights, normals and skeleton are used. Original
-  images are absent. Jersey materials, club markings, IK poses and all gameplay
-  animation are implemented in this repository. No third-party app code or
-  Mixamo animations were copied.
+- Original author/source: Innerscene, adapted from MakeHuman CC0 assets.
+- Original: https://www.innerscene.com/tools/library/3d-parts/soccer-player-standing-3d-person-team-sports-f55b1b4f
+- Public original download: https://www.innerscene.com/api/library/soccer-player-standing-3d-person-team-sports-f55b1b4f/download
+- Original file: `professional-soccer-standing.glb`, static, textured soccer figure.
+- License: CC0 1.0; source license notice in `assets/arena/innerscene-license.txt`.
+- Original SHA256: `773cfa73bbcf659d7044934aaeacf1c3c9a49ae2955a51f56de7ad61ad1b6ffb`.
+- The runtime uses `footballer-pro.glb`, an adaptation with a 23-bone anatomical rig,
+  continuous limb weights, separate jersey/shorts/socks/boots/skin/hands, subdivided
+  garment surfaces, hidden-body removal and resized embedded textures.
+- Prepared model SHA256: `e950b018a2ad73810ed774d55568469fba5cb000083aa9d2dfcd69eb322b6298`.
+- Reproduction: install Python numpy/scipy/Pillow, download the original and run
+  `python scripts/assets/prepare-athlete.py original.glb footballer-pro.glb male-rig.glb` in the
+  admin repository. No Unity, Mixamo or commercial-game files are distributed.
+- Anatomical skin weights are transferred through the matching MakeHuman UV layout
+  from the CC0 Innerscene male base rig, then mapped onto the 23-bone game rig.
+  Reference: https://www.innerscene.com/tools/library/3d-parts/male-base-mesh-3d-person-rigged-a-pose-380e6d89
+  The reference GLB is a processing input and is not shipped to players.
+- Both athletes share the downloaded mesh/texture template. Each has an independent
+  cloned skeleton, team kit and IK pose. Clothing is mesh geometry; skin is textured.
+
+## Crowd and stadium
+
+- `crowd-atlas.png`: original OpenAI ImageGen art, generated for this project.
+  Eight photographed-style seated adults in a 4×2 transparent atlas; no real team
+  identity or third-party logos. The exact asset metadata is `crowd-atlas.json`.
+- The in-game crowd uses this atlas in one instanced draw, with randomized variants,
+  brightness and restrained movement. Spectators are billboards; the stadium,
+  pitch, footballers, seats, roof, goal, ball and play are real 3D geometry.
+- Stadium architecture, seating bowl, cantilever roof, steel trusses, light panels,
+  concourses and display are original code. Static geometry is merged by material.
+- The previous `player-base.glb` remains available for old cached clients only.
+  It is the CC0 Quaternius Universal Base Characters `Superhero_Male_FullBody`
+  from https://quaternius.com/packs/universalbasecharacters.html via
+  https://github.com/programasweights/avatar/blob/main/public/assets/character.glb.
+  Original notice: `assets/arena/quaternius-license.txt`.
 
 ## ambientCG Grass007
 
@@ -30,7 +54,7 @@ implementation. This release does not include Unity or claim literal “5D”.
 Assets are self-hosted under `/assets/arena/`. No remote asset request, account,
 analytics or new browser permission is required. These maps support PBR grass;
 ACES tone mapping, environment reflections, soft shadows and modest bloom are
-implemented with Three.js. Rendering resolution and bloom adapt to the device.
+implemented with Three.js. An HDR multisample render target smooths edges. Bloom is reduced first on a slow device; rendering resolution has a higher floor and shadows remain enabled.
 The rig's wrist and ankle poses follow the recorded physical goalkeeper pose.
 
 ## Competition

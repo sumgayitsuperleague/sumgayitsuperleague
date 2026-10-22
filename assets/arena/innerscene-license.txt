@@ -1,0 +1,8 @@
+Innerscene / MakeHuman CC0 soccer figure.
+Source: https://www.innerscene.com/tools/library/3d-parts/soccer-player-standing-3d-person-team-sports-f55b1b4f
+Accessed 22 October 2026. Original professional-soccer-standing.glb.
+Public domain (CC0). Free to use, modify and redistribute for any purpose, including commercially, with no credit required.
+https://creativecommons.org/publicdomain/zero/1.0/
+Reference anatomical rig (CC0): https://www.innerscene.com/tools/library/3d-parts/male-base-mesh-3d-person-rigged-a-pose-380e6d89
+Adapted by SSL: anatomical rig, skin weights, garment subdivision, hidden-surface removal, texture-size optimization.
+Crowd atlas is original OpenAI ImageGen artwork generated for this project.

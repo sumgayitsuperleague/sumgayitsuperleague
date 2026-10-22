@@ -1,0 +1,14 @@
+{
+  "source": "OpenAI ImageGen",
+  "purpose": "Instanced distant spectator atlas in the real 3D stadium",
+  "layout": {
+    "columns": 4,
+    "rows": 2,
+    "width": 1536,
+    "height": 1024
+  },
+  "alpha": true,
+  "date": "2026-10-22",
+  "prompt": "Photorealistic transparent sprite sheet, 4 columns x 2 rows, eight unique adult seated football supporters, consistent scale and generous gutters, full bodies, neutral soft stadium light, everyday navy/blue/green/cream/charcoal clothing, clapping and scarves, no text, logos, chairs, floor or watermarks.",
+  "sha256": "7612c1bf8284e597ee45d19c139a5ac1d96904fe1d14dfc1e7792ac3aa671559"
+}
