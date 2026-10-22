@@ -1,4 +1,17 @@
-# Penalti arenası · SSL Kuboku
+# SSL Arena 3D · SSL Kuboku və Liqa
+
+22 oktyabr 2026.
+
+- Oyunda yalnız SSL Kuboku və Liqa formatları saxlanılıb. Yüngül qrafika, seriya, ayrıca penalti dueli və məşq seçimləri çıxarılıb.
+- Liqa: 8 cari klub, 7 tur, 28 unikal qarşılaşma; qələbə 3, heç-heçə 1 xal. Cədvəl və tamamlanmış turlardan davametmə cihazda saxlanır.
+- Tam 3D stadion: animasiyalı futbolçu, örtüklü tribunalar, klub bayraqları, real sponsor panelləri, TV və meydan kameraları, giriş və təkrar kameraları.
+- Seçimlə açılan stadion səsləri və dəstəklənən telefonlarda titrəyiş. Kompüter, mobil və tam ekran idarəetməsi yenilənib.
+- Admin panelin canlı ön baxışı və ümumi canlı redaktoru yeni formatları dəstəkləyir. Real liqa nəticələri, sponsorlar və musiqi qorunur.
+- 343 avtomatik test; real WebGL-də 7 turluq liqa, 3 mərhələli kubok, mobil toxunuş, qapıçı, təkrar, davametmə və qorunan admin redaktəsi yoxlanıb.
+
+---
+
+## Əvvəlki buraxılış: Penalti arenası · SSL Kuboku
 
 21 oktyabr 2026.
 
