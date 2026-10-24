@@ -85,6 +85,7 @@ export function validateStadium(s){
 }
 export function nextTrack(tracks,current,shuffle,random=Math.random){const active=tracks.filter(t=>t.enabled);if(!active.length)return null;if(active.length===1)return active[0];const at=active.findIndex(t=>t.id===current);if(!shuffle)return active[(at+1)%active.length];const choices=active.filter(t=>t.id!==current);return choices[Math.min(choices.length-1,Math.floor(random()*choices.length))];}
 export const STADIUM_COPY=[
+ ['Pleyeri sürüşdür','Drag music player','Перетащить плеер'],['Yeri qaytar','Reset position','Вернуть на место'],['Pleyeri yerinə qaytar','Reset player position','Вернуть плеер на место'],
  ['Musiqi idarəetməsi','Music controls','Управление музыкой'],
  ['Son nəticələr','Latest results','Последние результаты'],
  ['Meydana baxış','Pitch view','Вид на поле'],
