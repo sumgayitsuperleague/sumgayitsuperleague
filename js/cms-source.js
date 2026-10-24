@@ -12,7 +12,7 @@ export const NAV_ITEMS = [
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
   ['scorers','Bombardirlər','bombardirler.html'],['stats','Statistika','statistika.html'],
   ['media','Media','media.html'],['news','Xəbərlər','xeberler.html'],['about','Haqqımızda','haqqimizda.html'],
-  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['hall','3D liqa zalı','liqa-zali.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
+  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
 ];
 export const HOME_SECTIONS = [['pulse','Liqa rəqəmləri'],['results','Son nəticələr'],['fixtures','Növbəti oyunlar'],['table','Turnir cədvəli'],['videos','Videolar'],['scorers','Bombardirlər'],['teams','Komandalar'],['news','Xəbərlər'],['mvp','Ən yaxşı oyunçular']];
 export const BLOCK_TYPES = [['heading','Başlıq'],['paragraph','Mətn'],['image','Şəkil'],['quote','Sitat'],['list','Siyahı'],['button','Düymə / keçid'],['divider','Ayırıcı']];
@@ -38,6 +38,7 @@ export function getCMS(data) {
   defaults.home.matchCenter={...defaultMatchCenter(),...(cms.home?.matchCenter||{})};
   for(const key of ['navigation','pages','media'])if(Array.isArray(cms[key]))defaults[key]=cms[key];
   if(Array.isArray(cms.navigation))defaults.navigation=[...cms.navigation,...NAV_ITEMS.filter(([id])=>!cms.navigation.some(n=>n.id===id)).map(([id,label])=>({id,label,visible:true}))];
+  defaults.navigation=defaults.navigation.filter(n=>n.id!=='hall');
   return defaults;
 }
 const object=x=>x&&typeof x==='object'&&!Array.isArray(x);

@@ -5,7 +5,7 @@ export const FAN_LINEUP_SIZE=6;
 export const FAN_FORMATIONS=Object.freeze({"2-2-1":[{"role":"gk","x":50,"y":86},{"role":"field","x":28,"y":65},{"role":"field","x":72,"y":65},{"role":"field","x":28,"y":41},{"role":"field","x":72,"y":41},{"role":"field","x":50,"y":17}],"2-1-2":[{"role":"gk","x":50,"y":86},{"role":"field","x":28,"y":65},{"role":"field","x":72,"y":65},{"role":"field","x":50,"y":41},{"role":"field","x":28,"y":17},{"role":"field","x":72,"y":17}],"1-3-1":[{"role":"gk","x":50,"y":86},{"role":"field","x":50,"y":65},{"role":"field","x":18,"y":41},{"role":"field","x":50,"y":41},{"role":"field","x":82,"y":41},{"role":"field","x":50,"y":17}]});
 const LEGACY_FORMATIONS=Object.freeze({'1-2-1':'1-3-1','2-2':'2-2-1','1-1-2':'2-1-2'});
 export const fanFormation=value=>LEGACY_FORMATIONS[value]||value;
-export const FAN_PAGES=Object.freeze({'/final':'final','/ideal-altiliq':'lineup','/viktorina':'quiz','/liqa-zali':'hall','/birlikde-izle':'watch',...ARENA_PAGES});
+export const FAN_PAGES=Object.freeze({'/final':'final','/ideal-altiliq':'lineup','/viktorina':'quiz','/birlikde-izle':'watch',...ARENA_PAGES});
 export function defaultFanZone(){
  return {version:1,showLinks:true,...defaultArenaFeatures(),...defaultFanExperiences(),
   final:{enabled:true,showOnHome:true,title:'Final mərkəzi',description:'',archiveTitle:'Mövsümün finalı',recap:'',cover:'',state:'auto',matchId:'',thirdPlaceId:'',championTeam:'',showCountdown:true,showJourney:true,showStats:true,showThirdPlace:true,showSponsors:true,linkLabel:'',linkUrl:''},
@@ -16,13 +16,15 @@ export function defaultFanZone(){
 
 export function fanZoneSettings(value){
  const d=defaultFanZone(),v=value&&typeof value==='object'&&!Array.isArray(value)?value:{};
- const lineup={...d.lineup,...v.lineup};
+ const {hall:removedHall,...active}=v;
+ const center={...d.center,...active.center};if(Array.isArray(center.order))center.order=center.order.filter(k=>k!=='hall');if(center.featured==='hall')center.featured='penalty';
+ const lineup={...d.lineup,...active.lineup};
  // Upgrade only the shipped five-player defaults; keep all organizer edits.
  if(lineup.title==='Öz ideal beşliyini qur')lineup.title=d.lineup.title;
  if(lineup.description==='Heyətlərdən bir qapıçı və dörd meydan oyunçusu seç.')lineup.description=d.lineup.description;
  lineup.defaultFormation=fanFormation(lineup.defaultFormation);
  if(Array.isArray(lineup.formations))lineup.formations=[...new Set(lineup.formations.map(fanFormation))];
- return {...d,...v,...arenaSettings(v),...Object.fromEntries(['center','hall','watch'].map(k=>[k,{...d[k],...v[k]}])),final:{...d.final,...v.final},lineup,quiz:{...d.quiz,...v.quiz}};
+ return {...d,...active,...arenaSettings(active),center,watch:{...d.watch,...active.watch},final:{...d.final,...v.final},lineup,quiz:{...d.quiz,...v.quiz}};
 }
 
 export function validateFanZone(v,opts={}){
@@ -123,7 +125,7 @@ export function fanQuizQuestions(league,value,teamId='',lang='az',rng=Math.rando
 export function fanZoneTargets(value){
  const c=fanZoneSettings(value),rows=[];
  const add=(parent,property,key,label)=>{if(typeof parent[property]==='string'&&parent[property].trim())rows.push({parent,property,key,source:parent[property],label,group:'community'});};
- for(const [section,fields] of Object.entries({center:['title','description'],hall:['title','description'],watch:['title','description','notice'],final:['title','description','archiveTitle','recap','linkLabel'],lineup:['title','description'],quiz:['title','description']}))for(const k of fields)add(c[section],k,'fanZone.'+section+'.'+k,section+' · '+k);
+ for(const [section,fields] of Object.entries({center:['title','description'],watch:['title','description','notice'],final:['title','description','archiveTitle','recap','linkLabel'],lineup:['title','description'],quiz:['title','description']}))for(const k of fields)add(c[section],k,'fanZone.'+section+'.'+k,section+' · '+k);
  for(const q of c.quiz.questions){for(const k of ['title','note'])add(q,k,'fanZone.question.'+q.id+'.'+k,'Test · '+q.title);q.choices.forEach((_,i)=>add(q.choices,i,'fanZone.question.'+q.id+'.choice.'+i,'Cavab · '+q.title));}
  rows.push(...arenaLocaleTargets(c));
  return {config:c,rows};

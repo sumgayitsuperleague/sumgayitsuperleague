@@ -1,7 +1,7 @@
 export const POLICY_SLUGS=Object.freeze(['mexfilik','kukiler','redaksiya']);
 // Public routes stay independent of the GitHub Pages file layout.
 export const PAGE_ROUTES = Object.freeze({
- '/liqa-zali':'liqa-zali.html','/birlikde-izle':'birlikde-izle.html','/penalti-arenasi':'penalti-arenasi.html','/final':'final.html','/ideal-altiliq':'ideal-altiliq.html','/viktorina':'viktorina.html',
+ '/birlikde-izle':'birlikde-izle.html','/penalti-arenasi':'penalti-arenasi.html','/final':'final.html','/ideal-altiliq':'ideal-altiliq.html','/viktorina':'viktorina.html',
  '/':'index.html','/oyunlar':'oyunlar.html','/cedvel':'cedvel.html',
  '/komandalar':'komandalar.html','/komanda':'komanda.html','/matc':'matc.html','/futbolcular':'futbolcular.html',
  '/futbolcu':'futbolcu.html','/bombardirler':'bombardirler.html','/statistika':'statistika.html',
@@ -9,6 +9,7 @@ export const PAGE_ROUTES = Object.freeze({
  '/movsum':'merhele.html','/muqayise':'muqayise.html','/minifutbol':'minifutbol.html','/elaqe':'elaqe.html','/azarkes':'azarkes.html','/admin':'admin.html','/404':'404.html'
 });
 export function canonicalPath(path) {
+ if(['/liqa-zali','/liqa-zali/','/liqa-zali.html'].includes(path))return '/azarkes';
  if(['/zaman-tuneli','/zaman-tuneli/','/zaman-tuneli.html'].includes(path))return '/penalti-arenasi';
  if(['/ideal-beslik','/ideal-beslik/','/ideal-beslik.html'].includes(path))return '/ideal-altiliq';
  if(path==='/index.html'||path==='/index'||path==='/index/')return '/';
