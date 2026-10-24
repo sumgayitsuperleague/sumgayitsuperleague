@@ -63,7 +63,7 @@ export function createClutchScene(host,{home,away,quality='auto',reduced=false,o
  function releaseTemplate(){loadedModel?.traverse(o=>{if(o.isMesh){o.geometry?.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material]){for(const v of Object.values(m))if(v?.isTexture)v.dispose();m.dispose();}}});loadedModel=null;}
  function drawFrame(frame,dt=0){
   if(!frame)return;const defensive=current?.mission==='protect',end=defensive?1:-1,w=host.clientWidth,h=host.clientHeight,portrait=w/h<1.2;
-  const focus=frame.ball;cameraTarget.set(portrait?24:26,portrait?37:31,defensive?-32:32);aimTarget.set(focus.x*.14,0,end*5.5+focus.z*.1);
+  const focus=frame.ball;cameraTarget.set(portrait?20:16,portrait?29:20,defensive?-(portrait?25:17):(portrait?25:17));aimTarget.set(focus.x*.2,0,end*6.5+focus.z*.26);
   if(pending&&!reduced){cameraTarget.x-=Math.sin(frame.progress*Math.PI)*2;cameraTarget.y-=Math.sin(frame.progress*Math.PI)*2.8;}
   camera.position.lerp(cameraTarget,dt?Math.min(1,dt*3):1);cameraAim.lerp(aimTarget,dt?Math.min(1,dt*3):1);camera.lookAt(cameraAim);
   for(const p of frame.players){const a=actors.get(p.id);if(!a)continue;a.root.position.set(p.x,p.moving?Math.abs(Math.sin(clock*12))*.025:0,p.z);const target=frame.ball,heading=Math.atan2(target.x-p.x,target.z-p.z);a.root.rotation.y=heading;const gait=p.moving?Math.sin(clock*11):Math.sin(clock*1.8)*.025;
