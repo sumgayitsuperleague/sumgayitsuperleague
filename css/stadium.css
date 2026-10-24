@@ -47,14 +47,20 @@ body[data-stadium-motion=slide] #app>section:first-child{animation:stadium-enter
 body:not(.stadium-depth) .stadium-scene-ball,body:not(.stadium-depth) .stadium-scene-ring{display:none}
 @keyframes stadium-float{to{transform:translate3d(-12px,16px,0) rotate(12deg)}}@keyframes stadium-light{to{opacity:.35;transform:translate3d(-25px,12px,0)}}
 /* Persistent native music dock. */
-.has-stadium-player{padding-bottom:130px}
-.has-stadium-player .totop{bottom:150px;right:20px}
-.stadium-player{position:fixed;right:20px;bottom:20px;width:min(340px,calc(100vw - 24px));height:auto;padding:12px 16px 11px;box-sizing:border-box;z-index:80;color:#fff;background:#102b52;border:1px solid #ffffff29;border-radius:16px;box-shadow:0 12px 38px #07172d35;font-family:var(--font,system-ui)}
-.stadium-audio-heading{display:flex;align-items:center;gap:12px;min-width:0}.stadium-audio-heading>span{font-size:8px;letter-spacing:.09em;white-space:nowrap;color:#b5c9e8;font-weight:750}
-.stadium-audio-heading select{min-width:0;width:100%;font:650 11px var(--font,system-ui);color:#fff;background:#102b52;border:0;padding:5px 2px;text-overflow:ellipsis;cursor:pointer}.stadium-audio-heading option{color:#fff;background:#102b52}
-.stadium-audio-controls{display:flex;align-items:center;justify-content:center;gap:10px;margin:5px 0}
-.stadium-player button{display:grid;place-items:center;position:relative;width:42px;height:42px;min-height:42px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;touch-action:manipulation;user-select:none;font:700 12px var(--font,system-ui)}
-.stadium-player button.stadium-audio-toggle{width:44px;height:44px;background:#f4f8ff;color:#133669;transition:transform 120ms,background 160ms}.stadium-player.is-playing .stadium-audio-toggle{background:#6aa6ff;color:#071c3b}
+.has-stadium-player{padding-bottom:96px}
+.has-stadium-player .totop{bottom:92px;right:20px}
+.has-stadium-player:has(.stadium-player.is-expanded) .totop{bottom:182px}
+.stadium-player{position:fixed;right:20px;bottom:20px;width:min(300px,calc(100% - 24px));height:auto;padding:6px 8px;box-sizing:border-box;z-index:80;color:#fff;background:color-mix(in srgb,var(--b600,#1c44be) 48%,#081d5b);border:1px solid #ffffff4d;border-radius:12px;box-shadow:0 8px 26px #07172d30;font-family:var(--font,system-ui)}
+.stadium-audio-bar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px;min-height:40px}
+.stadium-audio-heading{display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;padding-left:4px}.stadium-audio-heading>span{font-size:7px;line-height:11px;letter-spacing:.12em;white-space:nowrap;color:#d9e5ff;font-weight:750}
+.stadium-audio-heading select{min-width:0;max-width:100%;width:100%;font:650 11px/1.4 var(--font,system-ui);color:#fff;background:transparent;border:0;padding:2px 0;text-overflow:ellipsis;cursor:pointer}.stadium-audio-heading option{color:#fff;background:#123797}
+.stadium-audio-controls{display:flex;align-items:center;justify-content:center;gap:0;margin:0}
+.stadium-player button{display:grid;place-items:center;position:relative;width:36px;height:40px;min-height:40px;padding:0;border:0;border-radius:8px;background:transparent;color:inherit;cursor:pointer;touch-action:manipulation;user-select:none;font:700 12px var(--font,system-ui)}
+.stadium-player button svg{width:17px;height:17px}
+.stadium-player button.stadium-audio-toggle{width:36px;height:36px;min-height:36px;border-radius:50%;background:#fff;color:var(--b600,#1c44be);transition:transform 120ms,background 160ms}.stadium-player.is-playing .stadium-audio-toggle{background:#fff;color:var(--b600,#1c44be)}
+.stadium-player button.stadium-audio-more{width:30px}.stadium-audio-more svg{transition:transform 160ms}.stadium-audio-more[aria-expanded=true] svg{transform:rotate(180deg)}
+.stadium-audio-details{padding:8px 3px 0;margin-top:6px;border-top:1px solid #ffffff30}.stadium-audio-details[hidden]{display:none}
+.stadium-audio-secondary{display:flex;justify-content:center;gap:22px}.stadium-audio-secondary button{width:48px;height:32px;min-height:32px;font-size:11px}
 .stadium-player button:disabled{opacity:.35;cursor:default}.stadium-player button:active{transform:scale(.95)}.stadium-player :focus-visible{outline:3px solid #a8caff;outline-offset:3px}
 .stadium-player.is-loading .stadium-audio-toggle:after{content:"";position:absolute;inset:3px;border:2px solid #16457a30;border-top-color:#174475;border-radius:50%;animation:music-loading .7s linear infinite;pointer-events:none}
 .stadium-audio-progress{display:flex;gap:9px;align-items:center}.stadium-audio-progress time{font-size:9px;line-height:18px;font-variant-numeric:tabular-nums;color:#c0d3ed;min-width:29px;text-align:center}.stadium-audio-progress input{width:100%;min-width:0;height:18px;margin:0;accent-color:#80b2ff;cursor:pointer}.stadium-audio-progress input:disabled{opacity:.4;cursor:default}
@@ -67,7 +73,13 @@ body:not(.stadium-depth) .stadium-scene-ball,body:not(.stadium-depth) .stadium-s
 @media(max-width:680px){
  .utility-bar>.wrap{height:auto;min-height:36px;flex-wrap:wrap;gap:5px;padding-top:5px;padding-bottom:5px}.utility-season{width:100%;display:flex;align-items:center;justify-content:space-between}.utility-season .baku-clock{margin:0;padding:0;border:0;gap:6px}.baku-clock time{font-size:11px}.utility-tools{width:100%;justify-content:space-between}
  .stadium-carousel{width:100%}.stadium-slides{min-height:390px}.stadium-slide>.league-main-news,.stadium-slide>.selected-match,.stadium-slide-feature{min-height:390px}.stadium-slide-feature{padding:24px}.stadium-slide-stage{right:18px;top:18px;font-size:10px}.stadium-slide-teams{gap:12px;margin-top:42px}.stadium-slide-teams .ball.lg{width:78px;height:78px;padding:10px}.stadium-slide-teams b{font-size:14px}.stadium-slide-teams>strong{font-size:35px}.stadium-slide-feature>h2{font-size:32px}.stadium-media-slide h2{font-size:37px;max-width:240px;letter-spacing:-1px}.stadium-slide-count{font-size:9px;margin-left:4px}.stadium-carousel-controls{height:56px}.stadium-carousel-controls button{min-width:42px;min-height:44px}.stadium-dots button{padding:9px;min-width:28px}.stadium-slide-teams+p{font-size:12px}.stadium-scene-ball{width:80px;height:80px;right:5%;top:10%}
- .stadium-player{right:12px;bottom:calc(12px + env(safe-area-inset-bottom));height:auto}.has-mobile-dock .stadium-player{bottom:calc(76px + env(safe-area-inset-bottom))}.has-stadium-player .totop{bottom:calc(220px + env(safe-area-inset-bottom));right:12px}.has-stadium-player.has-mobile-dock{padding-bottom:220px}
  .live-banner-item{flex-direction:column;gap:0;padding:0 14px 10px}.live-banner-item>.live-watch-link{width:100%;max-width:390px;white-space:normal}
+}
+@media(max-width:760px){
+ .stadium-player{right:12px;bottom:calc(12px + env(safe-area-inset-bottom));height:auto}
+ body.has-mobile-dock .stadium-player{bottom:calc(var(--mobile-dock-height,64px) + 12px)}
+ body.has-stadium-player .totop{bottom:calc(var(--mobile-dock-height,64px) + 84px);right:12px}
+ body.has-stadium-player:has(.stadium-player.is-expanded) .totop{bottom:calc(var(--mobile-dock-height,64px) + 184px)}
+ body.has-stadium-player.has-mobile-dock{padding-bottom:calc(var(--mobile-dock-height,64px) + 92px)}
 }
 @media(prefers-reduced-motion:reduce){.football-tap{display:none}.stadium-depth .stadium-tilt{transform:none;transition:none}.stadium-scene *{animation:none!important}.stadium-slides{transition:none!important}.stadium-slide-progress{display:none}body #app>section:first-child,body .stadium-slide.is-current{animation:none!important}}

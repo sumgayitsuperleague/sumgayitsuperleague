@@ -16,7 +16,12 @@ export function kickoffText(match,now=Date.now()){
  return UI.t('Növbəti oyuna')+' '+(days?quantity(days,'gün')+' · ':'')+(hours?quantity(hours,'saat')+' · ':'')+quantity(minutes,'dəqiqə');
 }
 export function bindMobileExperience(ctx){
- if(document.querySelector('.mobile-dock'))document.body.classList.add('has-mobile-dock');
+ const dock=document.querySelector('.mobile-dock');document.body.classList.toggle('has-mobile-dock',!!dock);
+ if(dock){
+  const measure=()=>{if(!dock.isConnected)return;const height=dock.getBoundingClientRect?.()?.height;if(Number.isFinite(height))document.body.style.setProperty('--mobile-dock-height',Math.ceil(height)+'px');};
+  measure();pageListen(window,'resize',measure);
+  if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(measure);observer.observe(dock);onPageCleanup(()=>observer.disconnect());}
+ }else document.body.style.removeProperty('--mobile-dock-height');
  // The drawer hides the desktop 'More' summary. Its links must stay expanded
  // while that summary is hidden, including after rotating a phone/tablet.
  const more=document.querySelector('#links .more-menu'),viewport=window.matchMedia?.('(max-width: 1000px)');

@@ -4,6 +4,7 @@ import {nextTrack,audioURL} from './stadium-source.js';
 const icon=path=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">${path}</svg>`;
 const PLAY=icon('<path d="m8 5 11 7-11 7Z"/>'),PAUSE=icon('<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>');
 const PREVIOUS=icon('<path d="M5 5h3v14H5zM19 5v14L9 12Z"/>'),NEXT=icon('<path d="M16 5h3v14h-3zM5 5l10 7-10 7Z"/>');
+const MORE=icon('<path d="m7 9 5 5 5-5 1.4 1.4L12 16.8l-6.4-6.4Z"/>');
 const time=value=>{const n=Math.max(0,Math.floor(Number(value)||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0');};
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -20,7 +21,7 @@ export function installMusicPlayer(config){
  let position=saved.id===current.id&&Number.isFinite(saved.seconds)?Math.max(0,saved.seconds):0;
  let history=[current.id],index=0;
  const player=document.createElement('aside');player.className='stadium-player';player.dataset.stadiumPlayer='';
- player.innerHTML=`<div class="stadium-audio-heading"><span>SSL / MUSIC</span><select data-audio="track"></select></div><div class="stadium-audio-controls"><button type="button" data-audio="previous">${PREVIOUS}</button><button type="button" data-audio="rewind"><span aria-hidden="true">↶10</span></button><button type="button" class="stadium-audio-toggle" data-audio="toggle" aria-pressed="false" aria-describedby="ssl-music-status">${PLAY}</button><button type="button" data-audio="forward"><span aria-hidden="true">10↷</span></button><button type="button" data-audio="next">${NEXT}</button></div><div class="stadium-audio-progress"><time data-audio-elapsed>0:00</time><input data-audio="seek" type="range" min="0" max="0" value="0" step="0.1" disabled><time data-audio-duration>0:00</time></div><span id="ssl-music-status" class="stadium-audio-status" data-audio-status role="status" aria-live="polite"></span>`;
+ player.innerHTML=`<div class="stadium-audio-bar"><div class="stadium-audio-heading"><span>SSL / MUSIC</span><select data-audio="track"></select></div><div class="stadium-audio-controls"><button type="button" data-audio="previous">${PREVIOUS}</button><button type="button" class="stadium-audio-toggle" data-audio="toggle" aria-pressed="false" aria-describedby="ssl-music-status">${PLAY}</button><button type="button" data-audio="next">${NEXT}</button><button type="button" class="stadium-audio-more" data-audio="details" aria-expanded="false" aria-controls="ssl-music-details">${MORE}</button></div></div><div id="ssl-music-details" class="stadium-audio-details" hidden><div class="stadium-audio-progress"><time data-audio-elapsed>0:00</time><input data-audio="seek" type="range" min="0" max="0" value="0" step="0.1" disabled><time data-audio-duration>0:00</time></div><div class="stadium-audio-secondary"><button type="button" data-audio="rewind"><span aria-hidden="true">↶ 10</span></button><button type="button" data-audio="forward"><span aria-hidden="true">10 ↷</span></button></div></div><span id="ssl-music-status" class="stadium-audio-status" data-audio-status role="status" aria-live="polite"></span>`;
  document.body.append(player);document.body.classList.add('has-stadium-player');
  const el=name=>player.querySelector('[data-audio="'+name+'"]'),control=el('toggle'),status=player.querySelector('[data-audio-status]'),seek=el('seek'),selector=el('track');
  const seconds=()=>Number.isFinite(audio?.currentTime)?audio.currentTime:position;
@@ -35,6 +36,7 @@ export function installMusicPlayer(config){
  const draw=()=>{
   control.innerHTML=playing?PAUSE:PLAY;control.setAttribute('aria-label',UI.t(playing?'Musiqini dayandır':'Musiqini aç'));control.setAttribute('aria-pressed',String(playing));control.setAttribute('aria-busy',String(busy));control.title=control.getAttribute('aria-label');
   for(const [name,label] of [['previous','Əvvəlki mahnı'],['next','Növbəti mahnı'],['rewind','10 saniyə geri'],['forward','10 saniyə irəli'],['seek','Mahnının vaxtı'],['track','Mahnını seç']]){el(name).setAttribute('aria-label',UI.t(label));el(name).title=UI.t(label);}
+  el('details').setAttribute('aria-label',UI.t('Musiqi idarəetməsi'));el('details').title=UI.t('Musiqi idarəetməsi');
   player.setAttribute('aria-label',UI.t('Musiqi'));player.classList.toggle('is-playing',playing);player.classList.toggle('is-loading',busy);player.dataset.track=current.id;
   selector.innerHTML=tracks.map(t=>`<option value="${esc(t.id)}"${t.id===current.id?' selected':''}>${esc(t.title)}</option>`).join('');
   selector.value=current.id;el('previous').disabled=el('next').disabled=tracks.length<2;
@@ -77,6 +79,7 @@ export function installMusicPlayer(config){
  };
  const jump=value=>{if(!audio||!duration())return false;try{audio.currentTime=Math.max(0,Math.min(Number(value)||0,duration()));position=audio.currentTime;progress();persist();return true;}catch{return false;}};
  control.addEventListener('click',()=>{if(playing||busy)pause();else start();});
+ el('details').addEventListener('click',()=>{const expanded=el('details').getAttribute('aria-expanded')!=='true';el('details').setAttribute('aria-expanded',String(expanded));player.querySelector('#ssl-music-details').hidden=!expanded;player.classList.toggle('is-expanded',expanded);});
  el('previous').addEventListener('click',()=>step(-1));el('next').addEventListener('click',()=>step(1));
  el('rewind').addEventListener('click',()=>jump(seconds()-10));el('forward').addEventListener('click',()=>jump(seconds()+10));
  seek.addEventListener('input',()=>jump(seek.value));selector.addEventListener('change',()=>change(selector.value));
