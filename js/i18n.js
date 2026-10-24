@@ -1,3 +1,4 @@
+import {experienceCopy} from './fan-experience.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {READABILITY_COPY} from './readability-copy.js';
 import {PLAYER_DUEL_COPY} from './player-duel-copy.js';
@@ -20,6 +21,7 @@ export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS,['Final mərkəzi','Final centre','Центр финала'],['Final səhifəsinə bax','Explore the final','Открыть финал'],['Final qarşılaşması hələ təyin edilməyib.','The final fixture has not been set yet.','Финальный матч пока не назначен.']];
 rows.push(...READABILITY_COPY,...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY,...PLAYER_DUEL_COPY);
+for(const row of experienceCopy)if(!rows.some(existing=>existing[0].toLocaleLowerCase('az')===row[0].toLocaleLowerCase('az')))rows.push(row);
 const dictionaries={en:new Map(),ru:new Map()};
 for(const [az,en,ru] of rows){dictionaries.en.set(az.toLocaleLowerCase('az'),en);dictionaries.ru.set(az.toLocaleLowerCase('az'),ru);}
 const russianCount=(number,forms)=>{const n=Number(number);return forms[n%100>=11&&n%100<=14?2:n%10===1?0:n%10>=2&&n%10<=4?1:2];};

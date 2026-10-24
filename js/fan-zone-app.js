@@ -1,3 +1,4 @@
+import {renderHallPage,renderWatchPage,bindHall,bindWatch} from './fan-experience.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {validateArenaFeatures} from './arena-model.js';
 import {arenaText,renderArenaPage,bindPenalty} from './arena-experience.js';
@@ -17,11 +18,13 @@ function fanLogo(team){
 
 function renderFanLinks(data,lang='az'){
  const c=localizedFanZone(data.cms?.fanZone,data.locales,lang);if(!c.showLinks)return '';
- const entries=[['final','/final','01'],['lineup','/ideal-altiliq','02'],['quiz','/viktorina','03'],['penalty','/penalti-arenasi','04']].filter(([k])=>c[k].enabled);
+ const entries=[['penalty','/penalti-arenasi','01'],['lineup','/ideal-altiliq','02'],['hall','/liqa-zali','03'],['watch','/birlikde-izle','04'],['quiz','/viktorina','05'],['final','/final','06']].filter(([k])=>c[k].enabled);
  return entries.length?'<nav class="fz-hub" aria-label="'+fanEscape(fanText('Azarkeş mərkəzi',lang))+'">'+entries.map(([k,path,n])=>'<a href="'+fanHref(path,lang)+'"><span>'+n+'</span><strong>'+fanEscape(fanText(c[k].title,lang))+'</strong><b aria-hidden="true">↗</b></a>').join('')+'</nav>':'';
 }
 
 function renderFanPage(data,page,lang='az'){
+ if(page==='hall')return renderHallPage(data,lang);
+ if(page==='watch')return renderWatchPage(data,lang,typeof location==='undefined'?'':new URLSearchParams(location.search).get('id')||'');
  const c=localizedFanZone(data.cms?.fanZone,data.locales,lang),config=c[page],e=fanEscape,t=s=>fanText(s,lang);
  if(!config)return '';
  const links=renderFanLinks(data,lang);
@@ -167,16 +170,16 @@ function mountFanZone(previewPenalty){
  arenaDispose?.();arenaDispose=null;const original=window.CONTENT;
  const source=previewPenalty?{...original,cms:{...original?.cms,fanZone:{...original?.cms?.fanZone,penalty:previewPenalty}}}:original;if(!source?.league)return;
  const lang=['en','ru'].includes(new URLSearchParams(location.search).get('lang'))?new URLSearchParams(location.search).get('lang'):'az',settings=localizedFanZone(source.cms?.fanZone,source.locales,lang);
- const path=document.body.dataset.previewPath||location.pathname,page=FAN_PAGES[path]||({'final':'final','lineup':'lineup','quiz':'quiz','penalty':'penalty'}[document.body.dataset.page]);
+ const path=document.body.dataset.previewPath||location.pathname,page=FAN_PAGES[path]||({'final':'final','lineup':'lineup','quiz':'quiz','penalty':'penalty','hall':'hall','watch':'watch'}[document.body.dataset.page]);
  if(page){
   const app=document.querySelector('#app');if(!app)return;app.innerHTML=renderFanPage(source,page,lang);document.title=fanText(settings[page].title,lang)+' · '+(source.site?.name||'Sumqayıt Super Liqası');
   if(!settings[page].enabled)return;
   if(page==='penalty'){arenaDispose=bindPenalty(source,settings,lang);const stop=arenaDispose;onPageCleanup(()=>{stop?.();if(arenaDispose===stop)arenaDispose=null;});}
+  if(page==='hall')bindHall(source,lang);if(page==='watch')bindWatch(source,lang);
   if(page==='lineup')bindFanLineup(source,settings,lang);if(page==='quiz')bindFanQuiz(source,settings,lang);
   const countdown=document.querySelector('[data-fan-countdown]');if(countdown){const tick=()=>{let s=Math.max(0,Math.floor((Number(countdown.dataset.fanCountdown)-Date.now())/1000)),values=[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60];countdown.querySelectorAll('b').forEach((el,i)=>el.textContent=String(values[i]).padStart(2,'0'));};tick();const interval=pageInterval(tick,1000);pageListen(window,'pagehide',()=>clearInterval(interval),{once:true});}
- }else if(document.body.dataset.page==='fans'){
-  const old=document.querySelector('.league-quiz'),links=renderFanLinks(source,lang);if(old){old.outerHTML=links;}else{const parent=document.querySelector('.fan-centre-top')?.parentElement;if(parent&&!parent.querySelector('.fz-hub'))parent.insertAdjacentHTML('beforeend',links);}
  }
+
  const footer=document.querySelector('footer .wrap')||document.querySelector('footer');
  if(footer&&settings.showLinks&&!footer.querySelector('.fz-footer-links')){const nav=document.createElement('nav');nav.className='fz-footer-links';nav.setAttribute('aria-label',fanText('Azarkeş mərkəzi',lang));nav.innerHTML=Object.entries(FAN_PAGES).filter(([,id])=>settings[id].enabled).map(([url,id])=>'<a href="'+fanHref(url,lang)+'">'+fanEscape(fanText(settings[id].title,lang))+'</a>').join('');footer.append(nav);}
  pageListen(window,'ssl-preferences-reset',()=>{try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key?.startsWith('ssl.fan.'))localStorage.removeItem(key);}}catch{}});

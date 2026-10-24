@@ -1,3 +1,5 @@
+import {renderFanCenter} from './fan-experience.js';
+import {fanZoneSettings} from './fan-zone-model.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {quizCard} from './fan-quiz.js';
 import * as UI from './i18n.js';
@@ -21,9 +23,13 @@ export function communityHome(ctx){
 export const leagueEntrance=renderLeagueEntrance;
 export const bindLeagueEntrance=bindMatchCenter;
 export function installFanCentre(ctx){
- const {P,CMS,L,DONE,T,esc,head,ball}=ctx;
- P.fans=()=>{const c=CMS.community,round=c.poll.round,played=DONE.filter(m=>m.round===round),best=played.slice().sort((a,b)=>(b.hs+b.as)-(a.hs+a.as))[0],total=played.reduce((n,m)=>n+m.hs+m.as,0);return head('Azarkeş mərkəzi','Seçimini et, liqanın gündəmini izlə və oyuna daha yaxın ol.')+`<section class="sec"><div class="wrap"><div class="fan-centre-top">${pollCard(ctx)}<aside class="fan-round-facts"><span class="eyebrow">${ordinal(round)} TUR</span><h2>Turun rəqəmləri</h2><div class="fan-fact-numbers"><div><b>${played.length}</b><span>Tamamlanmış oyun</span></div><div><b>${total}</b><span>Vurulan qol</span></div></div>${best?`<a href="matc.html?id=${best.id}"><span>Ən məhsuldar oyun</span><div>${ball(best.home,'sm')}<b>${esc(T[best.home].code)} ${best.hs}:${best.as} ${esc(T[best.away].code)}</b>${ball(best.away,'sm')}</div></a>`:''}<a class="fan-guide-link" href="minifutbol.html">Taktika lövhəsini yoxla ↗</a></aside></div>${quizCard(ctx)}${c.enabled?`<div class="social-page-heading"><div><span class="eyebrow">@SUMQAYITSUPERLIQA</span><h2>${esc(c.title)}</h2></div><a href="${esc(ctx.S.instagram)}" target="_blank" rel="noopener noreferrer">Instagram-da izlə ↗</a></div><div class="instagram-grid">${c.posts.filter(p=>p.published).map(p=>socialCard(p,ctx)).join('')||'<p>Yeni paylaşımlar tezliklə burada olacaq.</p>'}</div>`:''}</div></section>`;};
+ const {P,CMS,L,DONE,T,esc,ball}=ctx;
+ P.fans=()=>{const c=CMS.community,f=fanZoneSettings(CMS.fanZone).center,round=c.poll.round,played=DONE.filter(m=>m.round===round),best=played.slice().sort((a,b)=>(b.hs+b.as)-(a.hs+a.as))[0],total=played.reduce((n,m)=>n+m.hs+m.as,0);
+ const facts=f.showRoundStats?`<aside class="fan-round-facts"><span class="eyebrow">${ordinal(round)} TUR</span><h2>Turun rəqəmləri</h2><div class="fan-fact-numbers"><div><b>${played.length}</b><span>Tamamlanmış oyun</span></div><div><b>${total}</b><span>Vurulan qol</span></div></div>${best?`<a href="matc.html?id=${best.id}"><span>Ən məhsuldar oyun</span><div>${ball(best.home,'sm')}<b>${esc(T[best.home].code)} ${best.hs}:${best.as} ${esc(T[best.away].code)}</b>${ball(best.away,'sm')}</div></a>`:''}</aside>`:'';
+ return renderFanCenter({league:L,site:ctx.S,cms:CMS},UI.LANG)+`<section class="sec fx-centre-secondary"><div class="wrap">${f.showPoll||facts?`<div class="fan-centre-top">${f.showPoll?pollCard(ctx):''}${facts}</div>`:''}${f.showSocial&&c.enabled?`<div class="social-page-heading"><div><span class="eyebrow">@SUMQAYITSUPERLIQA</span><h2>${esc(c.title)}</h2></div><a href="${esc(ctx.S.instagram)}" target="_blank" rel="noopener noreferrer">Instagram-da izlə ↗</a></div><div class="instagram-grid">${c.posts.filter(p=>p.published).map(p=>socialCard(p,ctx)).join('')}</div>`:''}</div></section>`;
+ };
 }
+
 export function bindFanCentre(ctx){
  pageListen(document,'click',e=>{const b=e.target.closest('[data-instagram-load]');if(!b)return;const p=ctx.CMS.community.posts.find(p=>p.published&&p.id===b.dataset.instagramLoad),url=instagramEmbedURL(p?.url);if(!url)return;const host=b.closest('[data-social-card]').querySelector('[data-embed-host]');if(!host.hidden){host.hidden=true;host.replaceChildren();b.textContent=UI.t('Paylaşımı burada aç')+' ↗';return;}const frame=document.createElement('iframe');frame.src=url;frame.title=p.title;frame.loading='lazy';frame.referrerPolicy='no-referrer';frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');host.replaceChildren(frame);host.hidden=false;b.textContent=UI.t('Paylaşımı bağla')+' ×';});
  const box=ctx.$('#fan-poll-options');if(!box||typeof fetch!=='function')return;let poll,busy=false;

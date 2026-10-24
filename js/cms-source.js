@@ -12,7 +12,7 @@ export const NAV_ITEMS = [
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
   ['scorers','Bombardirlər','bombardirler.html'],['stats','Statistika','statistika.html'],
   ['media','Media','media.html'],['news','Xəbərlər','xeberler.html'],['about','Haqqımızda','haqqimizda.html'],
-  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['sponsors','Sponsorlar','sponsorlar.html']
+  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['hall','3D liqa zalı','liqa-zali.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
 ];
 export const HOME_SECTIONS = [['pulse','Liqa rəqəmləri'],['results','Son nəticələr'],['fixtures','Növbəti oyunlar'],['table','Turnir cədvəli'],['videos','Videolar'],['scorers','Bombardirlər'],['teams','Komandalar'],['news','Xəbərlər'],['mvp','Ən yaxşı oyunçular']];
 export const BLOCK_TYPES = [['heading','Başlıq'],['paragraph','Mətn'],['image','Şəkil'],['quote','Sitat'],['list','Siyahı'],['button','Düymə / keçid'],['divider','Ayırıcı']];
