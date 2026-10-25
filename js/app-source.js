@@ -1,3 +1,4 @@
+import {installTraffic} from './traffic.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {installConsistentIcons} from './ui-icons.js';
 import {editorialArtwork} from './editorial-art.js';
@@ -191,3 +192,4 @@ onPageCleanup(installSiteMotion(CMS.stadium?.motion));
 onPageCleanup(installConsistentIcons(document));
 }
 installSiteNavigation(mountSite);
+installTraffic();
