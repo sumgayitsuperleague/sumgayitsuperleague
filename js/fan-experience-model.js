@@ -1,7 +1,7 @@
 export const FAN_ACTIVITIES=Object.freeze(['penalty','lineup','watch','quiz','final']);
 export function defaultFanExperiences(){return {
  center:{title:'Azarkeş mərkəzi',description:'Meydana çıx. Altılığını qur. Liqanı yaşa.',featured:'penalty',order:[...FAN_ACTIVITIES],showPoll:false,showRoundStats:false,showSocial:true},
- watch:{enabled:true,title:'Birlikdə izlə',description:'Yayım, hesab və tribuna bir ekranda.',matchId:'',showArchive:true,showEvents:true,showReactions:true,showMatchPicker:true,allowFullscreen:true,allowRooms:true,allowChat:true,allowCustomVideo:true,notice:''}
+ watch:{enabled:true,title:'Birlikdə izlə',description:'Yayım, hesab və tribuna bir ekranda.',matchId:'',showArchive:true,showEvents:true,showReactions:true,showMatchPicker:true,allowFullscreen:true,allowRooms:true,allowChat:true,allowCustomVideo:false,notice:''}
 };}
 export function validateFanExperiences(value){
  const errors=[],d=defaultFanExperiences(),obj=v=>v&&typeof v==='object'&&!Array.isArray(v),id=v=>typeof v==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(v),text=(v,n)=>typeof v==='string'&&v.length<=n&&!/[<>\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(v),check=(ok,msg)=>{if(!ok)errors.push(msg);};
@@ -25,5 +25,18 @@ export function youtubeEmbedId(value){
 export function matchBroadcast(data,match){
  if(!match)return null;
  if(match.streamUrl&&youtubeEmbedId(match.streamUrl))return {id:youtubeEmbedId(match.streamUrl),url:match.streamUrl,live:match.status==='live'};
- const video=(data.videos||[]).find(v=>v.published&&v.match===match.id&&youtubeEmbedId(v.url));return video?{id:youtubeEmbedId(video.url),url:video.url,live:false}:null;
+ const video=(data.videos||[]).find(v=>v.published&&v.kind==='match'&&v.match===match.id&&youtubeEmbedId(v.url));return video?{id:youtubeEmbedId(video.url),url:video.url,live:false}:null;
+}
+export function broadcastRoundLabel(match,lang='az'){
+ const stage=match.stage||(/yarım\s*final/i.test(match.leg||'')?'semifinal':/3-cü|üçüncü/i.test(match.leg||'')?'third-place':/final/i.test(match.leg||'')?'final':'group');
+ const names={semifinal:['Yarımfinal','Semi-final','Полуфинал'],final:['Final','Final','Финал'],'third-place':['3-cü yer uğrunda','Third-place match','Матч за третье место']},i=lang==='en'?1:lang==='ru'?2:0;
+ if(names[stage])return names[stage][i];const n=Number(match.round)||1;if(lang==='en')return 'Round '+n;if(lang==='ru')return n+'-й тур';
+ const last=n%10,suffix=last?({1:'ci',2:'ci',3:'cü',4:'cü',5:'ci',6:'cı',7:'ci',8:'ci',9:'cu'})[last]:({10:'cu',20:'ci',30:'cu',40:'cı',50:'ci',60:'cı',70:'ci',80:'ci',90:'cı'})[n%100]||'cü';return n+'-'+suffix+' tur';
+}
+export function watchSources(data,config={showArchive:true},lang='az'){
+ const teams=Object.fromEntries((data.league?.teams||[]).map(t=>[t.id,t]));
+ return (data.league?.matches||[]).filter(m=>!m.qualificationPending&&(config.showArchive!==false||m.status!=='done')).flatMap(m=>{
+  const v=matchBroadcast(data,m);if(!v)return [];const roundLabel=broadcastRoundLabel(m,lang),home=teams[m.home],away=teams[m.away];if(!home||!away)return [];
+  return [{key:'match:'+m.id,matchId:m.id,id:v.id,url:v.url,title:roundLabel+' · '+home.name+' — '+away.name,teamsTitle:home.name+' — '+away.name,roundLabel,round:m.round,stage:m.stage||'group',date:m.date||'',time:m.time||'',live:m.status==='live',status:m.status,homeLogo:'/assets/logos/'+home.logo,awayLogo:'/assets/logos/'+away.logo}];
+ }).sort((a,b)=>{const rank=s=>s.live?0:s.status==='planned'?1:2;return rank(a)-rank(b)||(a.status==='planned'?a.date.localeCompare(b.date):b.date.localeCompare(a.date))||(Number(b.round)||0)-(Number(a.round)||0)||(a.time||'').localeCompare(b.time||'')||a.matchId.localeCompare(b.matchId);});
 }
