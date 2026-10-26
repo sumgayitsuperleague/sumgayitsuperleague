@@ -8,7 +8,7 @@ export const matchStageKey=m=>matchStage(m)==='group'?String(m.round):'stage:'+m
 export const creditedTeam=(m,g)=>g.og?(g.t===m.home?m.away:m.home):g.t;
 export function standings(league,group) {
   const teams=league.teams.filter(t=>t.group===group),by=new Map(teams.map(t=>[t.id,{id:t.id,o:0,q:0,h:0,m:0,vq:0,bq:0}]));
-  const matches=league.matches.filter(m=>m.status==='done'&&matchStage(m)==='group');
+  const matches=league.matches.filter(m=>m.status==='done'&&!m.qualificationPending&&matchStage(m)==='group');
   for(const m of matches){const h=by.get(m.home),a=by.get(m.away);if(!h||!a)continue;h.o++;a.o++;h.vq+=m.hs;h.bq+=m.as;a.vq+=m.as;a.bq+=m.hs;if(m.hs>m.as){h.q++;a.m++;}else if(m.hs<m.as){a.q++;h.m++;}else{h.h++;a.h++;}}
   const rows=[...by.values()];rows.forEach(r=>{r.x=r.q*3+r.h;r.tf=r.vq-r.bq;});
   const key=r=>[r.x,r.tf,r.vq,-r.bq,r.q];
@@ -25,13 +25,20 @@ export function scorers(league) {
   const rows=[...by.values()].map(r=>({p:r.p,t:r.t,g:r.g,mp:r.games.size})).sort((a,b)=>b.g-a.g||a.mp-b.mp||a.p.localeCompare(b.p,'az'));rows.forEach(r=>r.rank=1+rows.filter(x=>x.g>r.g).length);return rows;
 }
 export function teamSummary(league,id) {
-  const matches=league.matches.filter(m=>m.status==='done'&&(m.home===id||m.away===id)).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),result={played:0,wins:0,draws:0,losses:0,goalsFor:0,goalsAgainst:0,cleanSheets:0,yellow:0,red:0,form:[]};
+  const matches=league.matches.filter(m=>m.status==='done'&&!m.qualificationPending&&(m.home===id||m.away===id)).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),result={played:0,wins:0,draws:0,losses:0,goalsFor:0,goalsAgainst:0,cleanSheets:0,yellow:0,red:0,form:[]};
   for(const m of matches){const own=m.home===id?m.hs:m.as,opp=m.home===id?m.as:m.hs;result.played++;result.goalsFor+=own;result.goalsAgainst+=opp;result.wins+=own>opp;result.draws+=own===opp;result.losses+=own<opp;result.cleanSheets+=opp===0;result.form.push(own>opp?'Q':own<opp?'M':'H');for(const card of m.cards)if(card.t===id)result[card.c==='r'?'red':'yellow']++;}
   result.form=result.form.slice(-5);result.average=result.played?result.goalsFor/result.played:0;return result;
 }
+// Historical score-sheet people remain addressable without inventing roster data.
+export function playerRecord(league,teamId,name){
+ const key=playerKey(name),team=league.teams.find(t=>t.id===teamId);if(!team||!key)return null;
+ const current=team.players.find(p=>playerKey(p.name)===key);if(current)return current;
+ for(const match of league.matches.filter(m=>recordedMatch(m)&&[m.home,m.away].includes(teamId)))for(const item of [...(match.goals||[]),...(match.cards||[]),...(match.mvp?[match.mvp]:[])])if(!item.unk&&item.t===teamId&&playerKey(item.p)===key)return {name:playerName(item.p),historical:true};
+ return null;
+}
 // A score sheet records goals, awards and cards, not a player's appearances.
 export function playerSummary(league,teamId,name) {
- const key=playerKey(name),team=league.teams.find(t=>t.id===teamId),player=team?.players.find(p=>playerKey(p.name)===key);
+ const key=playerKey(name),team=league.teams.find(t=>t.id===teamId),player=playerRecord(league,teamId,name);
  if(!player)return null;
  const result={goals:0,scoringGames:0,mvp:0,yellow:0,red:0};
  const belongs=event=>!!event&&event.t===teamId&&playerKey(event.p)===key;
@@ -45,7 +52,7 @@ export function playerSummary(league,teamId,name) {
  return result;
 }
 export function headToHead(league,first,second) {
-  const matches=league.matches.filter(m=>m.status==='done'&&(m.home===first&&m.away===second||m.home===second&&m.away===first)).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  const matches=league.matches.filter(m=>m.status==='done'&&!m.qualificationPending&&(m.home===first&&m.away===second||m.home===second&&m.away===first)).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
   let firstWins=0,secondWins=0,draws=0,firstGoals=0,secondGoals=0;
   for(const m of matches){const a=m.home===first?m.hs:m.as,b=m.home===second?m.hs:m.as;firstGoals+=a;secondGoals+=b;firstWins+=a>b;secondWins+=b>a;draws+=a===b;}
   return {matches,firstWins,secondWins,draws,firstGoals,secondGoals};

@@ -1,4 +1,7 @@
 export const READABILITY_COPY=[
+ ['Mərhələlər üzrə qollar','Goals by stage','Голы по стадиям'],
+ ['Matç protokolunda','Recorded in match reports','В протоколах матчей'],
+ ['Tarixi oyun qeydləri · cari heyət siyahısında yoxdur','Historical match records · absent from the current roster','Исторические протоколы · отсутствует в текущей заявке'],
  ['Final mərhələsi','Final stage','Финальная стадия'],
  ['3-cü yer uğrunda','Third-place match','Матч за третье место'],
  ['Tarix və saat tezliklə','Date and time to be confirmed','Дата и время будут объявлены'],
