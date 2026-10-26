@@ -7,7 +7,7 @@ const LEGACY_FORMATIONS=Object.freeze({'1-2-1':'1-3-1','2-2':'2-2-1','1-1-2':'2-
 export const fanFormation=value=>LEGACY_FORMATIONS[value]||value;
 export const FAN_PAGES=Object.freeze({'/final':'final','/ideal-altiliq':'lineup','/viktorina':'quiz','/birlikde-izle':'watch',...ARENA_PAGES});
 export function defaultFanZone(){
- return {version:1,showLinks:true,...defaultArenaFeatures(),...defaultFanExperiences(),
+ return {version:1,showLinks:true,championship:{enabled:true,title:"Komandam necə çempion olar?",description:"Hesabları dəyiş. Qrupları yenidən sırala. Komandanı kuboka apar.",allowShare:true},...defaultArenaFeatures(),...defaultFanExperiences(),
   final:{enabled:true,showOnHome:true,title:'Final mərkəzi',description:'',archiveTitle:'Mövsümün finalı',recap:'',cover:'',state:'auto',matchId:'',thirdPlaceId:'',championTeam:'',showCountdown:true,showJourney:true,showStats:true,showThirdPlace:true,showSponsors:true,linkLabel:'',linkUrl:''},
   lineup:{enabled:true,title:'Öz ideal altılığını qur',description:'Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.',defaultFormation:'2-2-1',formations:['2-2-1','2-1-2','1-3-1'],allowedTeams:[],hiddenPlayers:[],strictGoalkeeper:true,allowShare:true,allowDownload:true},
   quiz:{enabled:true,title:'Komandanı nə qədər tanıyırsan?',description:'Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.',autoQuestions:true,questionLimit:5,shuffle:true,allowTeamSelect:true,questions:[]}
@@ -24,7 +24,7 @@ export function fanZoneSettings(value){
  if(lineup.description==='Heyətlərdən bir qapıçı və dörd meydan oyunçusu seç.')lineup.description=d.lineup.description;
  lineup.defaultFormation=fanFormation(lineup.defaultFormation);
  if(Array.isArray(lineup.formations))lineup.formations=[...new Set(lineup.formations.map(fanFormation))];
- return {...d,...active,...arenaSettings(active),center,watch:{...d.watch,...active.watch},final:{...d.final,...v.final},lineup,quiz:{...d.quiz,...v.quiz}};
+ return {...d,...active,...arenaSettings(active),center,championship:{...d.championship,...active.championship},watch:{...d.watch,...active.watch},final:{...d.final,...v.final},lineup,quiz:{...d.quiz,...v.quiz}};
 }
 
 export function validateFanZone(v,opts={}){
@@ -33,7 +33,7 @@ export function validateFanZone(v,opts={}){
   id=s=>typeof s==='string'&&/^[a-z0-9][a-z0-9_-]{0,79}$/.test(s),
   image=opts.imagePath||((s)=>s===''||/^\/assets\/(?:logo\.png|(?:logos|editorial)\/[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp))$/.test(s)),
   link=opts.safeLink||((s)=>s===''||/^\/(?!\/)[a-z0-9/?_=&%.#-]*$/i.test(s));
- if(!keys(v,['version','showLinks','final','lineup','quiz','penalty','timeline','center','hall','watch','clutch']))return ['Azarkeş bölmələrinin məlumat quruluşu düzgün deyil.'];
+ if(!keys(v,['version','showLinks','championship','final','lineup','quiz','penalty','timeline','center','hall','watch','clutch']))return ['Azarkeş bölmələrinin məlumat quruluşu düzgün deyil.'];
  const d=defaultFanZone();check(v.version===1&&typeof v.showLinks==='boolean','Azarkeş bölmələrinin versiyası və görünməsi düzgün deyil.');
  for(const name of ['final','lineup','quiz']){
   const c=v[name];
@@ -41,6 +41,7 @@ export function validateFanZone(v,opts={}){
   check(typeof c.enabled==='boolean'&&text(c.title,160,true)&&text(c.description,600),name+': başlıq və təqdimat düzgün deyil.');
   for(const k of Object.keys(d[name]).filter(k=>typeof d[name][k]==='boolean'))check(typeof c[k]==='boolean'||name==='final'&&k==='showOnHome'&&c[k]===undefined,name+': görünmə ayarı düzgün deyil.');
  }
+ const championship=v.championship;if(championship!==undefined)check(keys(championship,Object.keys(d.championship))&&typeof championship.enabled==='boolean'&&typeof championship.allowShare==='boolean'&&text(championship.title,160,true)&&text(championship.description,600),'Çempionluq ssenarisinin ayarları düzgün deyil.');
  const f=v.final;if(obj(f)){check(text(f.archiveTitle,160,true)&&text(f.recap,6000)&&image(f.cover),'Finalın arxiv mətni və ya şəkli düzgün deyil.');check(['auto','upcoming','live','completed','archived'].includes(f.state),'Finalın vəziyyəti düzgün deyil.');for(const k of ['matchId','thirdPlaceId','championTeam'])check(f[k]===''||id(f[k]),'Finalın oyun və ya komanda seçimi düzgün deyil.');check(text(f.linkLabel,80)&&link(f.linkUrl)&&Boolean(f.linkLabel.trim())===Boolean(f.linkUrl),'Əlavə keçid üçün həm ad, həm ünvan daxil et.');}
  const l=v.lineup;if(obj(l)){
   check(Array.isArray(l.formations)&&l.formations.length>=1&&l.formations.length<=3&&new Set(l.formations).size===l.formations.length&&l.formations.every(x=>Object.hasOwn(FAN_FORMATIONS,fanFormation(x)))&&l.formations.includes(l.defaultFormation),'Altılığın düzülüşlərini və əsas düzülüşünü seç.');
