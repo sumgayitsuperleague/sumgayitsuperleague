@@ -1,3 +1,4 @@
+import {installVenue} from './venue-app.js';
 import {installChampionship} from './championship-app.js';
 import {installTraffic} from './traffic.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
@@ -174,8 +175,8 @@ P.stats=()=>{const stages=[...new Set(DONE.map(League.matchStageKey))],stageOrde
 /* ---------- işə sal ---------- */
 const arena=installArena({P,L,S,C,CMS,H,B,T,M,DONE,PLAN,GROUPS,ST,STX,SC,PAGE,NAV,$,$$,esc,fd,fs,fmtShort,ball,mcard,tableHTML,head,sech,formHTML,homeMedia,homeNews,mvps,playerLink,NEWS,VIDEOS,newsCard,videoCard,thumb,videoForMatch,videoKind,coverFallback,newsArtwork,isVideoSaved,setSaveRefresh:fn=>{refreshVideoSaves=fn;}});
 installChampionship({P,CONTENT,L,PAGE});
-chrome();installMatchLive({P,M,T,ball,fd,videoForMatch,playerLink,$,$$,mcard,CMS});const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}arena.bind();pageEnd();
-const titleLabels={championship:'Komandam necə çempion olar?',sponsors:'Sponsorlar və tərəfdaşlar',fans:'Azarkeş mərkəzi',guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
+chrome();installMatchLive({P,M,T,ball,fd,videoForMatch,playerLink,$,$$,mcard,CMS});installVenue({P,L,CMS,lang:UI.LANG});const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}arena.bind();pageEnd();
+const titleLabels={venue:'Oyuna gəlmək üçün məlumat',championship:'Komandam necə çempion olar?',sponsors:'Sponsorlar və tərəfdaşlar',fans:'Azarkeş mərkəzi',guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
 document.title=(titleLabels[PAGE]?UI.t(titleLabels[PAGE])+' · ':'')+(PAGE==='team'&&T[new URLSearchParams(location.search).get('t')]?T[new URLSearchParams(location.search).get('t')].name+' · ':'')+(S.name||L.name);
 if(PAGE==='championship')document.title=($('#app h1')?.textContent||'Komandam necə çempion olar?')+' · '+(S.name||L.name);
 if(PAGE==='home'&&CMS.seo?.title)document.title=CMS.seo.title;

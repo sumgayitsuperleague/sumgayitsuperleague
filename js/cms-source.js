@@ -1,3 +1,4 @@
+import {venueSettings,validateVenue} from './venue-source.js';
 import {fanZoneSettings,validateFanZone} from './fan-zone-model.js';
 import {stadiumSettings,validateStadium} from './stadium-source.js';
 // Structured site editing shared by the admin and public renderer.
@@ -12,7 +13,7 @@ export const NAV_ITEMS = [
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
   ['scorers','Bombardirlər','bombardirler.html'],['stats','Statistika','statistika.html'],
   ['media','Media','media.html'],['news','Xəbərlər','xeberler.html'],['about','Haqqımızda','haqqimizda.html'],
-  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
+  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['venue','Oyuna gəl','mekan.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
 ];
 export const HOME_SECTIONS = [['pulse','Liqa rəqəmləri'],['results','Son nəticələr'],['fixtures','Növbəti oyunlar'],['table','Turnir cədvəli'],['videos','Videolar'],['scorers','Bombardirlər'],['teams','Komandalar'],['news','Xəbərlər'],['mvp','Ən yaxşı oyunçular']];
 export const BLOCK_TYPES = [['heading','Başlıq'],['paragraph','Mətn'],['image','Şəkil'],['quote','Sitat'],['list','Siyahı'],['button','Düymə / keçid'],['divider','Ayırıcı']];
@@ -25,7 +26,7 @@ export function getCMS(data) {
   const site=data.site||{},cms=data.cms||{};
   const defaults={
     home:{title:'',highlight:'',buttonLabel:'Oyunlar və nəticələr',buttonUrl:'/oyunlar',image:'',announcement:'',announcementUrl:'',layout:'league',featuredNews:'',leadType:'news',featuredMatch:'',featuredTitle:'Əsas oyun',featuredText:'',showSideNews:true,showFinalStage:true,showCommunity:true,showGuidePromo:true,showEntryLinks:true,blocks:[],blockPosition:'afterLead',matchCenter:defaultMatchCenter(),newsLimit:0,videoLimit:3,showClubStrip:false,showScoreStrip:true,sections:HOME_SECTIONS.map(([id])=>({id,visible:id==='videos'}))},
-    fanZone:fanZoneSettings(cms.fanZone),stadium:stadiumSettings(cms.stadium),guide:defaultGuide(),community:defaultCommunity(),sponsors:defaultSponsors(),editor:defaultEditor(),
+    venue:venueSettings(cms.venue),fanZone:fanZoneSettings(cms.fanZone),stadium:stadiumSettings(cms.stadium),guide:defaultGuide(),community:defaultCommunity(),sponsors:defaultSponsors(),editor:defaultEditor(),
     about:{title:'Liqa haqqında',subtitle:'Sumqayıtdan başlayan mini futbol hekayəsi.',heading:'BU ŞƏHƏRDƏ OYUN BİTMİR.',image:'',showFacts:true,showClubs:true,showJourney:true,showContact:true,blocks:[{id:'about-note-heading',type:'heading',text:'Rəqəmlər, rəqabət və icma',url:'',alt:'',level:2},{id:'about-note-text',type:'paragraph',text:'Bu platformada turnir cədvəli, bütün komandaların heyətləri, futbolçular, oyun statistikası və video arxivi bir arada toplanır. Oyun tarixləri və nəticələr saytdakı mövsüm məlumatlarından avtomatik yaradılır.',url:'',alt:'',level:2}]},
     appearance:{background:'#f4f6fa',surface:'#ffffff',text:'#172640',muted:'#627189',font:'system',headingFont:'system',radius:18,width:1320,mobileNav:true},
     branding:{logo:'/assets/logo.png',footerText:'Sumqayıtın mini futbol həyəcanı. Oyunlar, statistika, komandalar və media bir məkanda.',copyright:'Bütün hüquqlar qorunur.'},
@@ -57,7 +58,8 @@ export function safeLink(x) {
 }
 export function validateCMS(cms) {
   const errors=[],check=(ok,msg)=>{if(!ok&&errors.length<30)errors.push(msg);return ok;};
-  if(!check(keys(cms,['fanZone','stadium','home','about','guide','community','sponsors','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(!check(keys(cms,['venue','fanZone','stadium','home','about','guide','community','sponsors','editor','appearance','branding','seo','navigation','pages','media']),'Redaktorun məlumat quruluşu düzgün deyil.'))return errors;
+  if(cms.venue!==undefined)errors.push(...validateVenue(cms.venue));
   if(cms.fanZone!==undefined)errors.push(...validateFanZone(cms.fanZone,{imagePath,safeLink}));
   if(cms.stadium!==undefined)errors.push(...validateStadium(cms.stadium));
   if(cms.sponsors!==undefined)errors.push(...validateSponsors(cms.sponsors,imagePath));

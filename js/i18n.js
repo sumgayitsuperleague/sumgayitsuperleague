@@ -1,3 +1,4 @@
+import {VENUE_COPY} from './venue-source.js';
 import {experienceCopy} from './fan-experience.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {READABILITY_COPY} from './readability-copy.js';
@@ -20,7 +21,7 @@ export function configureLanguage(){LANG=languageFrom(location.search,typeof loc
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS,['Final mərkəzi','Final centre','Центр финала'],['Final səhifəsinə bax','Explore the final','Открыть финал'],['Final qarşılaşması hələ təyin edilməyib.','The final fixture has not been set yet.','Финальный матч пока не назначен.']];
-rows.push(...READABILITY_COPY,...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY,...PLAYER_DUEL_COPY);
+rows.push(...VENUE_COPY,...READABILITY_COPY,...STADIUM_COPY,...REFINEMENT_COPY,...GUIDE_TRANSLATIONS,...FAN_COPY,...EDITORIAL_COPY,...EXPERIENCE_COPY,...SPONSOR_COPY,...MATCH_LIVE_COPY,...PLAYER_DUEL_COPY);
 for(const row of experienceCopy)if(!rows.some(existing=>existing[0].toLocaleLowerCase('az')===row[0].toLocaleLowerCase('az')))rows.push(row);
 const dictionaries={en:new Map(),ru:new Map()};
 for(const [az,en,ru] of rows){dictionaries.en.set(az.toLocaleLowerCase('az'),en);dictionaries.ru.set(az.toLocaleLowerCase('az'),ru);}
