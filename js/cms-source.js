@@ -13,7 +13,7 @@ export const NAV_ITEMS = [
   ['teams','Komandalar','komandalar.html'],['players','Futbolçular','futbolcular.html'],
   ['scorers','Bombardirlər','bombardirler.html'],['stats','Statistika','statistika.html'],
   ['media','Media','media.html'],['news','Xəbərlər','xeberler.html'],['about','Haqqımızda','haqqimizda.html'],
-  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['venue','Oyuna gəl','mekan.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
+  ['playoffs','Mövsüm','merhele.html'],['compare','Müqayisə','muqayise.html'],['guide','Minifutbol','minifutbol.html'],['contact','Əlaqə','elaqe.html'],['fans','Azarkeş mərkəzi','azarkes.html'],['watch','Birlikdə izlə','birlikde-izle.html'],['sponsors','Sponsorlar','sponsorlar.html']
 ];
 export const HOME_SECTIONS = [['pulse','Liqa rəqəmləri'],['results','Son nəticələr'],['fixtures','Növbəti oyunlar'],['table','Turnir cədvəli'],['videos','Videolar'],['scorers','Bombardirlər'],['teams','Komandalar'],['news','Xəbərlər'],['mvp','Ən yaxşı oyunçular']];
 export const BLOCK_TYPES = [['heading','Başlıq'],['paragraph','Mətn'],['image','Şəkil'],['quote','Sitat'],['list','Siyahı'],['button','Düymə / keçid'],['divider','Ayırıcı']];
@@ -39,7 +39,7 @@ export function getCMS(data) {
   defaults.home.matchCenter={...defaultMatchCenter(),...(cms.home?.matchCenter||{})};
   for(const key of ['navigation','pages','media'])if(Array.isArray(cms[key]))defaults[key]=cms[key];
   if(Array.isArray(cms.navigation))defaults.navigation=[...cms.navigation,...NAV_ITEMS.filter(([id])=>!cms.navigation.some(n=>n.id===id)).map(([id,label])=>({id,label,visible:true}))];
-  defaults.navigation=defaults.navigation.filter(n=>n.id!=='hall');
+  defaults.navigation=defaults.navigation.filter(n=>!['hall','venue'].includes(n.id));
   return defaults;
 }
 const object=x=>x&&typeof x==='object'&&!Array.isArray(x);
@@ -116,7 +116,7 @@ export function validateCMS(cms) {
   if(check(keys(S,['title','description','image','googleVerification','alternateNames']),'Axtarış ayarları düzgün deyil.'))check(text(S.title,160)&&text(S.description,500)&&imagePath(S.image),'Axtarış başlığı, təsviri və ya şəkli düzgün deyil.');
   if(S?.googleVerification!==undefined)check(typeof S.googleVerification==='string'&&/^[a-zA-Z0-9_-]{0,120}$/.test(S.googleVerification),'Google təsdiq kodu düzgün deyil. Yalnız content dəyərini daxil et.');
   if(S?.alternateNames!==undefined)check(Array.isArray(S.alternateNames)&&S.alternateNames.length<=5&&new Set(S.alternateNames).size===S.alternateNames.length&&S.alternateNames.every(v=>text(v,120,true)),'Saytın alternativ adları düzgün deyil.');
-  check(Array.isArray(cms.navigation)&&cms.navigation.length>=10&&cms.navigation.length<=NAV_ITEMS.length&&new Set(cms.navigation.map(n=>n?.id)).size===cms.navigation.length&&NAV_ITEMS.slice(0,10).every(([id])=>cms.navigation.some(n=>n?.id===id))&&cms.navigation.every(n=>keys(n,['id','label','visible'])&&NAV_ITEMS.some(([id])=>id===n.id)&&text(n.label,50,true)&&typeof n.visible==='boolean'),'Sayt menyusu düzgün deyil.');
+  check(Array.isArray(cms.navigation)&&cms.navigation.length>=10&&cms.navigation.length<=NAV_ITEMS.length+1&&new Set(cms.navigation.map(n=>n?.id)).size===cms.navigation.length&&NAV_ITEMS.slice(0,10).every(([id])=>cms.navigation.some(n=>n?.id===id))&&cms.navigation.every(n=>keys(n,['id','label','visible'])&&(n.id==='venue'||NAV_ITEMS.some(([id])=>id===n.id))&&text(n.label,50,true)&&typeof n.visible==='boolean'),'Sayt menyusu düzgün deyil.');
   if(check(Array.isArray(cms.pages)&&cms.pages.length<=50,'Ən çox 50 əlavə səhifə olmalıdır.')){
     const ids=new Set(),slugs=new Set();
     cms.pages.forEach(p=>{

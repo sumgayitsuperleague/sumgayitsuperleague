@@ -1,5 +1,4 @@
-import {installVenue} from './venue-app.js';
-import {renderVenueTeaser} from './venue-source.js';
+import {installVenue,mountVenue} from './venue-app.js';
 import {installChampionship} from './championship-app.js';
 import {installTraffic} from './traffic.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
@@ -193,7 +192,7 @@ UI.installLanguage();
 installSiteDesign(CMS.editor,window.CONTENT);
 installStadium({CMS,L,M,T,H,ball,fd});
 mountFanZone();
-if(PAGE==='final'&&CMS.venue?.enabled&&CMS.venue.showFinal)$('#app').insertAdjacentHTML('beforeend',renderVenueTeaser({league:L,cms:CMS},UI.LANG));
+mountVenue({PAGE,L,CMS,lang:UI.LANG});
 onPageCleanup(installSiteMotion(CMS.stadium?.motion));
 onPageCleanup(installConsistentIcons(document));
 }
