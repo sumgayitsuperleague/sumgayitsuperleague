@@ -1,0 +1,26 @@
+{
+  "created": "2026-10-28",
+  "method": "OpenAI built-in image_gen, product-mockup generation; WebP encoding retains original alpha",
+  "cloth": {
+    "source": "exec-d8d89b0c-41c4-4338-ab47-b0405a6aab98.png",
+    "brief": "Neutral silver-grey photorealistic front and back blank football jerseys above a horizontal knitted supporter scarf, floating on genuine transparent background; real seams, hollow neck, folds, fine weave. No text or logos.",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "stadium": {
+    "source": "exec-4dc8be71-6e79-4cd9-9f64-2f030ab3999f.png",
+    "brief": "Monochrome cinematic night stadium from low on the pitch; roof floodlights and volumetric mist at edges, dark negative space above for personalized club artwork. No text, clubs or players.",
+    "dimensions": [
+      941,
+      1672
+    ]
+  },
+  "application": "Original league logos and personal lettering are applied separately in code. Three independently editable colours preserve the generated material luminance.",
+  "inspiration": [
+    "https://shop.studioinnate.com/product/3d-sports-jersey-mockup/",
+    "https://in.pinterest.com/pin/studio-innate--77053843621387797/",
+    "https://dielinemaker.com/mockups/sports-jersey"
+  ]
+}
