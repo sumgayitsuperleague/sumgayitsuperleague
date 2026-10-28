@@ -158,3 +158,6 @@ body.ux-site.ssl-official .player-duel-link:hover{background:#ffffff18;border-co
 
 /* Five Star's white lettering needs a consistent dark plate at every size. */
 img[src*="/five_star.png"]{background:#10254b!important;border-radius:12%;padding:2px!important;box-sizing:border-box;box-shadow:inset 0 0 0 1px #c99436;object-fit:contain}
+
+/* Keep the tall Siyezen shield inside square crest slots without clipping. */
+img[src*="/siyezen.png"]{aspect-ratio:1!important;min-width:0;min-height:0;object-fit:contain!important;object-position:center;transform:none}
