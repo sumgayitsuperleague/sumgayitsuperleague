@@ -1,11 +1,27 @@
 import {renderWatchPage,bindWatch} from './fan-experience.js';
 import {leagueDate} from './league-date.js';
+import {quizCategory} from './fan-quiz-model.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {validateArenaFeatures} from './arena-model.js';
 import {arenaText,renderArenaPage,bindPenalty} from './arena-experience.js';
 import {FAN_LINEUP_SIZE,fanFormation,FAN_FORMATIONS,FAN_PAGES,localizedFanZone,finalContext,eligibleFanPlayers,normalizeFanLineup,fanQuizQuestions} from './fan-zone-model.js';
 const FAN_COPY={"Final mərkəzi":["Final centre","Центр финала"],"Mövsümün finalı":["Season final","Финал сезона"],"Öz ideal altılığını qur":["Build your ideal six","Собери свою шестёрку"],"Komandanı nə qədər tanıyırsan?":["How well do you know your club?","Насколько хорошо ты знаешь свою команду?"],"Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.":["Choose one goalkeeper and five outfield players from the squads.","Выбери одного вратаря и пяти полевых игроков из составов."],"Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.":["Choose a club and answer questions based on real league records.","Выбери команду и отвечай на вопросы по реальным данным лиги."],"Azarkeş mərkəzi":["Fan centre","Центр болельщиков"],"Final":["Final","Финал"],"İdeal altılıq":["Ideal six","Идеальная шестёрка"],"Viktorina":["Quiz","Викторина"],"Planlaşdırılıb":["Upcoming","Предстоит"],"Canlı":["Live","В прямом эфире"],"Tamamlanıb":["Completed","Завершён"],"Arxiv":["Archive","Архив"],"Çempion":["Champion","Чемпион"],"Tarix və saat təyin edilməyib":["Date and time to be confirmed","Дата и время пока не назначены"],"Final qarşılaşması hələ təyin edilməyib.":["The final fixture has not been set yet.","Финальный матч пока не назначен."],"Matç mərkəzi":["Match centre","Центр матча"],"Penaltilər":["Penalties","Пенальти"],"Üçüncülük oyunu":["Third-place match","Матч за третье место"],"Finala gedən yol":["Road to the final","Путь к финалу"],"Finaldan əvvəlki göstəricilər":["Record before the final","Показатели до финала"],"Oyun":["Matches","Матчи"],"Qələbə":["Wins","Победы"],"Vurulan qol":["Goals scored","Забитые голы"],"Buraxılan qol":["Goals conceded","Пропущенные голы"],"Yekun":["Recap","Итоги"],"Tərəfdaşlar":["Partners","Партнёры"],"Gün":["Days","Дни"],"Saat":["Hours","Часы"],"Dəqiqə":["Minutes","Минуты"],"Saniyə":["Seconds","Секунды"],"Qapıçı":["Goalkeeper","Вратарь"],"Meydan oyunçusu":["Outfield player","Полевой игрок"],"Düzülüş":["Formation","Расстановка"],"Altılığının adı":["Lineup name","Название шестёрки"],"Mənim ideal altılığım":["My ideal six","Моя идеальная шестёрка"],"Komanda":["Club","Команда"],"Bütün komandalar":["All clubs","Все команды"],"Futbolçu axtar":["Find a player","Найти игрока"],"Futbolçu seç":["Choose a player","Выбрать игрока"],"Seçilib":["Selected","Выбран"],"Başqa mövqedə seçilib":["Selected in another position","Выбран на другой позиции"],"Bu seçimə uyğun futbolçu yoxdur.":["No players match this selection.","Нет игроков для этого выбора."],"Seçimi sil":["Remove selection","Убрать выбор"],"Sıfırla":["Reset","Сбросить"],"Şəkli endir":["Download image","Скачать изображение"],"Keçidi kopyala":["Copy link","Копировать ссылку"],"Paylaş":["Share","Поделиться"],"Keçid kopyalandı.":["Link copied.","Ссылка скопирована."],"Keçidi bu sahədən kopyala.":["Copy the link from this field.","Скопируй ссылку из этого поля."],"Şəkil hazırlanır…":["Preparing image…","Создаём изображение…"],"Şəkil hazırdır.":["Image ready.","Изображение готово."],"Şəkil hazırlanmadı. Yenidən sına.":["Could not create the image. Try again.","Не удалось создать изображение. Попробуй ещё раз."],"Altı mövqenin hamısına futbolçu seç.":["Choose a player for all six positions.","Выбери игрока для каждой из шести позиций."],"Seçimin yalnız bu brauzerdə saxlanılır.":["Your selection is saved only in this browser.","Выбор сохраняется только в этом браузере."],"Başla":["Start","Начать"],"Sual":["Question","Вопрос"],"Düzgün cavablar":["Correct answers","Правильные ответы"],"Düzgün cavab":["Correct answer","Правильный ответ"],"Növbəti sual":["Next question","Следующий вопрос"],"Nəticəyə bax":["View result","Посмотреть результат"],"Test tamamlandı":["Quiz completed","Тест завершён"],"Yenidən başla":["Play again","Начать заново"],"Komandanı dəyiş":["Change club","Сменить команду"],"Bu seçim üçün hələ sual yoxdur.":["No questions are available for this selection yet.","Для этого выбора пока нет вопросов."],"Cavabların serverdə saxlanmır.":["Your answers are not stored on the server.","Ответы не сохраняются на сервере."],"Bölmə hazırda bağlıdır.":["This section is currently closed.","Раздел сейчас закрыт."],"Azarkeş seçimi":["Fan selection","Выбор болельщика"],"Son nəticə":["Result","Результат"],"Qeyd olunmuş oyun yoxdur.":["No completed games are recorded.","Нет записанных завершённых матчей."],"Şəkildə altılığın və liqanın adı göstəriləcək.":["The image includes your lineup and the league name.","На изображении будут название шестёрки и название лиги."]};
 Object.assign(FAN_COPY,{"Minifutbol":["Minifootball","Мини-футбол"],"Heyətini tamamla":["Complete your lineup","Собери состав"],"Mövqəni seç, futbolçunu əlavə et.":["Choose a position, then add a player.","Выбери позицию и добавь игрока."],"seçilib":["selected","выбрано"],"1 qapıçı · 5 meydan oyunçusu":["1 goalkeeper · 5 outfield players","1 вратарь · 5 полевых игроков"]});
+Object.assign(FAN_COPY,{
+ "Aktual məlumatlar":["Current records","Актуальные данные"],
+ "Komandanı seç. Özünü yoxla.":["Pick your club. Test yourself.","Выбери команду. Проверь себя."],
+ "Hər testdə fərqli mövzular, hər başlanğıcda ən son məlumatlar.":["Different topics in every quiz, fresh records at every start.","Разные темы в каждом тесте, свежие данные при каждом запуске."],
+ "Qol və kart suallarına canlı oyunların saxlanmış məlumatları da daxildir. Oyun və qələbə sayı tamamlanmış matçlardan hesablanır.":["Goal and card questions include saved live-match records. Match and win counts use completed games.","Вопросы о голах и карточках учитывают сохранённые данные текущих матчей. Число матчей и побед берётся из завершённых игр."],
+ "Bu test başladığı andakı məlumatlarla hesablanır.":["This attempt uses the records saved at its start.","В этом тесте используются данные на момент его начала."],
+ "Liqa məlumatları yeniləndi. Yeni test ən son göstəricilərlə başlayacaq.":["League records have changed. Your next quiz will use the latest figures.","Данные лиги обновились. Новый тест начнётся с актуальными показателями."],
+ "Məlumatlar yenilənir…":["Refreshing records…","Обновляем данные…"],
+ "Ən son məlumatları almaq mümkün olmadı. Yenidən sına.":["Could not fetch the latest records. Try again.","Не удалось получить свежие данные. Попробуйте ещё раз."],
+ "Komanda siyahısı dəyişib. Yenidən seçim et.":["The club list has changed. Please choose again.","Список команд изменился. Выберите заново."],
+ "Cavablara və izahlara bax":["Review answers and explanations","Посмотреть ответы и пояснения"],
+ "Komandanı əla tanıyırsan!":["You know your club brilliantly!","Ты отлично знаешь свою команду!"],
+ "Yaxşı nəticə!":["Well played!","Хороший результат!"],
+ "Növbəti testdə daha yaxşısı!":["Try for a better score next time!","В следующем тесте получится лучше!"]
+});
 function fanText(key,lang='az'){return FAN_COPY[key]?.[lang==='en'?0:lang==='ru'?1:-1]||arenaText(key,lang);}
 
 function fanEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -143,25 +159,60 @@ function bindFanLineup(data,settings,lang){
 }
 
 function bindFanQuiz(data,settings,lang){
- const box=document.querySelector('#fan-quiz');if(!box)return;const c=settings.quiz,t=s=>fanText(s,lang),e=fanEscape,params=new URLSearchParams(location.search);
- let team=c.allowTeamSelect&&data.league.teams.some(a=>a.id===params.get('team'))?params.get('team'):'',questions=[],index=0,score=0,answered=false;
- const teamOptions=()=>'<option value="">'+t('Bütün komandalar')+'</option>'+data.league.teams.map(a=>'<option value="'+e(a.id)+'"'+(team===a.id?' selected':'')+'>'+e(a.name)+'</option>').join('');
- const home=()=>{box.innerHTML=(c.allowTeamSelect?'<label>'+t('Komanda')+'<select id="fan-quiz-team">'+teamOptions()+'</select></label>':'')+'<button type="button" class="btn pri" data-fan-quiz-start>'+t('Başla')+'</button><p class="fz-muted">'+t('Cavabların serverdə saxlanmır.')+'</p>';};
+ const box=document.querySelector('#fan-quiz');if(!box)return;const t=s=>fanText(s,lang),e=fanEscape,params=new URLSearchParams(location.search),scope=pageScope();
+ let latest=data,currentSettings=settings,c=settings.quiz,team=c.allowTeamSelect&&data.league.teams.some(a=>a.id===params.get('team'))?params.get('team'):'',questions=[],index=0,score=0,answered=false,phase='idle',busy=false,controller,timer,updated=false,attemptClub;
+ const options=()=>'<option value="">'+t('Bütün komandalar')+'</option>'+latest.league.teams.map(a=>'<option value="'+e(a.id)+'"'+(team===a.id?' selected':'')+'>'+e(a.name)+'</option>').join('');
+ const club=()=>{const a=phase==='idle'?latest.league.teams.find(a=>a.id===team):attemptClub;return '<div class="fz-quiz-club"><img src="'+e(fanLogo(a))+'" alt="" width="64" height="64"><div><span class="fz-eyebrow">SSL · '+t('Viktorina')+'</span><strong>'+e(a?.name||t('Bütün komandalar'))+'</strong></div><span class="fz-quiz-badge">'+t('Aktual məlumatlar')+'</span></div>';};
+ const updateNote=()=>'<p class="fz-muted fz-quiz-update" data-quiz-update role="status" aria-live="polite">'+(updated?t('Liqa məlumatları yeniləndi. Yeni test ən son göstəricilərlə başlayacaq.'):'')+'</p>';
+ const source=q=>q.source?'<a class="fz-quiz-source" href="'+e(fanHref(q.source.href,lang))+'">'+e(q.source.label)+' ↗</a>':'';
+ const home=()=>{phase='idle';updated=false;box.innerHTML=club()+'<div class="fz-quiz-intro"><h2>'+t('Komandanı seç. Özünü yoxla.')+'</h2><p>'+t('Hər testdə fərqli mövzular, hər başlanğıcda ən son məlumatlar.')+'</p><div class="fz-quiz-topics">'+['identity','attack','players','recent','discipline'].map(k=>'<span>'+quizCategory(k,lang)+'</span>').join('')+'</div>'+(c.allowTeamSelect?'<label>'+t('Komanda')+'<select id="fan-quiz-team">'+options()+'</select></label>':'')+'<button type="button" class="btn pri" data-fan-quiz-start>'+t('Başla')+' · '+c.questionLimit+' '+t('Sual').toLocaleLowerCase(lang==='az'?'az':lang)+'</button><p class="fz-muted">'+t('Qol və kart suallarına canlı oyunların saxlanmış məlumatları da daxildir. Oyun və qələbə sayı tamamlanmış matçlardan hesablanır.')+'</p><small>'+t('Cavabların serverdə saxlanmır.')+'</small><p class="fz-feedback" role="status" aria-live="polite"></p></div>';};
  const draw=()=>{
   answered=false;
-  if(index>=questions.length){box.innerHTML='<span class="fz-eyebrow">'+t('Test tamamlandı')+'</span><h2 tabindex="-1">'+score+' / '+questions.length+'</h2><p>'+t('Düzgün cavablar')+'</p><div class="fz-lineup-actions"><button type="button" class="btn pri" data-fan-quiz-restart>'+t('Yenidən başla')+'</button><button type="button" class="btn sec" data-fan-quiz-home>'+t('Komandanı dəyiş')+'</button></div>';return;}
-  const q=questions[index];box.innerHTML='<div class="fz-quiz-progress"><span>'+t('Sual')+' '+(index+1)+' / '+questions.length+'</span><span>'+t('Düzgün cavablar')+': '+score+'</span></div><progress value="'+index+'" max="'+questions.length+'" aria-label="'+t('Sual')+'"></progress><h2 tabindex="-1">'+e(q.title)+'</h2><div class="fz-answers" role="group" aria-label="'+e(q.title)+'">'+q.choices.map((answer,i)=>'<button type="button" data-fan-answer="'+i+'"><b>'+String.fromCharCode(65+i)+'</b><span>'+e(answer)+'</span></button>').join('')+'</div><p class="fz-feedback" role="status" aria-live="polite"></p><button class="btn pri" type="button" data-fan-next hidden>'+t(index===questions.length-1?'Nəticəyə bax':'Növbəti sual')+'</button>';
+  if(index>=questions.length){phase='result';box.innerHTML=club()+'<div class="fz-quiz-result"><div class="fz-quiz-result-ring" style="--quiz-score:'+score/questions.length*100+'%"><strong>'+score+'<small>/ '+questions.length+'</small></strong></div><div><span class="fz-eyebrow">'+t('Test tamamlandı')+'</span><h2 tabindex="-1">'+t(score===questions.length?'Komandanı əla tanıyırsan!':score>=questions.length/2?'Yaxşı nəticə!':'Növbəti testdə daha yaxşısı!')+'</h2><p>'+t('Düzgün cavablar')+': '+score+' / '+questions.length+'</p></div></div><div class="fz-lineup-actions"><button type="button" class="btn pri" data-fan-quiz-restart>'+t('Yenidən başla')+'</button>'+(c.allowTeamSelect?'<button type="button" class="btn sec" data-fan-quiz-home>'+t('Komandanı dəyiş')+'</button>':'')+'</div><details class="fz-quiz-review"><summary>'+t('Cavablara və izahlara bax')+'</summary><ol>'+questions.map(q=>'<li><strong>'+e(q.title)+'</strong><p>'+t('Düzgün cavab')+': <b>'+e(q.choices[q.answer])+'</b></p>'+(q.note?'<small>'+e(q.note)+'</small>':'')+source(q)+'</li>').join('')+'</ol></details><p class="fz-feedback" role="status" aria-live="polite"></p>'+updateNote();return;}
+  phase='active';const q=questions[index];box.innerHTML=club()+'<div class="fz-quiz-progress"><span>'+t('Sual')+' '+(index+1)+' / '+questions.length+'</span><span data-quiz-score>'+t('Düzgün cavablar')+': '+score+'</span></div><progress value="'+index+'" max="'+questions.length+'" aria-label="'+t('Sual')+'"></progress><span class="fz-quiz-topic">'+quizCategory(q.category,lang)+'</span><h2 tabindex="-1">'+e(q.title)+'</h2><div class="fz-answers" role="group" aria-label="'+e(q.title)+'">'+q.choices.map((answer,i)=>'<button type="button" data-fan-answer="'+i+'"><b>'+String.fromCharCode(65+i)+'</b><span>'+e(answer)+'</span></button>').join('')+'</div><div class="fz-feedback" role="status" aria-live="polite"></div><button class="btn pri" type="button" data-fan-next hidden>'+t(index===questions.length-1?'Nəticəyə bax':'Növbəti sual')+'</button><small class="fz-quiz-snapshot">'+t('Bu test başladığı andakı məlumatlarla hesablanır.')+'</small>'+updateNote();
  };
- const start=()=>{questions=fanQuizQuestions(data.league,settings,team,lang);index=0;score=0;if(!questions.length){home();const p=document.createElement('p');p.setAttribute('role','status');p.textContent=t('Bu seçim üçün hələ sual yoxdur.');box.append(p);return;}draw();box.querySelector('h2').focus();};
- box.addEventListener('change',event=>{if(event.target.id==='fan-quiz-team')team=event.target.value;});
- box.addEventListener('click',event=>{
+ const start=async()=>{
+  if(busy)return;busy=true;box.setAttribute('aria-busy','true');for(const b of box.querySelectorAll('button,select'))b.disabled=true;
+  const feedback=box.querySelector('.fz-feedback');if(feedback)feedback.textContent=t('Məlumatlar yenilənir…');
+  try{
+   // Native editor previews intentionally use the current preview data, including
+   // unsaved organizer edits. Public attempts always read the no-store endpoint.
+   if(!document.body.dataset.previewPath){
+    controller=new AbortController();timer=setTimeout(()=>controller.abort(),8000);
+    const response=await fetch('/api/site-content',{cache:'no-store',credentials:'omit',signal:controller.signal});
+    if(!response.ok)throw Error('Quiz data unavailable');const snapshot=await response.json();
+    if(!Array.isArray(snapshot.data?.league?.teams)||!Array.isArray(snapshot.data?.league?.matches))throw Error('Invalid quiz data');
+    latest=snapshot.data;currentSettings=localizedFanZone(latest.cms?.fanZone,latest.locales,lang);c=currentSettings.quiz;
+   }
+   if(scope?.disposed||!box.isConnected)return;
+   if(!c.enabled){box.innerHTML='<p role="status">'+t('Bölmə hazırda bağlıdır.')+'</p>';return;}
+   if(!c.allowTeamSelect)team='';
+   if(team&&!latest.league.teams.some(a=>a.id===team)){team='';home();box.querySelector('.fz-feedback').textContent=t('Komanda siyahısı dəyişib. Yenidən seçim et.');return;}
+   questions=fanQuizQuestions(latest.league,currentSettings,team,lang);attemptClub=latest.league.teams.find(a=>a.id===team);index=0;score=0;updated=false;
+   if(!questions.length){home();box.querySelector('.fz-feedback').textContent=t('Bu seçim üçün hələ sual yoxdur.');return;}
+   draw();box.querySelector('h2').focus();
+  }catch(error){if(scope?.disposed||!box.isConnected)return;const el=box.querySelector('.fz-feedback');if(el)el.textContent=t('Ən son məlumatları almaq mümkün olmadı. Yenidən sına.');}
+  finally{clearTimeout(timer);busy=false;box.removeAttribute('aria-busy');if(phase!=='active')for(const b of box.querySelectorAll('button,select'))b.disabled=false;}
+ };
+ const bridge={receive(snapshot){
+  if(phase==='idle'||!box.isConnected||!snapshot?.data?.league)return false;
+  const fresh=localizedFanZone(snapshot.data.cms?.fanZone,snapshot.data.locales,lang);if(!fresh.quiz.enabled)return false;
+  latest=snapshot.data;currentSettings=fresh;c=fresh.quiz;updated=true;const note=box.querySelector('[data-quiz-update]');if(note)note.textContent=t('Liqa məlumatları yeniləndi. Yeni test ən son göstəricilərlə başlayacaq.');return true;
+ }};
+ window.SSL_FAN_QUIZ=bridge;
+ onPageCleanup(()=>{controller?.abort();clearTimeout(timer);if(window.SSL_FAN_QUIZ===bridge)delete window.SSL_FAN_QUIZ;});
+ pageListen(window,'ssl-match-live-change',()=>bridge.receive({data:window.CONTENT}));
+ pageListen(box,'change',event=>{if(event.target.id==='fan-quiz-team'){team=event.target.value;box.querySelector('.fz-quiz-club').outerHTML=club();}});
+ pageListen(box,'click',event=>{
+  if(busy)return;
   if(event.target.closest('[data-fan-quiz-start],[data-fan-quiz-restart]')){start();return;}
   if(event.target.closest('[data-fan-quiz-home]')){home();return;}
   if(event.target.closest('[data-fan-next]')&&answered){index++;draw();box.querySelector('h2').focus();return;}
   const b=event.target.closest('[data-fan-answer]');if(!b||answered||index>=questions.length)return;
   answered=true;const q=questions[index],choice=Number(b.dataset.fanAnswer);if(choice===q.answer)score++;
   for(const answer of box.querySelectorAll('[data-fan-answer]')){answer.disabled=true;answer.classList.toggle('is-correct',Number(answer.dataset.fanAnswer)===q.answer);answer.classList.toggle('is-wrong',answer===b&&choice!==q.answer);}
-  box.querySelector('.fz-feedback').textContent=t('Düzgün cavab')+': '+q.choices[q.answer]+(q.note?' — '+q.note:'');box.querySelector('[data-fan-next]').hidden=false;box.querySelector('progress').value=index+1;
+  box.querySelector('[data-quiz-score]').textContent=t('Düzgün cavablar')+': '+score;
+  box.querySelector('.fz-feedback').innerHTML='<p>'+t('Düzgün cavab')+': <b>'+e(q.choices[q.answer])+'</b>'+(q.note?' — '+e(q.note):'')+'</p>'+source(q);box.querySelector('[data-fan-next]').hidden=false;box.querySelector('progress').value=index+1;
  });home();
 }
 
@@ -184,7 +235,7 @@ function mountFanZone(previewPenalty){
  if(footer&&settings.showLinks&&!footer.querySelector('.fz-footer-links')){const nav=document.createElement('nav');nav.className='fz-footer-links';nav.setAttribute('aria-label',fanText('Azarkeş mərkəzi',lang));nav.innerHTML=Object.entries(FAN_PAGES).filter(([,id])=>settings[id].enabled).map(([url,id])=>'<a href="'+fanHref(url,lang)+'">'+fanEscape(fanText(settings[id].title,lang))+'</a>').join('');footer.append(nav);}
  pageListen(window,'ssl-preferences-reset',()=>{try{for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key?.startsWith('ssl.fan.'))localStorage.removeItem(key);}}catch{}});
 }
-export {fanText,fanEscape,renderFanLinks,renderFanPage,mountFanZone};
+export {fanText,fanEscape,renderFanLinks,renderFanPage,mountFanZone,bindFanQuiz};
 if(typeof window!=='undefined'&&typeof document!=='undefined'){if(document.readyState==='complete'){if(!window.SSL_SITE)mountFanZone();}else pageListen(document,'DOMContentLoaded',()=>{if(!window.SSL_SITE)mountFanZone();},{once:true});}
 
 if(typeof window!=='undefined')pageListen(window,'message',event=>{if(document.body.dataset.previewPath!=='/penalti-arenasi'||event.source!==parent||event.origin!==location.origin||event.data?.type!=='ssl-arena-preview')return;if(validateArenaFeatures({penalty:event.data.penalty}).length===0)mountFanZone(event.data.penalty);});

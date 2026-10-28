@@ -1,3 +1,5 @@
+import {automaticFanQuestions,diverseQuizQuestions} from './fan-quiz-model.js';
+export {automaticFanQuestions} from './fan-quiz-model.js';
 import {defaultFanExperiences,validateFanExperiences} from './fan-experience-model.js';
 import {ARENA_PAGES,defaultArenaFeatures,arenaSettings,validateArenaFeatures,publicArenaFeatures,arenaLocaleTargets} from './arena-model.js';
 // Final hub, lineup builder and team quiz. No league records are mutated.
@@ -103,23 +105,11 @@ export function shuffleFanItems(items,rng=Math.random){
  const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.min(i,Math.max(0,Math.floor(rng()*(i+1))));[a[i],a[j]]=[a[j],a[i]];}return a;
 }
 
-export function automaticFanQuestions(league,teamId='',lang='az'){
- const teams=league.teams||[],team=teams.find(t=>t.id===teamId),played=(league.matches||[]).filter(m=>m.status==='done'&&!m.qualificationPending&&(!team||m.home===team.id||m.away===team.id)),name=team?.name||'';
- const labels=lang==='en'?['How many clubs are in the league?','How many players are listed for '+name+'?','How many completed matches are recorded for '+name+'?','How many goals has '+name+' scored in completed matches?','What is the highest total score in a completed match involving '+name+'?','How many completed league matches are recorded?','How many goals were scored in completed league matches?','What is the highest total score in a completed league match?','Number of recorded wins for '+name+'?']:lang==='ru'?['Сколько команд участвует в лиге?','Сколько игроков в заявке '+name+'?','Сколько завершённых матчей записано у '+name+'?','Сколько голов забила команда '+name+'?','Сколько голов в самом результативном завершённом матче '+name+'?','Сколько завершённых матчей записано в лиге?','Сколько голов забито в завершённых матчах лиги?','Сколько голов в самом результативном матче лиги?','Сколько побед записано у '+name+'?']:['Liqada neçə komanda iştirak edir?',name+' heyətində neçə futbolçu qeyd olunub?',name+' üçün neçə tamamlanmış oyun qeyd olunub?',name+' tamamlanmış oyunlarda neçə qol vurub?',name+' komandasının ən məhsuldar bitmiş oyununda ümumilikdə neçə qol vurulub?','Liqada neçə tamamlanmış oyun qeyd olunub?','Liqanın tamamlanmış oyunlarında ümumilikdə neçə qol vurulub?','Liqanın ən məhsuldar bitmiş oyununda neçə qol vurulub?',name+' üçün neçə qələbə qeyd olunub?'];
- const numeric=(id,title,n)=>{const choices=[...new Set([n,Math.max(0,n-2),n+3,Math.max(0,n-1),n+1,n+4])].slice(0,4).map(String);return {id:'auto-'+id,team:teamId,title,choices,answer:0,note:'',published:true};};
- const result=[numeric('teams',labels[0],teams.length)];
- if(team){
-  result.push(numeric('roster',labels[1],(team.players||[]).length));
-  if(played.length)result.push(numeric('team-played',labels[2],played.length),numeric('team-goals',labels[3],played.reduce((n,m)=>n+(m.home===team.id?m.hs:m.as),0)),numeric('team-record',labels[4],Math.max(...played.map(m=>m.hs+m.as))),numeric('team-wins',labels[8],played.filter(m=>(m.home===team.id?m.hs:m.as)>(m.home===team.id?m.as:m.hs)).length));
- }else if(played.length)result.push(numeric('played',labels[5],played.length),numeric('goals',labels[6],played.reduce((n,m)=>n+m.hs+m.as,0)),numeric('record',labels[7],Math.max(...played.map(m=>m.hs+m.as))));
- return result;
-}
-
 export function fanQuizQuestions(league,value,teamId='',lang='az',rng=Math.random){
- const c=fanZoneSettings(value).quiz,teamExists=(league.teams||[]).some(t=>t.id===teamId),team=teamExists?teamId:'';
+ const c=fanZoneSettings(value).quiz;if(!c.enabled)return [];const teamExists=(league.teams||[]).some(t=>t.id===teamId),team=teamExists?teamId:'';
  let pool=c.questions.filter(q=>q.published&&(!q.team||q.team===team)).map(q=>({...q,choices:q.choices.slice()}));
  if(c.autoQuestions)pool=pool.concat(automaticFanQuestions(league,team,lang));
- if(c.shuffle)pool=shuffleFanItems(pool,rng);
+ if(c.shuffle)pool=diverseQuizQuestions(shuffleFanItems(pool,rng),c.questionLimit);
  return pool.slice(0,c.questionLimit).map(q=>{const order=shuffleFanItems(q.choices.map((_,i)=>i),rng);return {...q,choices:order.map(i=>q.choices[i]),answer:order.indexOf(q.answer)};});
 }
 

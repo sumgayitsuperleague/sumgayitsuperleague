@@ -52,7 +52,7 @@ export function installSiteNavigation(mount){
   finally{if(ticket===request){document.documentElement.classList.remove('site-navigating');document.querySelector('#app')?.removeAttribute('aria-busy');}}
  };
  const refreshLocal=()=>{const fields=[...document.querySelectorAll('#app input[id],#app select[id]')].filter(e=>!['file','password','checkbox','radio'].includes(e.type)).map(e=>[e.id,e.value]);const page=document.body.dataset.page,attributes=Object.fromEntries([...document.body.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])),scroll=[window.scrollX||0,window.scrollY||0];resetBody(page,attributes);render();for(const [id,value] of fields){const field=document.getElementById(id);if(field){field.value=value;field.dispatchEvent(new window.Event(field.tagName==='SELECT'?'change':'input',{bubbles:true}));}}scrollTo({left:scroll[0],top:scroll[1],behavior:'instant'});};
- const refresh=async()=>{const data=await snapshot();if(applyData(data))refreshLocal();return data;};
+ const refresh=async()=>{const data=await snapshot();if(applyData(data)&&!window.SSL_FAN_QUIZ?.receive(data))refreshLocal();return data;};
  window.SSL_SITE={enabled:false,navigate,refresh,refreshLocal};
  render();
  // The protected editor retains its own navigation and lifecycle.
