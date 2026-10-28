@@ -116,7 +116,7 @@ export function fanQuizQuestions(league,value,teamId='',lang='az',rng=Math.rando
 export function fanZoneTargets(value){
  const c=fanZoneSettings(value),rows=[];
  const add=(parent,property,key,label)=>{if(typeof parent[property]==='string'&&parent[property].trim())rows.push({parent,property,key,source:parent[property],label,group:'community'});};
- for(const [section,fields] of Object.entries({center:['title','description'],watch:['title','description','notice'],final:['title','description','archiveTitle','recap','linkLabel'],lineup:['title','description'],quiz:['title','description']}))for(const k of fields)add(c[section],k,'fanZone.'+section+'.'+k,section+' · '+k);
+ for(const [section,fields] of Object.entries({center:['title','description','identityTitle','identityDescription'],watch:['title','description','notice'],final:['title','description','archiveTitle','recap','linkLabel'],lineup:['title','description'],quiz:['title','description']}))for(const k of fields)add(c[section],k,'fanZone.'+section+'.'+k,section+' · '+k);
  for(const q of c.quiz.questions){for(const k of ['title','note'])add(q,k,'fanZone.question.'+q.id+'.'+k,'Test · '+q.title);q.choices.forEach((_,i)=>add(q.choices,i,'fanZone.question.'+q.id+'.choice.'+i,'Cavab · '+q.title));}
  rows.push(...arenaLocaleTargets(c));
  return {config:c,rows};

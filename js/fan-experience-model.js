@@ -1,6 +1,6 @@
 export const FAN_ACTIVITIES=Object.freeze(['penalty','lineup','watch','quiz','final']);
 export function defaultFanExperiences(){return {
- center:{title:'Azarkeş mərkəzi',description:'Meydana çıx. Altılığını qur. Liqanı yaşa.',featured:'penalty',order:[...FAN_ACTIVITIES],showPoll:false,showRoundStats:false,showSocial:true},
+ center:{title:'Azarkeş mərkəzi',description:'Meydana çıx. Altılığını qur. Liqanı yaşa.',featured:'penalty',order:[...FAN_ACTIVITIES],showPoll:false,showRoundStats:false,showSocial:true,showIdentity:true,identityTitle:'Komanda kimliyini yarat',identityDescription:'Sənin adın. Sənin rənglərin. Sənin komandan.'},
  watch:{enabled:true,title:'Birlikdə izlə',description:'Yayım, hesab və tribuna bir ekranda.',matchId:'',showArchive:true,showEvents:true,showReactions:true,showMatchPicker:true,allowFullscreen:true,allowRooms:true,allowChat:true,allowCustomVideo:false,notice:''}
 };}
 export function validateFanExperiences(value){
@@ -9,9 +9,10 @@ export function validateFanExperiences(value){
   const v=value[key];if(v===undefined)continue;
   if(!obj(v)||Object.keys(v).some(k=>!Object.hasOwn(d[key],k))){errors.push(key+': bölmənin quruluşu düzgün deyil.');continue;}
   check(text(v.title,160)&&v.title.trim()&&text(v.description,600),key+': başlıq və təqdimat düzgün deyil.');
-  for(const k of Object.keys(d[key]).filter(k=>typeof d[key][k]==='boolean'))check(typeof v[k]==='boolean'||['allowRooms','allowChat','allowCustomVideo'].includes(k)&&v[k]===undefined,key+': görünmə ayarı düzgün deyil.');
+  for(const k of Object.keys(d[key]).filter(k=>typeof d[key][k]==='boolean'))check(typeof v[k]==='boolean'||['allowRooms','allowChat','allowCustomVideo','showIdentity'].includes(k)&&v[k]===undefined,key+': görünmə ayarı düzgün deyil.');
  }
  const c=value.center;if(obj(c))check((FAN_ACTIVITIES.includes(c.featured)||c.featured==='hall')&&Array.isArray(c.order)&&c.order.length>=FAN_ACTIVITIES.length&&c.order.length<=FAN_ACTIVITIES.length+1&&new Set(c.order).size===c.order.length&&new Set(c.order.filter(k=>k!=='hall')).size===FAN_ACTIVITIES.length&&c.order.every(k=>k==='hall'||FAN_ACTIVITIES.includes(k)),'Azarkeş mərkəzinin əsas oyunu və sırası düzgün deyil.');
+ if(obj(c))for(const [key,max] of [['identityTitle',160],['identityDescription',600]])check(c[key]===undefined||text(c[key],max),'Azarkeş studiyasının mətni düzgün deyil.');
  const w=value.watch;if(obj(w))check((w.matchId===''||id(w.matchId))&&text(w.notice,600),'Yayım otağının oyunu və qeydi düzgün deyil.');
  return errors;
 }

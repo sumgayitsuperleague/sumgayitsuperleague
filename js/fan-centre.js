@@ -1,3 +1,4 @@
+import {bindFanIdentity} from './fan-identity.js';
 import {renderFanCenter} from './fan-experience.js';
 import {fanZoneSettings} from './fan-zone-model.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
@@ -31,6 +32,7 @@ export function installFanCentre(ctx){
 }
 
 export function bindFanCentre(ctx){
+ bindFanIdentity({league:ctx.L,site:ctx.S,cms:ctx.CMS},UI.LANG);
  pageListen(document,'click',e=>{const b=e.target.closest('[data-instagram-load]');if(!b)return;const p=ctx.CMS.community.posts.find(p=>p.published&&p.id===b.dataset.instagramLoad),url=instagramEmbedURL(p?.url);if(!url)return;const host=b.closest('[data-social-card]').querySelector('[data-embed-host]');if(!host.hidden){host.hidden=true;host.replaceChildren();b.textContent=UI.t('Paylaşımı burada aç')+' ↗';return;}const frame=document.createElement('iframe');frame.src=url;frame.title=p.title;frame.loading='lazy';frame.referrerPolicy='no-referrer';frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');host.replaceChildren(frame);host.hidden=false;b.textContent=UI.t('Paylaşımı bağla')+' ×';});
  const box=ctx.$('#fan-poll-options');if(!box||typeof fetch!=='function')return;let poll,busy=false;
  const draw=()=>{box.setAttribute('aria-busy','false');if(!poll.enabled){box.innerHTML='<p>'+UI.t('Hazırda aktiv səsvermə yoxdur.')+'</p>';return;}box.innerHTML=poll.choices.map(option=>{const m=ctx.M.find(m=>m.id===option.match);if(!m)return '';return `<button type="button" class="poll-choice ${poll.selected===m.id?'selected':''}" data-poll-match="${m.id}"${poll.selected||busy?' disabled':''} aria-pressed="${poll.selected===m.id}"><span class="poll-choice-fill" style="width:${option.percentage}%"></span><span class="poll-match-label">${ctx.ball(m.home,'xs')}<b>${ctx.esc(ctx.T[m.home].code)} ${m.hs}:${m.as} ${ctx.esc(ctx.T[m.away].code)}</b>${ctx.ball(m.away,'xs')}</span><strong>${option.percentage}%</strong></button>`;}).join('');ctx.$('#fan-poll-total').textContent=UI.t('Səs sayı')+': '+poll.total;if(poll.selected)ctx.$('#fan-poll-status').textContent=UI.t('Seçimin qeydə alınıb.');UI.enhanceRoot(box);};
