@@ -76,5 +76,10 @@ export function bindFanIdentity(data,lang='az'){
  });
  pageListen(window,'ssl-preferences-reset',()=>{try{localStorage.removeItem(IDENTITY_STORAGE);}catch{}generation++;state=normalizeIdentity({},teams);syncFields();draw();});
  onPageCleanup(()=>{disposed=true;controller?.abort();for(const url of urls)URL.revokeObjectURL(url);urls.clear();logos.clear();});
- syncFields();draw();if(location.hash.startsWith('#kimlik')||params.has('club')){details.open=true;if(location.hash.startsWith('#kimlik'))pageFrame(()=>{if(alive())root.scrollIntoView({block:'start',behavior:'instant'});});}
+ const openFromLocation=()=>{
+  if(!alive()||!location.hash.startsWith('#kimlik'))return;
+  if(!busy){const current=new URLSearchParams(location.search);if(location.hash.startsWith('#kimlik?'))for(const [key,value] of new URLSearchParams(location.hash.slice(8)))current.set(key,value);state=identityFromParams(current,teams,state);syncFields();draw();}
+  details.open=true;pageFrame(()=>{if(alive())root.scrollIntoView({block:'start',behavior:'instant'});});
+ };
+ pageListen(window,'hashchange',openFromLocation);syncFields();draw();if(location.hash.startsWith('#kimlik'))openFromLocation();else if(params.has('club'))details.open=true;
 }
