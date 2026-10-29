@@ -1,28 +1,21 @@
-// A closed two-sided cloth surface, shared by the GPU and software renderers.
-export function fanClothMesh(kind,alpha,{columns=24,rows=kind==='scarf'?8:30}={}){
- const scarf=kind==='scarf',width=scarf?6.2:3.8,height=scarf?1.22:4.78,points=[],faces=[],cells=new Set(),stride=columns+1;
- const sample=(u,v)=>typeof alpha==='function'?alpha(Math.max(0,Math.min(1,u)),Math.max(0,Math.min(1,v))):255;
- for(let j=0;j<rows;j++)for(let i=0;i<columns;i++)if(sample((i+.5)/columns,(j+.5)/rows)>12||[sample(i/columns,j/rows),sample((i+1)/columns,j/rows),sample(i/columns,(j+1)/rows),sample((i+1)/columns,(j+1)/rows)].some(v=>v>100))cells.add(j*columns+i);
- const boundary=new Set();
- for(const cell of cells){const i=cell%columns,j=Math.floor(cell/columns),a=j*stride+i,b=a+1,c=a+stride,d=c+1;if(i===0||!cells.has(cell-1)){boundary.add(a);boundary.add(c);}if(i===columns-1||!cells.has(cell+1)){boundary.add(b);boundary.add(d);}if(j===0||!cells.has(cell-columns)){boundary.add(a);boundary.add(b);}if(j===rows-1||!cells.has(cell+columns)){boundary.add(c);boundary.add(d);}}
- const edgeUV=(u,v,index)=>{if(!boundary.has(index)||sample(u,v)>130)return [u,v];for(let step=1;step<=22;step++){const radius=step*.0035;for(let ray=0;ray<24;ray++){const direction=ray*Math.PI/12,x=u+Math.cos(direction)*radius,y=v+Math.sin(direction)*radius;if(x>=0&&x<=1&&y>=0&&y<=1&&sample(x,y)>150)return [x,y];}}return [u,v];};
- const surfaceUV=Array.from({length:stride*(rows+1)},(_,index)=>edgeUV((index%stride)/columns,Math.floor(index/stride)/rows,index));
- const shape=(u,v,back)=>{
-  let x=(u-.5)*width,y=(.5-v)*height,z;
-  if(scarf)z=.18*Math.sin(u*Math.PI*2.2)+.055*Math.sin(u*17+v*3)+(v-.5)*.2*Math.sin(u*7)+(back?-.022:.022);
-  else{const radial=Math.sqrt(Math.max(0,1-((u-.51)/.34)**2)),sleeve=v<.44&&Math.abs(u-.5)>.29,depth=sleeve?.105+.035*Math.sin(v*15):.075+.18*radial,wave=.018*Math.sin(u*39+v*19)+.013*Math.cos(v*71+u*9);z=(back?-1:1)*(depth+wave);x+=.018*Math.sin(v*19)*(u-.5);}
-  return {x,y,z,u:back?1-u:u,v};
- };
- for(let side=0;side<2;side++)for(let j=0;j<=rows;j++)for(let i=0;i<=columns;i++)points.push(shape(...surfaceUV[j*stride+i],side===1));
- const count=stride*(rows+1),add=(a,b,c,side)=>faces.push({a,b,c,side});
- for(const cell of cells){const i=cell%columns,j=Math.floor(cell/columns),a=j*stride+i,b=a+1,c=a+stride,d=c+1;add(a,c,b,0);add(b,c,d,0);add(a+count,b+count,c+count,1);add(b+count,d+count,c+count,1);
-  const edges=[];if(i===0||!cells.has(cell-1))edges.push([c,a]);if(i===columns-1||!cells.has(cell+1))edges.push([b,d]);if(j===0||!cells.has(cell-columns))edges.push([a,b]);if(j===rows-1||!cells.has(cell+columns))edges.push([d,c]);
-  for(const [v,w] of edges){add(v,w,v+count,2);add(w,w+count,v+count,2);}
- }
- return {points,faces,width,height,columns,rows};
+// Calibrated UV render data: every angle comes from the same real sewn 3D garment.
+export const STUDIO_FRAME_COUNT=48;
+export const STUDIO_ROOT='/assets/fan-studio/v3/';
+export const studioWrapAngle=value=>((Number(value)||0)%360+360)%360;
+export function studioFrameBlend(angle,count=STUDIO_FRAME_COUNT){const position=studioWrapAngle(angle)/360*count,lower=Math.floor(position);return {lower:lower%count,upper:(lower+1)%count,mix:position-lower};}
+export function studioDecodeUV(r,g,b){return [(r*16+(b>>>4))/4095,(g*16+(b&15))/4095];}
+export const STUDIO_LINEAR=Float32Array.from({length:256},(_,i)=>(i/255)**2.2);
+export const STUDIO_DISPLAY=Uint8ClampedArray.from({length:8193},(_,i)=>Math.round(Math.min(1,i/4096)**(1/2.2)*255));
+export function studioShadeChannel(value,diffuse,specular,scale=2){const linear=STUDIO_LINEAR[value]*STUDIO_LINEAR[diffuse]*scale+STUDIO_LINEAR[specular]*scale;return STUDIO_DISPLAY[Math.min(8192,Math.max(0,Math.round(linear*4096)))];}
+export function studioCompileFrame(uv,light,width,height,textureWidth=2048,textureHeight=1024){
+ if(!(uv instanceof Uint8ClampedArray)||!(light instanceof Uint8ClampedArray)||uv.length!==width*height*4||light.length!==uv.length)throw Error('Invalid studio surface data');
+ let count=0;for(let i=3;i<uv.length;i+=4)if(uv[i])count++;
+ const pixels=new Uint32Array(count),texels=new Uint32Array(count),diffuse=new Uint8Array(count),specular=new Uint8Array(count),alpha=new Uint8Array(count),weightX=new Uint8Array(count),weightY=new Uint8Array(count);let at=0;
+ for(let i=0;i<uv.length;i+=4){if(!uv[i+3])continue;let ref=i;if(uv[i+3]<245){const x=(i/4)%width,y=Math.floor(i/4/width);let found=false;for(let radius=1;radius<=2&&!found;radius++)for(const [dx,dy] of [[-radius,0],[radius,0],[0,-radius],[0,radius],[-radius,-radius],[radius,radius]]){const xx=x+dx,yy=y+dy;if(xx<0||xx>=width||yy<0||yy>=height)continue;const n=(yy*width+xx)*4;if(uv[n+3]>=250){ref=n;found=true;break;}}}const [u,v]=studioDecodeUV(uv[ref],uv[ref+1],uv[ref+2]),x=Math.min(textureWidth-1.001,Math.max(0,u*(textureWidth-1))),y=Math.min(textureHeight-1.001,Math.max(0,(1-v)*(textureHeight-1)));pixels[at]=i;texels[at]=(Math.floor(y)*textureWidth+Math.floor(x))*4;weightX[at]=Math.round((x%1)*255);weightY[at]=Math.round((y%1)*255);diffuse[at]=light[i];specular[at]=light[i+1];alpha[at]=uv[i+3];at++;}
+ return {width,height,textureWidth,pixels,texels,diffuse,specular,alpha,weightX,weightY};
 }
-export function fanProject(point,{angle=0,pitch=0,zoom=1,width=640,height=480,kind='kit'}={}){
- const c=Math.cos(angle),s=Math.sin(angle),cp=Math.cos(pitch),sp=Math.sin(pitch),x=point.x*c+point.z*s,z0=-point.x*s+point.z*c,y=point.y*cp-z0*sp,z=point.y*sp+z0*cp;
- const focal=8.5/(8.5-z),scale=Math.min(width/(kind==='scarf'?7.2:4.8),height/(kind==='scarf'?2.5:5.6))*zoom;
- return {x:width/2+x*scale*focal,y:height/2-y*scale*focal,z,u:point.u,v:point.v};
+export function studioPaintPixels(frame,texture){
+ const out=new Uint8ClampedArray(frame.width*frame.height*4),linear=STUDIO_LINEAR,display=STUDIO_DISPLAY;
+ for(let n=0;n<frame.pixels.length;n++){const index=frame.pixels[n],texel=frame.texels[n],below=texel+frame.textureWidth*4,wx=frame.weightX[n]/255,wy=frame.weightY[n]/255,d=linear[frame.diffuse[n]]*2,s=linear[frame.specular[n]]*2;for(let c=0;c<3;c++)out[index+c]=display[Math.min(8192,Math.round((((linear[texture[texel+c]]*(1-wx)+linear[texture[texel+4+c]]*wx)*(1-wy)+(linear[texture[below+c]]*(1-wx)+linear[texture[below+4+c]]*wx)*wy)*d+s)*4096))];out[index+3]=frame.alpha[n];}
+ return out;
 }

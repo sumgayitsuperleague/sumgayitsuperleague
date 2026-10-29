@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "created": "2026-10-29",
+  "method": "48 Cycles-lit views per sewn garment; lossless 12-bit UV maps and separate neutral diffuse/specular lighting, dynamically recoloured in linear space",
+  "jersey": {
+    "source": "https://www.innerscene.com/tools/library/3d-parts/soccer-player-standing-3d-person-team-sports-f55b1b4f",
+    "license": "CC0",
+    "input": "/assets/arena/footballer-pro.glb",
+    "changes": "Isolated Jersey, welded mesh, mannequin-supported cloth relaxation, real thickness, open neck and sleeves, stitched boundary piping, new UV atlas and lighting"
+  },
+  "scarf": {
+    "source": "Original procedural mesh and woven material by SSL",
+    "details": "Two readable sides, physical drape and 96 individual fringe strands"
+  },
+  "font": {
+    "family": "Oswald Bold",
+    "license": "SIL Open Font License 1.1",
+    "source": "https://github.com/google/fonts/tree/main/ofl/oswald",
+    "licenseFile": "/assets/fonts/oswald-license.txt"
+  },
+  "logos": "Original league and club marks remain unchanged",
+  "runtime": "Self-hosted calibrated UV material renderer; four views per atlas, bounded image and frame caches. No WebGL required. Not a live cloth simulation.",
+  "artwork": "Original composition and vector typography, with optional existing locally hosted generated stadium background.",
+  "regeneration": "ssl-secure-admin/scripts/fan-studio/README.md"
+}
