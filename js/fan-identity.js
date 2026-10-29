@@ -123,7 +123,7 @@ export function bindFanIdentity(data,lang='az'){
   const enabled=product==='wallpaper'||product==='avatar',box=root.querySelector('.fi-compositions');box.hidden=!enabled;root.querySelector('[data-fi-garment-options]').hidden=enabled;
   if(enabled){const key=product==='avatar'?'avatar':'poster',choices=key==='avatar'?IDENTITY_AVATARS:IDENTITY_POSTERS;root.querySelector('.fi-composition-buttons').innerHTML=choices.map(c=>`<button type="button" data-fi-composition="${c}" aria-pressed="${state[key]===c}">${t(c)}</button>`).join('');}
  }
- const loadStudio=()=>runtimePromise||=(import(new URL(document.body.dataset.previewPath?'/fan-studio-runtime.js?v=20261029atelier5':'/js/fan-studio-runtime.js?v=20261029atelier5',location.origin).href).catch(error=>{runtimePromise=null;throw error;}));
+ const loadStudio=()=>runtimePromise||=(import(new URL(document.body.dataset.previewPath?'/fan-studio-runtime.js?v=20261029atelier6':'/js/fan-studio-runtime.js?v=20261029atelier6',location.origin).href).catch(error=>{runtimePromise=null;throw error;}));
  const fontData=()=>{
   const path=IDENTITY_ASSETS.font;if(logos.has(path))return logos.get(path);
   const promise=(async()=>{controller||=new AbortController();const response=await fetch(path,{credentials:'same-origin',cache:'force-cache',signal:controller.signal});if(!response.ok)throw Error('Display font unavailable');const data=await response.arrayBuffer(),blob=new Blob([data],{type:'font/woff'});return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>{fontURI=reader.result;resolve(fontURI);};reader.onerror=()=>reject(Error('Display font unreadable'));reader.readAsDataURL(blob);});})();logos.set(path,promise);promise.catch(()=>logos.delete(path));return promise;
