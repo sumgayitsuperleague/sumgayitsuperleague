@@ -1,0 +1,16 @@
+{
+  "version": 4,
+  "created": "2026-10-29",
+  "model": {
+    "source": "https://github.com/FrancescoCastaldi/mini-jersey-studio",
+    "path": "models/shirt.glb",
+    "original_git_blob": "9c7609eddfd597a70cb708f96bc19841766b3488",
+    "license": "MIT",
+    "notice": "mini-jersey-license.txt",
+    "adaptation": "Original sewn mesh and baked knit/AO maps retained. Separate front/back print UV0, original material UV1, classified seam swatches and per-vertex AO. 19,517 triangles."
+  },
+  "renderer": "Self-hosted Three.js PBR renderer; same mesh with perspective-correct rasterization when WebGL is unavailable. No remote rendering service.",
+  "scarf": "Original two-sided draped mesh with woven edge and individually modelled fringes.",
+  "cover": "Rendered from the same garment with original SSL artwork.",
+  "reference": "Studio Innate apparel photography and hanger presentation; no Studio Innate source assets are distributed."
+}
