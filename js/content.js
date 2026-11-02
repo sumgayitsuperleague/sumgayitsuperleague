@@ -4,7 +4,7 @@ window.CONTENT={
   "league": {
     "season": "2026",
     "name": "Sumqayıt Super Liqası",
-    "updated": "2026-10-13",
+    "updated": "2026-11-02",
     "teams": [
       {
         "id": "agt",
@@ -413,7 +413,7 @@ window.CONTENT={
         "code": "KMN",
         "name": "Komando Sumqayıt",
         "logo": "komando.png",
-        "color": "#a3aecb",
+        "color": "#000000",
         "group": "A",
         "coach": "Sənan Mirzəyev",
         "players": [
@@ -824,7 +824,7 @@ window.CONTENT={
             "t": "agt"
           },
           {
-            "p": "Müğdət İbrahimli",
+            "p": "İbrahimli Muğdət",
             "t": "agt"
           },
           {
@@ -981,7 +981,7 @@ window.CONTENT={
         ],
         "cards": [
           {
-            "p": "İmaməli Nağıyev",
+            "p": "Nağlıyev İmaməli",
             "t": "fvs",
             "c": "y"
           },
@@ -1077,7 +1077,7 @@ window.CONTENT={
             "t": "siy"
           },
           {
-            "p": "Hacbala Mayılov",
+            "p": "Mayılov Hacıbala",
             "t": "siy"
           },
           {
@@ -1193,7 +1193,7 @@ window.CONTENT={
             "t": "gb"
           },
           {
-            "p": "Məhmməd Nəsibov",
+            "p": "Nəsibov Məhəmməd",
             "t": "gb"
           },
           {
@@ -1299,7 +1299,7 @@ window.CONTENT={
             "t": "kmn"
           },
           {
-            "p": "İsmayıl Hüseynli",
+            "p": "Hüseyni İsmayıl",
             "t": "kmn"
           },
           {
@@ -1399,7 +1399,7 @@ window.CONTENT={
             "c": "y"
           },
           {
-            "p": "İmaməli Nağıyev",
+            "p": "Nağlıyev İmaməli",
             "t": "fvs",
             "c": "r"
           }
@@ -1525,7 +1525,7 @@ window.CONTENT={
       {
         "id": "r4-siy-gb",
         "round": 4,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-09-27",
         "time": "14:00",
         "home": "siy",
@@ -1588,7 +1588,7 @@ window.CONTENT={
       {
         "id": "r4-omn-agt",
         "round": 4,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-09-27",
         "time": "15:00",
         "home": "omn",
@@ -1619,7 +1619,7 @@ window.CONTENT={
             "t": "agt"
           },
           {
-            "p": "Müğdət İbrahimli",
+            "p": "İbrahimli Muğdət",
             "t": "agt"
           },
           {
@@ -1652,7 +1652,7 @@ window.CONTENT={
       {
         "id": "r4-kmn-qrt",
         "round": 4,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-09-27",
         "time": "16:00",
         "home": "kmn",
@@ -1713,7 +1713,7 @@ window.CONTENT={
       {
         "id": "r4-ert-fvs",
         "round": 4,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-09-27",
         "time": "17:00",
         "home": "ert",
@@ -1763,7 +1763,7 @@ window.CONTENT={
       {
         "id": "r5-qrt-siy",
         "round": 5,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-04",
         "time": "14:00",
         "home": "qrt",
@@ -1823,7 +1823,7 @@ window.CONTENT={
       {
         "id": "r5-agt-ert",
         "round": 5,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-04",
         "time": "15:00",
         "home": "agt",
@@ -1877,7 +1877,7 @@ window.CONTENT={
       {
         "id": "r5-kmn-gb",
         "round": 5,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-04",
         "time": "16:00",
         "home": "kmn",
@@ -1915,13 +1915,13 @@ window.CONTENT={
             "c": "y"
           },
           {
-            "p": "Məhmməd Nəsibov",
+            "p": "Nəsibov Məhəmməd",
             "t": "gb",
             "c": "y"
           }
         ],
         "mvp": {
-          "p": "Məhmməd Nəsibov",
+          "p": "Nəsibov Məhəmməd",
           "t": "gb"
         },
         "stage": "group"
@@ -1929,7 +1929,7 @@ window.CONTENT={
       {
         "id": "r5-omn-fvs",
         "round": 5,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-04",
         "time": "17:00",
         "home": "omn",
@@ -1952,7 +1952,7 @@ window.CONTENT={
             "t": "fvs"
           },
           {
-            "p": "Kənan Tanriverdiyev",
+            "p": "Tanrıverdiyev Kənan",
             "t": "fvs"
           },
           {
@@ -1977,7 +1977,7 @@ window.CONTENT={
       {
         "id": "r6-siy-kmn",
         "round": 6,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-11",
         "time": "14:00",
         "home": "siy",
@@ -2011,7 +2011,7 @@ window.CONTENT={
       {
         "id": "r6-ert-omn",
         "round": 6,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-11",
         "time": "15:00",
         "home": "ert",
@@ -2085,7 +2085,7 @@ window.CONTENT={
       {
         "id": "r6-qrt-gb",
         "round": 6,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-11",
         "time": "16:00",
         "home": "qrt",
@@ -2145,7 +2145,7 @@ window.CONTENT={
       {
         "id": "r6-agt-fvs",
         "round": 6,
-        "leg": "2-ci dövr (səfər)",
+        "leg": "2-ci dövr ",
         "date": "2026-10-11",
         "time": "17:00",
         "home": "agt",
@@ -2187,6 +2187,186 @@ window.CONTENT={
         ],
         "mvp": null,
         "stage": "group"
+      },
+      {
+        "id": "match-494b0066",
+        "round": 7,
+        "date": "2026-10-18",
+        "time": "21:00",
+        "venue": "Azfar",
+        "leg": "",
+        "home": "fvs",
+        "away": "gb",
+        "status": "done",
+        "hs": 1,
+        "as": 6,
+        "goals": [
+          {
+            "t": "gb",
+            "p": "Bayramov Nurlan"
+          },
+          {
+            "t": "gb",
+            "p": "Nəsibov Məhəmməd"
+          },
+          {
+            "t": "gb",
+            "p": "Nəsibov Məhəmməd"
+          },
+          {
+            "t": "gb",
+            "p": "Əmirov Mirzə"
+          },
+          {
+            "t": "gb",
+            "p": "Bayramov Nurlan"
+          },
+          {
+            "t": "fvs",
+            "p": "Pirmuradov Səxavət"
+          },
+          {
+            "t": "gb",
+            "p": "Nəbiyev Vüsal"
+          }
+        ],
+        "cards": [
+          {
+            "t": "fvs",
+            "p": "Abbaszadə Emil",
+            "c": "y"
+          },
+          {
+            "t": "gb",
+            "p": "Alıyev Məhəmməd",
+            "c": "y"
+          }
+        ],
+        "mvp": {
+          "t": "gb",
+          "p": "Nəsibov Məhəmməd"
+        },
+        "stage": "semifinal",
+        "streamUrl": "https://www.youtube.com/watch?v=SUj7XRATSsc"
+      },
+      {
+        "id": "match-efc72a57",
+        "round": 7,
+        "date": "2026-10-18",
+        "time": "20:00",
+        "venue": "Azfar",
+        "leg": "",
+        "home": "siy",
+        "away": "agt",
+        "status": "done",
+        "hs": 1,
+        "as": 2,
+        "goals": [
+          {
+            "p": "İbrahimli Muğdət",
+            "t": "agt"
+          },
+          {
+            "p": "Abbasov Fərid",
+            "t": "agt"
+          },
+          {
+            "p": "Ələsgərov Rövşən",
+            "t": "siy"
+          }
+        ],
+        "cards": [
+          {
+            "p": "İbrahimli Muğdət",
+            "t": "agt",
+            "c": "y"
+          },
+          {
+            "p": "Əmrahov Qüvvət",
+            "t": "siy",
+            "c": "y"
+          },
+          {
+            "p": "Qafarlı Ədalət",
+            "t": "agt",
+            "c": "r"
+          }
+        ],
+        "mvp": null,
+        "stage": "semifinal",
+        "clock": {
+          "period": 1,
+          "state": "paused",
+          "elapsed": 0,
+          "startedAt": null,
+          "periodMinutes": 25,
+          "extraMinutes": 10
+        },
+        "streamUrl": "https://www.youtube.com/watch?v=4SV-8_OTWiI"
+      },
+      {
+        "id": "auto-final",
+        "stage": "final",
+        "round": 7,
+        "leg": "Final",
+        "date": "2026-11-01",
+        "time": "20:00",
+        "home": "agt",
+        "away": "gb",
+        "hs": 2,
+        "as": 2,
+        "venue": "Azfar",
+        "status": "done",
+        "goals": [],
+        "cards": [],
+        "mvp": null,
+        "sourceSemifinals": [
+          "match-efc72a57",
+          "match-494b0066"
+        ],
+        "streamUrl": "",
+        "clock": {
+          "period": 1,
+          "state": "paused",
+          "elapsed": 0,
+          "startedAt": null,
+          "periodMinutes": 25,
+          "extraMinutes": 10
+        },
+        "penalties": {
+          "home": 3,
+          "away": 2
+        }
+      },
+      {
+        "id": "auto-third-place",
+        "stage": "third-place",
+        "round": 7,
+        "leg": "3-cü yer uğrunda",
+        "date": "2026-11-01",
+        "time": "18:00",
+        "home": "siy",
+        "away": "fvs",
+        "hs": 3,
+        "as": 6,
+        "venue": "Azfar",
+        "status": "done",
+        "goals": [],
+        "cards": [],
+        "mvp": null,
+        "sourceSemifinals": [
+          "match-efc72a57",
+          "match-494b0066"
+        ],
+        "streamUrl": "",
+        "clock": {
+          "period": 1,
+          "state": "paused",
+          "elapsed": 0,
+          "startedAt": null,
+          "periodMinutes": 25,
+          "extraMinutes": 10
+        }
       }
     ],
     "rules": [
@@ -2202,7 +2382,7 @@ window.CONTENT={
       "Püşk"
     ],
     "competition": {
-      "phase": "semifinal",
+      "phase": "completed",
       "qualified": [
         "siy",
         "gb",
@@ -2228,6 +2408,21 @@ window.CONTENT={
     "adminUrl": ""
   },
   "news": [
+    {
+      "id": "ssl-final-preview-20261024",
+      "title": "Final öncəsi: Agrotam və Gənclərbirliyinin keçdiyi yol",
+      "text": "26 oktyabr 2026 tarixinə liqada 26 oyun tamamlanıb, yekun hesablarda 171 qol qeydə alınıb. Qrup mərhələsinə 24 oyun və 161 qol, iki yarımfinala isə 10 qol düşür. Qrup cədvəli yalnız qrup nəticələrini, mövsüm statistikası isə bütün tamamlanmış oyunları əhatə edir.\n\nHəlledici gün\nFinal, Agrotam — Gənclərbirliyi: 2026 M11 1 · 20:00.\nÜçüncülük, Siyəzən — Five Star: 2026 M11 1 · 18:00. Saatlar Bakı vaxtı ilə göstərilir. Ən son təqvim və yayım keçidləri matç səhifələrindədir.\n\nFinalçıların yolu\nAgrotam yarımfinalda Siyəzəni 2:1 məğlub edərək finala çıxıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 21 vurulan və 19 buraxılan qolu var.\nGənclərbirliyi digər yarımfinalda Five Star üzərində 6:1 hesablı qələbə qazanıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 32 vurulan və 22 buraxılan qolu qeydə alınıb.\n\nFive Star — Gənclərbirliyi: təsdiqlənmiş protokol\nNurlan Bayramov və Məhəmməd Nəsibov hərəyə iki, Mirzə Əmirov və Vüsal Nəbiyev hərəyə bir qol vurub. Five Starın qolunu Səxavət Pirmuradov vurub. Emil Abbaszadə və Məhəmməd Alıyev sarı kart alıb. Matçın ən yaxşı oyunçusu Məhəmməd Nəsibov seçilib.\n\nLiqanı necə izləməli?\nNəticələr, bombardirlər və fərdi profillər eyni oyun protokollarından hesablanır. Avtoqollar komandanın hesabına daxil edilir, fərdi bombardir göstəricisinə əlavə olunmur. SSL TV-də 26 tam oyun yazısı toplanıb; mövcud yayımları “Birlikdə izlə” bölməsində saytdan izləmək mümkündür. Bu icmal 26 oktyabrdakı qeydləri əks etdirir; sonrakı yeniliklər üçün matç səhifələrinə baxın.",
+      "date": "2026-10-26",
+      "published": true,
+      "category": "Liqa təhlili",
+      "source": "Sumqayıt Super Liqası",
+      "mark": "SSL",
+      "image": "/assets/editorial/news-league-launch.webp",
+      "url": "",
+      "match": "auto-final",
+      "imageFit": "cover",
+      "imagePosition": "center"
+    },
     {
       "id": "ssl-season-2026",
       "title": "2026: Sumqayıtın ilk mini futbol mövsümü",
@@ -2377,7 +2572,8 @@ window.CONTENT={
       "match": "r2-gb-kmn",
       "youtubeId": "t6RGvwkVQ8c",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-aboi8qdbi3g",
@@ -2391,7 +2587,8 @@ window.CONTENT={
       "match": "r2-fvs-omn",
       "youtubeId": "aBOI8QDbI3g",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-19ogliih29a",
@@ -2405,7 +2602,8 @@ window.CONTENT={
       "match": "r2-siy-qrt",
       "youtubeId": "19oGliiH29A",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-4d_xgcaimzm",
@@ -2419,7 +2617,8 @@ window.CONTENT={
       "match": "r1-gb-siy",
       "youtubeId": "4d_xGCaiMZM",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-hg-tgg9c93o",
@@ -2433,7 +2632,8 @@ window.CONTENT={
       "match": "r1-fvs-ert",
       "youtubeId": "Hg-Tgg9C93o",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt--ojtureyjjs",
@@ -2447,7 +2647,8 @@ window.CONTENT={
       "match": "r1-qrt-kmn",
       "youtubeId": "-OJTUREYjJs",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-tljnompwuio",
@@ -2461,7 +2662,8 @@ window.CONTENT={
       "match": "r1-agt-omn",
       "youtubeId": "TLjNoMpWUio",
       "kind": "highlights",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-yrqwbgr8x50",
@@ -2643,7 +2845,8 @@ window.CONTENT={
       "match": "",
       "youtubeId": "SFaDeVTb8JY",
       "kind": "program",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-fqnmslf6hgi",
@@ -2783,7 +2986,8 @@ window.CONTENT={
       "match": "",
       "youtubeId": "Ut7bNNi0ozk",
       "kind": "program",
-      "coverMode": "poster"
+      "coverMode": "youtube",
+      "image": ""
     },
     {
       "id": "yt-qec4b-ncy2a",
@@ -2868,6 +3072,50 @@ window.CONTENT={
       "youtubeId": "6RT9AiaTTgM",
       "kind": "shorts",
       "coverMode": "poster"
+    },
+    {
+      "id": "launch-match-494b0066",
+      "title": "Five Star — Gənclərbirliyi",
+      "date": "2026-10-18",
+      "text": "Yarımfinalın tam oyun yayımı.",
+      "url": "https://www.youtube.com/watch?v=SUj7XRATSsc",
+      "published": true,
+      "home": "fvs",
+      "away": "gb",
+      "match": "match-494b0066",
+      "youtubeId": "SUj7XRATSsc",
+      "kind": "match",
+      "coverMode": "poster",
+      "image": ""
+    },
+    {
+      "id": "launch-match-efc72a57",
+      "title": "Siyəzən — Agrotam",
+      "date": "2026-10-18",
+      "text": "Yarımfinalın tam oyun yayımı.",
+      "url": "https://www.youtube.com/watch?v=4SV-8_OTWiI",
+      "published": true,
+      "home": "siy",
+      "away": "agt",
+      "match": "match-efc72a57",
+      "youtubeId": "4SV-8_OTWiI",
+      "kind": "match",
+      "coverMode": "poster"
+    },
+    {
+      "id": "videos-1d0cff00",
+      "title": "Sumqayıt Super Liqası | FİNALA DOĞRU | Müzakirə",
+      "date": "2026-10-24",
+      "text": "Sumqayıt Super Liqasında final həyəcanı! 🏆\n\nBu canlı yayımda mini futbol liqasının ən aktual mövzularını, komandaların çıxışını, yarımfinal mübarizəsini və final öncəsi gözləntiləri müzakirə edəcəyik.\n\n🎙️ Futbol söhbətləri, maraqlı fikirlər və finala gedən yol haqqında geniş müzakirə!\n\n🔴 Canlı yayımı izləməyi, bəyənməyi və kanala abunə olmağı unutmayın!\n\n📌 Mövzu: Sumqayıt Super Liqası\n🎬 Veriliş: Finala Doğru | Müzakirə\n\n#SumqayitSuperLiqası #FinalaDoğru #MiniFutbol #Futbol #CanlıYayım",
+      "url": "https://www.youtube.com/watch?v=dI1OypqOdpE",
+      "published": true,
+      "home": "",
+      "away": "",
+      "match": "",
+      "youtubeId": "dI1OypqOdpE",
+      "kind": "program",
+      "coverMode": "youtube",
+      "image": ""
     }
   ],
   "about": {
@@ -2886,7 +3134,7 @@ window.CONTENT={
       "announcement": "",
       "announcementUrl": "",
       "layout": "league",
-      "featuredNews": "ssl-round6-2026",
+      "featuredNews": "ssl-final-preview-20261024",
       "leadType": "news",
       "featuredMatch": "",
       "featuredTitle": "Növbəti oyun",
@@ -2943,13 +3191,148 @@ window.CONTENT={
         },
         {
           "id": "pulse",
-          "visible": false
+          "visible": true
         },
         {
           "id": "fixtures",
           "visible": false
         }
       ]
+    },
+    "venue": {
+      "enabled": true,
+      "showHome": true,
+      "showMatches": true,
+      "showFinal": true,
+      "title": "Stadiona gəliş üçün xəritə",
+      "name": "Azfar Arena · Sumqayıt",
+      "address": "Bulvar küçəsi, 56, Sumqayıt",
+      "description": "Oyunlarımız Sumqayıt Bulvarı ərazisindəki Azfar stadionunda keçirilir.",
+      "mapUrl": "https://yandex.com/maps/org/179395234808/",
+      "destination": "HMWM+C2M, Sumqayıt, Azərbaycan",
+      "latitude": 40.5960875,
+      "longitude": 49.6825469,
+      "entryInfo": "",
+      "travelInfo": ""
+    },
+    "fanZone": {
+      "version": 1,
+      "showLinks": true,
+      "championship": {
+        "enabled": true,
+        "title": "Komandam necə çempion olar?",
+        "description": "Hesabları dəyiş. Qrupları yenidən sırala. Komandanı kuboka apar.",
+        "allowShare": true
+      },
+      "penalty": {
+        "enabled": true,
+        "showOnHome": true,
+        "title": "Penalti arenası",
+        "description": "Komandanı seç. SSL Kubokunu və Liqanı fəth et.",
+        "difficulty": "normal",
+        "defaultMode": "cup",
+        "allowPractice": false,
+        "allowSound": true,
+        "allowReplay": true,
+        "allowDuel": false,
+        "allowCup": true,
+        "allowLeague": true,
+        "showSponsors": true,
+        "sponsorMotion": true,
+        "defaultTeam": "",
+        "defaultOpponent": "",
+        "duelRounds": 5
+      },
+      "timeline": {
+        "enabled": false,
+        "showOnHome": false,
+        "title": "Mövsümün zaman tuneli",
+        "description": "İlk fitdən finala. Bu mövsümün hekayəsini birlikdə yenidən yaşa.",
+        "autoMatches": true,
+        "cover": "/assets/editorial/ig-pitch.jpg",
+        "items": [],
+        "hiddenChapters": []
+      },
+      "center": {
+        "title": "Azarkeş mərkəzi",
+        "description": "Meydana çıx. Altılığını qur. Liqanı yaşa.",
+        "featured": "penalty",
+        "order": [
+          "penalty",
+          "lineup",
+          "watch",
+          "quiz",
+          "final"
+        ],
+        "showPoll": false,
+        "showRoundStats": false,
+        "showSocial": true,
+        "showIdentity": true,
+        "identityTitle": "Komanda kimliyini yarat",
+        "identityDescription": "Sənin adın. Sənin rənglərin. Sənin komandan."
+      },
+      "watch": {
+        "enabled": true,
+        "title": "Birlikdə izlə",
+        "description": "Yayım, hesab və tribuna bir ekranda.",
+        "matchId": "",
+        "showArchive": true,
+        "showEvents": true,
+        "showReactions": true,
+        "showMatchPicker": true,
+        "allowFullscreen": true,
+        "allowRooms": true,
+        "allowChat": true,
+        "allowCustomVideo": false,
+        "notice": ""
+      },
+      "final": {
+        "enabled": true,
+        "showOnHome": true,
+        "title": "Final mərkəzi",
+        "description": "",
+        "archiveTitle": "Mövsümün finalı",
+        "recap": "1 noyabr 2026: Agrotam Sumqayıt Super Liqasının çempionu oldu. Gənclərbirliyi ilə final 2:2 hesabı ilə bitdi; penalti seriyasında Agrotam 3:2 qalib gəldi. Gənclərbirliyi mövsümü ikinci yerdə tamamladı. Üçüncülük oyununda Five Star Siyəzəni 6:3 hesabı ilə məğlub etdi. Penalti seriyasının qolları mövsümün qol statistikasına daxil edilmir.",
+        "cover": "",
+        "trophy": "/assets/editorial/ssl-trophy-2026.webp",
+        "state": "auto",
+        "matchId": "auto-final",
+        "thirdPlaceId": "auto-third-place",
+        "championTeam": "agt",
+        "showCountdown": true,
+        "showJourney": true,
+        "showStats": true,
+        "showThirdPlace": true,
+        "showSponsors": false,
+        "linkLabel": "",
+        "linkUrl": ""
+      },
+      "lineup": {
+        "enabled": true,
+        "title": "Öz ideal altılığını qur",
+        "description": "Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.",
+        "defaultFormation": "1-3-1",
+        "formations": [
+          "1-3-1",
+          "2-2-1",
+          "2-1-2"
+        ],
+        "allowedTeams": [],
+        "hiddenPlayers": [],
+        "strictGoalkeeper": true,
+        "allowShare": true,
+        "allowDownload": true
+      },
+      "quiz": {
+        "enabled": true,
+        "title": "Komandanı nə qədər tanıyırsan?",
+        "description": "Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.",
+        "autoQuestions": true,
+        "questionLimit": 5,
+        "shuffle": true,
+        "allowTeamSelect": true,
+        "questions": []
+      }
     },
     "stadium": {
       "version": 3,
@@ -2981,10 +3364,10 @@ window.CONTENT={
         "depth": true,
         "carousel": true,
         "autoplay": false,
-        "interval": 6
+        "interval": 7
       },
       "music": {
-        "enabled": false,
+        "enabled": true,
         "autoplay": true,
         "shuffle": true,
         "volume": 25,
@@ -2994,48 +3377,48 @@ window.CONTENT={
             "title": "Shakira · Waka Waka",
             "preset": "meydan",
             "source": "url",
-            "url": "",
-            "enabled": false
+            "url": "/assets/audio/track-ab4de6c089e6ad76fb9dd85bbf5695d76b7d6e3a5e9ac97a30f1695d08f9105c.mp3",
+            "enabled": true
           },
           {
             "id": "wavin-flag",
             "title": "K’NAAN · Wavin’ Flag",
             "preset": "meydan",
             "source": "url",
-            "url": "",
-            "enabled": false
+            "url": "/assets/audio/track-c3782353b75765e257f252211fc5539d7757d03e872417f3f4631db1d704040a.mp3",
+            "enabled": true
           },
           {
             "id": "la-la-la",
             "title": "Shakira · La La La (Brazil 2014)",
             "preset": "meydan",
             "source": "url",
-            "url": "",
-            "enabled": false
+            "url": "/assets/audio/track-30cb54300dea3c2341857634f08ec56b212e11aadf6597b14a1d6deb3f5e58a6.mp3",
+            "enabled": true
           },
           {
             "id": "we-are-one",
             "title": "Pitbull · We Are One (Ole Ola)",
             "preset": "meydan",
             "source": "url",
-            "url": "",
-            "enabled": false
+            "url": "/assets/audio/track-6a250ef75cb37f95781bd85d30ee64af63ada7745a25318b4ddadad7c645ae03.mp3",
+            "enabled": true
           },
           {
             "id": "hayya-hayya",
             "title": "Trinidad Cardona, Davido & Aisha · Hayya Hayya",
             "preset": "meydan",
             "source": "url",
-            "url": "",
-            "enabled": false
+            "url": "/assets/audio/track-0882cd5d239b8b2eefdd0b895dbde3010f9c8cb557eae67c66643916548951c5.mp3",
+            "enabled": true
           },
           {
             "id": "dreamers",
             "title": "Jung Kook & Fahad Al Kubaisi · Dreamers",
             "preset": "meydan",
             "source": "url",
-            "url": "",
-            "enabled": false
+            "url": "/assets/audio/track-9f29145626820ec94b8aa5689d81d7e4eb3a42a605f0ddbdf3b3261d4473dd1b.mp3",
+            "enabled": true
           }
         ]
       },
@@ -3308,8 +3691,175 @@ window.CONTENT={
       ]
     },
     "editor": {
-      "labels": [],
-      "styles": [],
+      "labels": [
+        {
+          "id": "text-58920f4d",
+          "source": "2-ci dövr (səfər)",
+          "az": "2-ci dövr ",
+          "en": "Return fixtures",
+          "ru": "Второй круг",
+          "scope": "*"
+        },
+        {
+          "id": "text-c4b3449c",
+          "source": "7-ci tur",
+          "az": "YARIM FİNAL",
+          "en": "semifinal",
+          "ru": "полуфинал",
+          "scope": "*"
+        },
+        {
+          "id": "text-366cdb04",
+          "source": "Digər videolar →",
+          "az": "Digər videolar →",
+          "en": "Other videos →",
+          "ru": "Другие видео →",
+          "scope": "*"
+        },
+        {
+          "id": "text-ee3bd518",
+          "source": "6-CI TUR · 2-ci dövr",
+          "az": "6-CI TUR · 2-ci dövr",
+          "en": "Round 6 · 2nd stage",
+          "ru": "6-й тур · 2-й этап",
+          "scope": "*"
+        },
+        {
+          "id": "text-1a9ed4dd",
+          "source": "5-Cİ TUR · 2-ci dövr",
+          "az": "5-Cİ TUR · 2-ci dövr",
+          "en": "Round 5 · 2nd stage\n",
+          "ru": "5-й тур · 2-й этап",
+          "scope": "*"
+        },
+        {
+          "id": "text-3b05c1f0",
+          "source": "Məxfilik",
+          "az": "",
+          "en": "Privacy",
+          "ru": "Конфиденциальность",
+          "scope": "*"
+        },
+        {
+          "id": "text-c690850d",
+          "source": "Kukilər və seçimlər",
+          "az": "",
+          "en": "Cookies and preferences",
+          "ru": "Файлы cookie и настройки",
+          "scope": "*"
+        },
+        {
+          "id": "text-d7a5ecb5",
+          "source": "Redaksiya prinsipləri",
+          "az": "",
+          "en": "Editorial principles",
+          "ru": "Редакционные принципы",
+          "scope": "*"
+        },
+        {
+          "id": "text-ea46ca66",
+          "source": "Meydandan görüntülər",
+          "az": "Müsahibələr",
+          "en": "From the pitch",
+          "ru": "На поле",
+          "scope": "*"
+        },
+        {
+          "id": "text-982e8cc4",
+          "source": "MEDIA",
+          "az": "MEDIA",
+          "en": "MEDIA",
+          "ru": "Медиа ",
+          "scope": "*"
+        },
+        {
+          "id": "text-bcbf193a",
+          "source": "Final, Agrotam — Gənclərbirliyi: 2026 M11 1 · 20:00.",
+          "az": "Final, Agrotam — Gənclərbirliyi: 2026  1 noyabr · 20:00.",
+          "en": "",
+          "ru": "",
+          "scope": "*"
+        },
+        {
+          "id": "text-febe7955",
+          "source": "Üçüncülük, Siyəzən — Five Star: 2026 M11 1 · 18:00. Saatlar Bakı vaxtı ilə göstərilir. Ən son təqvim və yayım keçidləri matç səhifələrindədir.",
+          "az": "Üçüncülük, Siyəzən — Five Star:2026  1 noyabr · 18:00. Saatlar Bakı vaxtı ilə göstərilir. Ən son təqvim və yayım keçidləri matç səhifələrindədir.",
+          "en": "",
+          "ru": "",
+          "scope": "*"
+        },
+        {
+          "id": "text-de99beb8",
+          "source": "Five Star — Gənclərbirliyi: təsdiqlənmiş protokol",
+          "az": "Five Star — Gənclərbirliyi: ",
+          "en": "",
+          "ru": "",
+          "scope": "*"
+        },
+        {
+          "id": "text-fed5a048",
+          "source": "Nəticələr, bombardirlər və fərdi profillər eyni oyun protokollarından hesablanır. Avtoqollar komandanın hesabına daxil edilir, fərdi bombardir göstəricisinə əlavə olunmur. SSL TV-də 26 tam oyun yazısı toplanıb; mövcud yayımları “Birlikdə izlə” bölməsində saytdan izləmək mümkündür. Bu icmal 26 oktyabrdakı qeydləri əks etdirir; sonrakı yeniliklər üçün matç səhifələrinə baxın.",
+          "az": " SSL TV-də 26 tam oyun yazısı toplanıb; mövcud yayımları “Birlikdə izlə” bölməsində saytdan izləmək mümkündür. Bu icmal 26 oktyabrdakı qeydləri əks etdirir; sonrakı yeniliklər üçün matç səhifələrinə baxın.",
+          "en": "",
+          "ru": "",
+          "scope": "*"
+        }
+      ],
+      "styles": [
+        {
+          "id": "style-33a119f5",
+          "selector": "div.roster-stat:nth-of-type(1) \u003e span:nth-of-type(1)",
+          "page": "/futbolcular",
+          "viewport": "all",
+          "css": {
+            "color": "#ffffff",
+            "backgroundColor": "#1c44be"
+          },
+          "attrs": {}
+        },
+        {
+          "id": "style-2444db30",
+          "selector": "div.roster-stat:nth-of-type(1) \u003e span:nth-of-type(2)",
+          "page": "/futbolcular",
+          "viewport": "all",
+          "css": {
+            "color": "#ffffff",
+            "backgroundColor": "#1c44be"
+          },
+          "attrs": {}
+        },
+        {
+          "id": "style-a6e19947",
+          "selector": "span:nth-of-type(2) \u003e small",
+          "page": "/futbolcular",
+          "viewport": "all",
+          "css": {
+            "color": "#ffffff"
+          },
+          "attrs": {}
+        },
+        {
+          "id": "style-61947618",
+          "selector": "div.roster-stat:nth-of-type(1) \u003e span:nth-of-type(1) \u003e small",
+          "page": "/futbolcular",
+          "viewport": "all",
+          "css": {
+            "color": "#f0f0f0"
+          },
+          "attrs": {}
+        },
+        {
+          "id": "style-93b2ecf6",
+          "selector": "a.btn",
+          "page": "/komanda",
+          "viewport": "all",
+          "css": {
+            "color": "#ffffff",
+            "backgroundColor": "#2255aa"
+          },
+          "attrs": {}
+        }
+      ],
       "layouts": []
     },
     "about": {
@@ -3394,8 +3944,7 @@ window.CONTENT={
       "image": "",
       "googleVerification": "",
       "alternateNames": [
-        "Sumgayit Super League",
-        "Сумгаитская Суперлига"
+        "Sumqayıt Super Liqası"
       ]
     },
     "navigation": [
@@ -3477,6 +4026,11 @@ window.CONTENT={
       {
         "id": "sponsors",
         "label": "Sponsorlar",
+        "visible": true
+      },
+      {
+        "id": "watch",
+        "label": "Birlikdə izlə",
         "visible": true
       }
     ],
@@ -3999,6 +4553,11 @@ window.CONTENT={
         "text": "ЛИГА"
       },
       {
+        "key": "news.ssl-season-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
+      },
+      {
         "key": "news.ssl-round6-2026.title",
         "source": "VI tur: dörd qarşılaşmada 28 qol",
         "text": "VI тур: 28 голов в четырёх матчах"
@@ -4012,6 +4571,11 @@ window.CONTENT={
         "key": "news.ssl-round6-2026.category",
         "source": "TUR İCMALI",
         "text": "ОБЗОР ТУРА"
+      },
+      {
+        "key": "news.ssl-round6-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
       },
       {
         "key": "news.ssl-scorers-2026.title",
@@ -4029,6 +4593,11 @@ window.CONTENT={
         "text": "СТАТИСТИКА"
       },
       {
+        "key": "news.ssl-scorers-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
+      },
+      {
         "key": "news.ssl-tv-2026.title",
         "source": "SSL TV: mövsümün oyunları bir arxivdə",
         "text": "SSL TV: матчи сезона в одном архиве"
@@ -4042,6 +4611,11 @@ window.CONTENT={
         "key": "news.ssl-tv-2026.category",
         "source": "MEDIA",
         "text": "МЕДИА"
+      },
+      {
+        "key": "news.ssl-tv-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
       },
       {
         "key": "news.tur3.title",
@@ -4364,26 +4938,6 @@ window.CONTENT={
         "text": "Жребий"
       },
       {
-        "key": "news.ssl-season-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
-        "key": "news.ssl-round6-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
-        "key": "news.ssl-scorers-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
-        "key": "news.ssl-tv-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
         "key": "site.hero",
         "source": "Oyunlar, nəticələr və turnir cədvəli.",
         "text": "Матчи, результаты и турнирная таблица."
@@ -4544,16 +5098,6 @@ window.CONTENT={
         "text": "Публикация нашего официального аккаунта Instagram."
       },
       {
-        "key": "cms.home.featuredTitle",
-        "source": "Növbəti oyun",
-        "text": "Следующий матч"
-      },
-      {
-        "key": "home.matchCenter.title",
-        "source": "Matç mərkəzi",
-        "text": "Матч-центр"
-      },
-      {
         "key": "aboutBlocks.league-purpose-title.text",
         "source": "Yarış haqqında",
         "text": "О соревновании"
@@ -4567,11 +5111,6 @@ window.CONTENT={
         "key": "aboutBlocks.league-community-title.text",
         "source": "Oyundan sonra da davam edir.",
         "text": "После финального свистка."
-      },
-      {
-        "key": "community.featured.title",
-        "source": "Turun oyunu",
-        "text": "Матч тура"
       },
       {
         "key": "cms.about.subtitle",
@@ -4807,6 +5346,121 @@ window.CONTENT={
         "key": "sponsors.partner-sfc-volunteers.alt",
         "source": "Sumqayıt FK Könüllüləri",
         "text": "Волонтёры ФК «Сумгаит»"
+      },
+      {
+        "key": "home.matchCenter.title",
+        "source": "Matç mərkəzi",
+        "text": "Матч-центр"
+      },
+      {
+        "key": "cms.home.featuredTitle",
+        "source": "Növbəti oyun",
+        "text": "Следующий матч"
+      },
+      {
+        "key": "community.featured.title",
+        "source": "Turun oyunu",
+        "text": "Матч тура"
+      },
+      {
+        "key": "site.tagline",
+        "source": "Minifutbol",
+        "text": "Мини-футбол"
+      },
+      {
+        "key": "fanZone.center.title",
+        "source": "Azarkeş mərkəzi",
+        "text": "Центр болельщиков"
+      },
+      {
+        "key": "fanZone.center.description",
+        "source": "Meydana çıx. Altılığını qur. Liqanı yaşa.",
+        "text": "Выходи на поле. Собери шестёрку. Живи лигой."
+      },
+      {
+        "key": "fanZone.watch.title",
+        "source": "Birlikdə izlə",
+        "text": "Смотрим вместе"
+      },
+      {
+        "key": "fanZone.watch.description",
+        "source": "Yayım, hesab və tribuna bir ekranda.",
+        "text": "Трансляция, счёт и болельщики на одном экране."
+      },
+      {
+        "key": "fanZone.final.title",
+        "source": "Final mərkəzi",
+        "text": "Центр финала"
+      },
+      {
+        "key": "fanZone.final.archiveTitle",
+        "source": "Mövsümün finalı",
+        "text": "Финал сезона"
+      },
+      {
+        "key": "fanZone.lineup.title",
+        "source": "Öz ideal altılığını qur",
+        "text": "Собери свою шестёрку"
+      },
+      {
+        "key": "fanZone.lineup.description",
+        "source": "Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.",
+        "text": "Выбери одного вратаря и пять полевых игроков."
+      },
+      {
+        "key": "fanZone.quiz.title",
+        "source": "Komandanı nə qədər tanıyırsan?",
+        "text": "Насколько хорошо ты знаешь свою команду?"
+      },
+      {
+        "key": "fanZone.quiz.description",
+        "source": "Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.",
+        "text": "Выбери команду и отвечай на вопросы по реальным данным лиги."
+      },
+      {
+        "key": "fanZone.penalty.title",
+        "source": "Penalti arenası",
+        "text": "Арена пенальти"
+      },
+      {
+        "key": "fanZone.penalty.description",
+        "source": "Komandanı seç. SSL Kubokunu və Liqanı fəth et.",
+        "text": "Выбери клуб. Сыграй за Кубок SSL и титул лиги."
+      },
+      {
+        "key": "stadium.broadcast.label",
+        "source": "YouTube-da canlı izlə",
+        "text": "Смотреть в прямом эфире на YouTube"
+      },
+      {
+        "key": "navigation.sponsors",
+        "source": "Sponsorlar",
+        "text": "Спонсоры"
+      },
+      {
+        "key": "navigation.watch",
+        "source": "Birlikdə izlə",
+        "text": "Смотрим вместе"
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.title",
+        "source": "Final öncəsi: Agrotam və Gənclərbirliyinin keçdiyi yol",
+        "text": "Перед финалом: путь Agrotam и Gənclərbirliyi"
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.text",
+        "source": "26 oktyabr 2026 tarixinə liqada 26 oyun tamamlanıb, yekun hesablarda 171 qol qeydə alınıb. Qrup mərhələsinə 24 oyun və 161 qol, iki yarımfinala isə 10 qol düşür. Qrup cədvəli yalnız qrup nəticələrini, mövsüm statistikası isə bütün tamamlanmış oyunları əhatə edir.\n\nHəlledici gün\nFinal, Agrotam — Gənclərbirliyi: 2026 M11 1 · 20:00.\nÜçüncülük, Siyəzən — Five Star: 2026 M11 1 · 18:00. Saatlar Bakı vaxtı ilə göstərilir. Ən son təqvim və yayım keçidləri matç səhifələrindədir.\n\nFinalçıların yolu\nAgrotam yarımfinalda Siyəzəni 2:1 məğlub edərək finala çıxıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 21 vurulan və 19 buraxılan qolu var.\nGənclərbirliyi digər yarımfinalda Five Star üzərində 6:1 hesablı qələbə qazanıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 32 vurulan və 22 buraxılan qolu qeydə alınıb.\n\nFive Star — Gənclərbirliyi: təsdiqlənmiş protokol\nNurlan Bayramov və Məhəmməd Nəsibov hərəyə iki, Mirzə Əmirov və Vüsal Nəbiyev hərəyə bir qol vurub. Five Starın qolunu Səxavət Pirmuradov vurub. Emil Abbaszadə və Məhəmməd Alıyev sarı kart alıb. Matçın ən yaxşı oyunçusu Məhəmməd Nəsibov seçilib.\n\nLiqanı necə izləməli?\nNəticələr, bombardirlər və fərdi profillər eyni oyun protokollarından hesablanır. Avtoqollar komandanın hesabına daxil edilir, fərdi bombardir göstəricisinə əlavə olunmur. SSL TV-də 26 tam oyun yazısı toplanıb; mövcud yayımları “Birlikdə izlə” bölməsində saytdan izləmək mümkündür. Bu icmal 26 oktyabrdakı qeydləri əks etdirir; sonrakı yeniliklər üçün matç səhifələrinə baxın.",
+        "text": "По состоянию на 26 октября 2026 года в лиге завершены 26 матчей, по итоговым счетам забит 171 гол. На групповой этап приходятся 24 матча и 161 гол; два полуфинала добавили 10 голов. Групповая таблица учитывает только групповые матчи, статистика сезона — все завершённые встречи.\n\nРешающий день\nФинал Agrotam — Gənclərbirliyi: 1 ноября 2026 г. · 20:00.\nЗа третье место, Siyəzən — Five Star: 1 ноября 2026 г. · 18:00. Указано бакинское время. Актуальное расписание и ссылки на трансляции доступны на страницах матчей.\n\nПуть финалистов\nAgrotam вышел в финал после победы над Siyəzən 2:1. В 7 завершённых матчах команда одержала 5 побед, забила 21 и пропустила 19 голов.\nGənclərbirliyi выиграл у Five Star 6:1. В 7 завершённых матчах у команды 5 побед, 32 забитых и 22 пропущенных голов.\n\nПодтверждённый протокол Five Star — Gənclərbirliyi\nNurlan Bayramov и Məhəmməd Nəsibov забили по два гола, Mirzə Əmirov и Vüsal Nəbiyev — по одному. Гол Five Star записан на Səxavət Pirmuradov. Жёлтые карточки получили Emil Abbaszadə и Məhəmməd Alıyev. Лучшим игроком выбран Məhəmməd Nəsibov.\n\nКак следить за лигой\nРезультаты, бомбардиры и профили игроков рассчитываются по одним протоколам матчей. Автоголы входят в командный счёт, но не в личные показатели бомбардиров. В SSL TV собраны 26 полных записей; доступные трансляции можно смотреть на сайте в разделе «Смотрим вместе». Обзор отражает данные на 26 октября; дальнейшие обновления доступны на страницах матчей."
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.category",
+        "source": "Liqa təhlili",
+        "text": "Анализ лиги"
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Сумгаитская Суперлига"
       }
     ],
     "en": [
@@ -4961,6 +5615,11 @@ window.CONTENT={
         "text": "LEAGUE"
       },
       {
+        "key": "news.ssl-season-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
+      },
+      {
         "key": "news.ssl-round6-2026.title",
         "source": "VI tur: dörd qarşılaşmada 28 qol",
         "text": "Matchweek VI: 28 goals in four matches"
@@ -4974,6 +5633,11 @@ window.CONTENT={
         "key": "news.ssl-round6-2026.category",
         "source": "TUR İCMALI",
         "text": "MATCHWEEK REPORT"
+      },
+      {
+        "key": "news.ssl-round6-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
       },
       {
         "key": "news.ssl-scorers-2026.title",
@@ -4991,6 +5655,11 @@ window.CONTENT={
         "text": "STATISTICS"
       },
       {
+        "key": "news.ssl-scorers-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
+      },
+      {
         "key": "news.ssl-tv-2026.title",
         "source": "SSL TV: mövsümün oyunları bir arxivdə",
         "text": "SSL TV: the season’s matches in one archive"
@@ -5004,6 +5673,11 @@ window.CONTENT={
         "key": "news.ssl-tv-2026.category",
         "source": "MEDIA",
         "text": "MEDIA"
+      },
+      {
+        "key": "news.ssl-tv-2026.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası"
       },
       {
         "key": "news.tur3.title",
@@ -5326,26 +6000,6 @@ window.CONTENT={
         "text": "Drawing of lots"
       },
       {
-        "key": "news.ssl-season-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
-        "key": "news.ssl-round6-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
-        "key": "news.ssl-scorers-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
-        "key": "news.ssl-tv-2026.source",
-        "source": "Sumqayıt Super Liqası",
-        "text": "Sumqayıt Super Liqası"
-      },
-      {
         "key": "site.hero",
         "source": "Oyunlar, nəticələr və turnir cədvəli.",
         "text": "Fixtures, results and standings."
@@ -5506,16 +6160,6 @@ window.CONTENT={
         "text": "A post from our official Instagram account."
       },
       {
-        "key": "cms.home.featuredTitle",
-        "source": "Növbəti oyun",
-        "text": "Next match"
-      },
-      {
-        "key": "home.matchCenter.title",
-        "source": "Matç mərkəzi",
-        "text": "Match centre"
-      },
-      {
         "key": "aboutBlocks.league-purpose-title.text",
         "source": "Yarış haqqında",
         "text": "About the competition"
@@ -5529,11 +6173,6 @@ window.CONTENT={
         "key": "aboutBlocks.league-community-title.text",
         "source": "Oyundan sonra da davam edir.",
         "text": "Beyond the final whistle."
-      },
-      {
-        "key": "community.featured.title",
-        "source": "Turun oyunu",
-        "text": "Match of the week"
       },
       {
         "key": "cms.about.subtitle",
@@ -5769,6 +6408,121 @@ window.CONTENT={
         "key": "sponsors.partner-sfc-volunteers.alt",
         "source": "Sumqayıt FK Könüllüləri",
         "text": "Sumqayıt FK Volunteers"
+      },
+      {
+        "key": "home.matchCenter.title",
+        "source": "Matç mərkəzi",
+        "text": "Match centre"
+      },
+      {
+        "key": "cms.home.featuredTitle",
+        "source": "Növbəti oyun",
+        "text": "Next match"
+      },
+      {
+        "key": "community.featured.title",
+        "source": "Turun oyunu",
+        "text": "Match of the week"
+      },
+      {
+        "key": "site.tagline",
+        "source": "Minifutbol",
+        "text": "Minifootball"
+      },
+      {
+        "key": "fanZone.center.title",
+        "source": "Azarkeş mərkəzi",
+        "text": "Fan centre"
+      },
+      {
+        "key": "fanZone.center.description",
+        "source": "Meydana çıx. Altılığını qur. Liqanı yaşa.",
+        "text": "Take the pitch. Build your six. Live the league."
+      },
+      {
+        "key": "fanZone.watch.title",
+        "source": "Birlikdə izlə",
+        "text": "Watch together"
+      },
+      {
+        "key": "fanZone.watch.description",
+        "source": "Yayım, hesab və tribuna bir ekranda.",
+        "text": "Broadcast, score and fans on one screen."
+      },
+      {
+        "key": "fanZone.final.title",
+        "source": "Final mərkəzi",
+        "text": "Final centre"
+      },
+      {
+        "key": "fanZone.final.archiveTitle",
+        "source": "Mövsümün finalı",
+        "text": "Season final"
+      },
+      {
+        "key": "fanZone.lineup.title",
+        "source": "Öz ideal altılığını qur",
+        "text": "Build your ideal six"
+      },
+      {
+        "key": "fanZone.lineup.description",
+        "source": "Heyətlərdən bir qapıçı və beş meydan oyunçusu seç.",
+        "text": "Choose one goalkeeper and five outfield players from the squads."
+      },
+      {
+        "key": "fanZone.quiz.title",
+        "source": "Komandanı nə qədər tanıyırsan?",
+        "text": "How well do you know your club?"
+      },
+      {
+        "key": "fanZone.quiz.description",
+        "source": "Komandanı seç və liqanın həqiqi məlumatlarına əsaslanan sualları cavablandır.",
+        "text": "Choose a club and answer questions based on real league records."
+      },
+      {
+        "key": "fanZone.penalty.title",
+        "source": "Penalti arenası",
+        "text": "Penalty arena"
+      },
+      {
+        "key": "fanZone.penalty.description",
+        "source": "Komandanı seç. SSL Kubokunu və Liqanı fəth et.",
+        "text": "Choose your club. Compete for the SSL Cup and the league."
+      },
+      {
+        "key": "stadium.broadcast.label",
+        "source": "YouTube-da canlı izlə",
+        "text": "Watch live on YouTube"
+      },
+      {
+        "key": "navigation.sponsors",
+        "source": "Sponsorlar",
+        "text": "Sponsors"
+      },
+      {
+        "key": "navigation.watch",
+        "source": "Birlikdə izlə",
+        "text": "Watch together"
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.title",
+        "source": "Final öncəsi: Agrotam və Gənclərbirliyinin keçdiyi yol",
+        "text": "Before the final: the route taken by Agrotam and Gənclərbirliyi"
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.text",
+        "source": "26 oktyabr 2026 tarixinə liqada 26 oyun tamamlanıb, yekun hesablarda 171 qol qeydə alınıb. Qrup mərhələsinə 24 oyun və 161 qol, iki yarımfinala isə 10 qol düşür. Qrup cədvəli yalnız qrup nəticələrini, mövsüm statistikası isə bütün tamamlanmış oyunları əhatə edir.\n\nHəlledici gün\nFinal, Agrotam — Gənclərbirliyi: 2026 M11 1 · 20:00.\nÜçüncülük, Siyəzən — Five Star: 2026 M11 1 · 18:00. Saatlar Bakı vaxtı ilə göstərilir. Ən son təqvim və yayım keçidləri matç səhifələrindədir.\n\nFinalçıların yolu\nAgrotam yarımfinalda Siyəzəni 2:1 məğlub edərək finala çıxıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 21 vurulan və 19 buraxılan qolu var.\nGənclərbirliyi digər yarımfinalda Five Star üzərində 6:1 hesablı qələbə qazanıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 32 vurulan və 22 buraxılan qolu qeydə alınıb.\n\nFive Star — Gənclərbirliyi: təsdiqlənmiş protokol\nNurlan Bayramov və Məhəmməd Nəsibov hərəyə iki, Mirzə Əmirov və Vüsal Nəbiyev hərəyə bir qol vurub. Five Starın qolunu Səxavət Pirmuradov vurub. Emil Abbaszadə və Məhəmməd Alıyev sarı kart alıb. Matçın ən yaxşı oyunçusu Məhəmməd Nəsibov seçilib.\n\nLiqanı necə izləməli?\nNəticələr, bombardirlər və fərdi profillər eyni oyun protokollarından hesablanır. Avtoqollar komandanın hesabına daxil edilir, fərdi bombardir göstəricisinə əlavə olunmur. SSL TV-də 26 tam oyun yazısı toplanıb; mövcud yayımları “Birlikdə izlə” bölməsində saytdan izləmək mümkündür. Bu icmal 26 oktyabrdakı qeydləri əks etdirir; sonrakı yeniliklər üçün matç səhifələrinə baxın.",
+        "text": "As of 26 October 2026, the league has 26 completed matches and 171 goals in their final scorelines. The group stage accounts for 24 matches and 161 goals; the two semi-finals added 10 goals. The group table uses group-stage results, while season statistics include every completed match.\n\nFinal day\nAgrotam — Gənclərbirliyi: 1 November 2026 · 20:00.\nThird place, Siyəzən — Five Star: 1 November 2026 · 18:00. All kick-off times are Baku time. The match pages carry the latest schedule and broadcast links.\n\nThe finalists’ paths\nAgrotam reached the final with a 2–1 semi-final win over Siyəzən. Across 7 completed matches, Agrotam have 5 wins, 21 goals scored and 19 conceded.\nGənclərbirliyi beat Five Star 6–1 in the other semi-final. Their season record is 5 wins in 7 completed matches, with 32 goals scored and 22 conceded.\n\nThe confirmed Five Star — Gənclərbirliyi protocol\nNurlan Bayramov and Məhəmməd Nəsibov scored twice each; Mirzə Əmirov and Vüsal Nəbiyev scored once each. Səxavət Pirmuradov scored for Five Star. Emil Abbaszadə and Məhəmməd Alıyev received yellow cards. Məhəmməd Nəsibov was named player of the match.\n\nFollowing the league\nResults, the scoring chart and individual profiles are calculated from the same match records. Own goals count in the team score and stay out of individual scoring totals. All 26 full-match recordings are collected in SSL TV; the Watch together section opens the available broadcasts on the website. This report describes the records as of 26 October; later updates are available on the match pages."
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.category",
+        "source": "Liqa təhlili",
+        "text": "League analysis"
+      },
+      {
+        "key": "news.ssl-final-preview-20261024.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumgayit Super League"
       }
     ]
   }

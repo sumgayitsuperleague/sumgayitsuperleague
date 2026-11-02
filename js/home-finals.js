@@ -3,6 +3,7 @@ import {fanZoneSettings,finalContext} from './fan-zone-model.js';
 import {pageInterval,pageListen,onPageCleanup} from './page-lifecycle.js';
 import {HOME_FINALS_COPY,finalsCountdown,finalsDate,finalsKickoff} from './home-finals-model.js';
 import {uiIcon} from './ui-icons.js';
+import {renderSeasonHonours} from './season-honours.js';
 
 const copy=()=>HOME_FINALS_COPY[UI.LANG]||HOME_FINALS_COPY.az;
 const serverNow=()=>Date.now()+(Number(window.__sslServerOffset)||0);
@@ -31,8 +32,8 @@ export function renderHomeFinals(ctx){
  const selected=ctx.H.matchCenter,finalPhase=['final','completed'].includes(ctx.L.competition?.phase)||selected?.mode==='stage'&&selected.stage==='final'||['live','done'].includes(f.match.status);
  if(!finalPhase)return '';
  const c=copy(),e=ctx.esc,now=Date.now()+(typeof window!=='undefined'?Number(window.__sslServerOffset)||0:0),third=config.showThirdPlace!==false?f.thirdPlace:null;
- const title=f.state==='archived'?config.archiveTitle:config.title&&config.title!=='Final mərkəzi'?config.title:c.heading;
- return `<section class="home-finals" aria-labelledby="home-finals-title" data-home-finals><div class="wrap"><header class="hf-heading"><div><span class="hf-eyebrow">${e(ctx.S.name)}<i aria-hidden="true"></i>${e(ctx.L.season)} ${e(c.season)}</span><h1 id="home-finals-title">${e(UI.t(title))}</h1></div><a class="hf-venue-link" href="elaqe.html#stadion">${uiIcon('pin')}<span>${e(f.match.venue||ctx.L.venue||'')}<small>${e(c.timezone)}</small></span>${uiIcon('arrow')}</a></header><div class="hf-grid${third?'':' hf-grid--single'}">${matchCard(ctx,f.match,'final',config,now,f.stats)}${third?matchCard(ctx,third,'third',config,now):''}</div></div></section>`;
+ const title=f.champion?c.completedHeading:f.state==='archived'?config.archiveTitle:config.title&&config.title!=='Final mərkəzi'?config.title:c.heading;
+ return `<section class="home-finals" aria-labelledby="home-finals-title" data-home-finals><div class="wrap"><header class="hf-heading"><div><span class="hf-eyebrow">${e(ctx.S.name)}<i aria-hidden="true"></i>${e(ctx.L.season)} ${e(c.season)}</span><h1 id="home-finals-title">${e(UI.t(title))}</h1></div><a class="hf-venue-link" href="elaqe.html#stadion">${uiIcon('pin')}<span>${e(f.match.venue||ctx.L.venue||'')}<small>${e(c.timezone)}</small></span>${uiIcon('arrow')}</a></header>${renderSeasonHonours(f,{season:ctx.L.season,lang:UI.LANG,esc:e})}<div class="hf-grid${third?'':' hf-grid--single'}">${matchCard(ctx,f.match,'final',config,now,f.stats)}${third?matchCard(ctx,third,'third',config,now):''}</div></div></section>`;
 }
 
 export function updateHomeFinals(root,matches,now,esc){
