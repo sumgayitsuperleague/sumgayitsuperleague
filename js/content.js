@@ -2409,6 +2409,36 @@ window.CONTENT={
   },
   "news": [
     {
+      "id": "ssl-final-report-20261104",
+      "match": "auto-final",
+      "date": "2026-11-04",
+      "published": true,
+      "title": "Agrotam penaltilərlə çempion oldu: final gününün icmalı",
+      "text": "1 noyabrda Azfar Arenada Sumqayıt Super Liqasının ilk çempionu müəyyənləşdi. Agrotam və Gənclərbirliyi finalı 2:2 hesabı ilə başa vurdu. Penalti seriyasında 3:2 qalib gələn Agrotam kuboku qazandı, Gənclərbirliyi ikinci yeri tutdu.\n\nFinala gedən yol 18 oktyabr yarımfinallarından keçdi. Agrotam Siyəzən üzərində 2:1 hesablı qələbə qazandı. Digər oyunda Gənclərbirliyi Five Starı 6:1 məğlub etdi. Həlledici qarşılaşmaya qədər Agrotam 7 oyunda 21, Gənclərbirliyi isə 7 oyunda 32 qol vurmuşdu. Gənclərbirliyinin finala qədər daha çox qol vurması həlledici oyunda üstün hesabla nəticələnmədi: tərəflər iki qolla bərabər qaldı.\n\nÜçüncü yer uğrunda görüşdə Five Star Siyəzənə 6:3 hesabı ilə qalib gəldi. Doqquz qolluq nəticə final gününün digər mükafatçısını müəyyənləşdirdi: Five Star üçüncü, Siyəzən dördüncü oldu. Bu oyun ayrıca matçdır və çempionluq görüşünün hesabına təsir etmir.\n\nLiqanın yekun cədvəlində finalın hesabı 2:2, penalti seriyasının nəticəsi ayrıca 3:2 kimi göstərilir. Bu fərq komanda göstəricilərini və bombardirlər siyahısını düzgün oxumaq üçün vacibdir. Buradakı icmal təsdiqlənmiş nəticələri və əvvəlki mərhələnin protokollarını əsas götürür. Qol müəllifləri və digər oyun hadisələri yalnız rəsmi matç qeydlərində olduqda göstərilir.",
+      "category": "Mövsüm icmalı",
+      "source": "Sumqayıt Super Liqası",
+      "mark": "SSL",
+      "image": "/assets/editorial/ssl-trophy-2026.webp",
+      "url": "",
+      "imageFit": "contain",
+      "imagePosition": "center"
+    },
+    {
+      "id": "ssl-season-review-20261104",
+      "match": "",
+      "date": "2026-11-04",
+      "published": true,
+      "title": "2026 mövsümü rəqəmlərlə: qrup cədvəlindən mükafat kürsüsünə",
+      "text": "Sumqayıt Super Liqasının ilk mövsümündə 8 komanda 28 oyun keçirdi, yekun hesablarda 184 qol qeydə alındı. Bu, bir oyuna orta hesabla 6,57 qol deməkdir. Həmin göstəricilər 4 noyabr 2026 tarixində liqanın rəsmi nəticə arxivindən götürülüb.\n\nQrup mərhələsində komandalar iki qrupa bölündü və hər komanda qrupdakı rəqibləri ilə iki dəfə qarşılaşdı. 24 qrup oyununda 161 qol vuruldu. Qrup cədvəlində ilk iki yer pley-offa vəsiqə verdi. Xallar bərabər olanda ilk fərqləndirici göstərici top fərqi idi. A qrupu: Siyəzən (12 xal, +12), Gənclərbirliyi (12 xal, +5). B qrupu: Five Star (12 xal, +11), Agrotam (12 xal, +1). Mötərizədə xaldan sonra top fərqi göstərilib.\n\nQrup sıralaması yekun mükafat sıralamasından fərqlənir. Agrotam B qrupunu ikinci pillədə bitirsə də, yarımfinalı və finalı keçərək çempion oldu. B qrupunun lideri Five Star isə mövsümü üçüncü yerdə tamamladı. Qrup cədvəlini oxuyanda yarımfinalın və finalın həmin xalları dəyişmədiyini nəzərə almaq lazımdır.\n\nİki yarımfinalda 10 qol vuruldu. Final və üçüncülük matçı birlikdə 13 qol əlavə etdi. Finalın 2:2 hesabı ümumi statistikaya dörd qol kimi düşüb. Penalti seriyasının 3:2 nəticəsi qalibi müəyyənləşdirir və matçın qol cəminə daxil edilmir.\n\nBombardirlər cədvəli oyun protokollarında adı göstərilən qol müəlliflərinə əsaslanır. Matçın yekun hesabı təsdiqlənsə də, bütün qol müəlliflərinin adı qeydə alınmaya bilər. Buna görə komandanın ümumi qol göstəricisini futbolçuların fərdi qol saylarının cəmi ilə eyniləşdirmək olmaz. Hesabları Oyunlar, qrup sıralamasını Cədvəl, final mərhələsini isə Final mərkəzi bölməsində müqayisə etmək mümkündür.",
+      "category": "Mövsüm icmalı",
+      "source": "Sumqayıt Super Liqası",
+      "mark": "SSL",
+      "image": "/assets/editorial/news-season-draw.webp",
+      "url": "",
+      "imageFit": "cover",
+      "imagePosition": "center"
+    },
+    {
       "id": "ssl-final-preview-20261024",
       "title": "Final öncəsi: Agrotam və Gənclərbirliyinin keçdiyi yol",
       "text": "26 oktyabr 2026 tarixinə liqada 26 oyun tamamlanıb, yekun hesablarda 171 qol qeydə alınıb. Qrup mərhələsinə 24 oyun və 161 qol, iki yarımfinala isə 10 qol düşür. Qrup cədvəli yalnız qrup nəticələrini, mövsüm statistikası isə bütün tamamlanmış oyunları əhatə edir.\n\nHəlledici gün\nFinal, Agrotam — Gənclərbirliyi: 2026 M11 1 · 20:00.\nÜçüncülük, Siyəzən — Five Star: 2026 M11 1 · 18:00. Saatlar Bakı vaxtı ilə göstərilir. Ən son təqvim və yayım keçidləri matç səhifələrindədir.\n\nFinalçıların yolu\nAgrotam yarımfinalda Siyəzəni 2:1 məğlub edərək finala çıxıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 21 vurulan və 19 buraxılan qolu var.\nGənclərbirliyi digər yarımfinalda Five Star üzərində 6:1 hesablı qələbə qazanıb. Komandanın 7 tamamlanmış oyunda 5 qələbəsi, 32 vurulan və 22 buraxılan qolu qeydə alınıb.\n\nFive Star — Gənclərbirliyi: təsdiqlənmiş protokol\nNurlan Bayramov və Məhəmməd Nəsibov hərəyə iki, Mirzə Əmirov və Vüsal Nəbiyev hərəyə bir qol vurub. Five Starın qolunu Səxavət Pirmuradov vurub. Emil Abbaszadə və Məhəmməd Alıyev sarı kart alıb. Matçın ən yaxşı oyunçusu Məhəmməd Nəsibov seçilib.\n\nLiqanı necə izləməli?\nNəticələr, bombardirlər və fərdi profillər eyni oyun protokollarından hesablanır. Avtoqollar komandanın hesabına daxil edilir, fərdi bombardir göstəricisinə əlavə olunmur. SSL TV-də 26 tam oyun yazısı toplanıb; mövcud yayımları “Birlikdə izlə” bölməsində saytdan izləmək mümkündür. Bu icmal 26 oktyabrdakı qeydləri əks etdirir; sonrakı yeniliklər üçün matç səhifələrinə baxın.",
@@ -3332,6 +3362,9 @@ window.CONTENT={
         "shuffle": true,
         "allowTeamSelect": true,
         "questions": []
+      },
+      "clutch": {
+        "enabled": false
       }
     },
     "stadium": {
@@ -5461,6 +5494,51 @@ window.CONTENT={
         "key": "news.ssl-final-preview-20261024.source",
         "source": "Sumqayıt Super Liqası",
         "text": "Сумгаитская Суперлига"
+      },
+      {
+        "key": "news.ssl-season-review-20261104.title",
+        "source": "2026 mövsümü rəqəmlərlə: qrup cədvəlindən mükafat kürsüsünə",
+        "text": "Сезон 2026 в цифрах: от группового этапа до пьедестала"
+      },
+      {
+        "key": "news.ssl-season-review-20261104.text",
+        "source": "Sumqayıt Super Liqasının ilk mövsümündə 8 komanda 28 oyun keçirdi, yekun hesablarda 184 qol qeydə alındı. Bu, bir oyuna orta hesabla 6,57 qol deməkdir. Həmin göstəricilər 4 noyabr 2026 tarixində liqanın rəsmi nəticə arxivindən götürülüb.\n\nQrup mərhələsində komandalar iki qrupa bölündü və hər komanda qrupdakı rəqibləri ilə iki dəfə qarşılaşdı. 24 qrup oyununda 161 qol vuruldu. Qrup cədvəlində ilk iki yer pley-offa vəsiqə verdi. Xallar bərabər olanda ilk fərqləndirici göstərici top fərqi idi. A qrupu: Siyəzən (12 xal, +12), Gənclərbirliyi (12 xal, +5). B qrupu: Five Star (12 xal, +11), Agrotam (12 xal, +1). Mötərizədə xaldan sonra top fərqi göstərilib.\n\nQrup sıralaması yekun mükafat sıralamasından fərqlənir. Agrotam B qrupunu ikinci pillədə bitirsə də, yarımfinalı və finalı keçərək çempion oldu. B qrupunun lideri Five Star isə mövsümü üçüncü yerdə tamamladı. Qrup cədvəlini oxuyanda yarımfinalın və finalın həmin xalları dəyişmədiyini nəzərə almaq lazımdır.\n\nİki yarımfinalda 10 qol vuruldu. Final və üçüncülük matçı birlikdə 13 qol əlavə etdi. Finalın 2:2 hesabı ümumi statistikaya dörd qol kimi düşüb. Penalti seriyasının 3:2 nəticəsi qalibi müəyyənləşdirir və matçın qol cəminə daxil edilmir.\n\nBombardirlər cədvəli oyun protokollarında adı göstərilən qol müəlliflərinə əsaslanır. Matçın yekun hesabı təsdiqlənsə də, bütün qol müəlliflərinin adı qeydə alınmaya bilər. Buna görə komandanın ümumi qol göstəricisini futbolçuların fərdi qol saylarının cəmi ilə eyniləşdirmək olmaz. Hesabları Oyunlar, qrup sıralamasını Cədvəl, final mərhələsini isə Final mərkəzi bölməsində müqayisə etmək mümkündür.",
+        "text": "В первом сезоне Sumqayıt Super Liqası 8 клубов провели 28 матчей. По итоговым счетам забито 184 голов, в среднем 6,57 за игру. Данные взяты из официального архива результатов лиги на 4 ноября 2026 года.\n\nКоманды разделились на две группы и дважды встретились с каждым соперником по своей группе. В 24 матчах этого этапа забили 161 голов. По две лучшие команды прошли в плей-офф. При равенстве очков первым дополнительным показателем была разница мячей. Группа A: Siyəzən (12 очк., +12), Gənclərbirliyi (12 очк., +5). Группа B: Five Star (12 очк., +11), Agrotam (12 очк., +1). После количества очков в скобках указана разница мячей.\n\nГрупповая таблица и пьедестал показывают разные итоги. Agrotam занял второе место в группе B, а затем выиграл плей-офф и стал чемпионом. Победитель группы Five Star завершил сезон на третьем месте. Матчи плей-офф не меняют очки в групповой таблице.\n\nВ двух полуфиналах забили 10 голов. Финал и матч за третье место добавили ещё 13. Финал со счётом 2:2 принёс четыре гола в общую статистику. Серия пенальти 3:2 определила победителя и учитывается отдельно.\n\nВ списке бомбардиров учитываются голы, авторы которых указаны в официальных протоколах. Если авторы отдельных голов ещё не внесены, командный итог может отличаться от суммы личных показателей. Счета доступны в разделе матчей, результаты группового этапа в таблице, а итоги плей-офф в центре финала."
+      },
+      {
+        "key": "news.ssl-season-review-20261104.category",
+        "source": "Mövsüm icmalı",
+        "text": "Обзор сезона"
+      },
+      {
+        "key": "news.ssl-season-review-20261104.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Редакция Sumqayıt Super Liqası"
+      },
+      {
+        "key": "news.ssl-final-report-20261104.title",
+        "source": "Agrotam penaltilərlə çempion oldu: final gününün icmalı",
+        "text": "Agrotam выиграл первый титул по пенальти: обзор финального дня"
+      },
+      {
+        "key": "news.ssl-final-report-20261104.text",
+        "source": "1 noyabrda Azfar Arenada Sumqayıt Super Liqasının ilk çempionu müəyyənləşdi. Agrotam və Gənclərbirliyi finalı 2:2 hesabı ilə başa vurdu. Penalti seriyasında 3:2 qalib gələn Agrotam kuboku qazandı, Gənclərbirliyi ikinci yeri tutdu.\n\nFinala gedən yol 18 oktyabr yarımfinallarından keçdi. Agrotam Siyəzən üzərində 2:1 hesablı qələbə qazandı. Digər oyunda Gənclərbirliyi Five Starı 6:1 məğlub etdi. Həlledici qarşılaşmaya qədər Agrotam 7 oyunda 21, Gənclərbirliyi isə 7 oyunda 32 qol vurmuşdu. Gənclərbirliyinin finala qədər daha çox qol vurması həlledici oyunda üstün hesabla nəticələnmədi: tərəflər iki qolla bərabər qaldı.\n\nÜçüncü yer uğrunda görüşdə Five Star Siyəzənə 6:3 hesabı ilə qalib gəldi. Doqquz qolluq nəticə final gününün digər mükafatçısını müəyyənləşdirdi: Five Star üçüncü, Siyəzən dördüncü oldu. Bu oyun ayrıca matçdır və çempionluq görüşünün hesabına təsir etmir.\n\nLiqanın yekun cədvəlində finalın hesabı 2:2, penalti seriyasının nəticəsi ayrıca 3:2 kimi göstərilir. Bu fərq komanda göstəricilərini və bombardirlər siyahısını düzgün oxumaq üçün vacibdir. Buradakı icmal təsdiqlənmiş nəticələri və əvvəlki mərhələnin protokollarını əsas götürür. Qol müəllifləri və digər oyun hadisələri yalnız rəsmi matç qeydlərində olduqda göstərilir.",
+        "text": "1 ноября на стадионе Azfar определился первый чемпион Sumqayıt Super Liqası. Финал Agrotam и Gənclərbirliyi завершился со счётом 2:2. Agrotam выиграл серию пенальти 3:2 и завоевал кубок, а Gənclərbirliyi занял второе место.\n\nОба финалиста прошли полуфиналы 18 октября. Agrotam победил Siyəzən 2:1, а Gənclərbirliyi обыграл Five Star 6:1. До решающей встречи Agrotam забил 21 голов в 7 матчах, а Gənclərbirliyi — 32 в 7. Преимущество Gənclərbirliyi по голам в предыдущих раундах не отразилось на итоговом счёте финала: обе команды забили по два мяча.\n\nВ матче за третье место Five Star обыграл Siyəzən 6:3. Встреча с девятью голами определила оставшееся место на пьедестале: Five Star стал третьим, Siyəzən — четвёртым. Этот результат учитывается отдельно от финала.\n\nВ официальном центре матча указаны счёт 2:2 и результат серии 3:2. Такое разделение помогает корректно сравнивать результативность команд и читать список бомбардиров. Обзор опирается на подтверждённые результаты лиги и протоколы предыдущих раундов. Авторы голов и события матча указываются только при наличии официальной записи."
+      },
+      {
+        "key": "news.ssl-final-report-20261104.category",
+        "source": "Mövsüm icmalı",
+        "text": "Обзор сезона"
+      },
+      {
+        "key": "news.ssl-final-report-20261104.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Редакция Sumqayıt Super Liqası"
+      },
+      {
+        "key": "fanZone.final.recap",
+        "source": "1 noyabr 2026: Agrotam Sumqayıt Super Liqasının çempionu oldu. Gənclərbirliyi ilə final 2:2 hesabı ilə bitdi; penalti seriyasında Agrotam 3:2 qalib gəldi. Gənclərbirliyi mövsümü ikinci yerdə tamamladı. Üçüncülük oyununda Five Star Siyəzəni 6:3 hesabı ilə məğlub etdi. Penalti seriyasının qolları mövsümün qol statistikasına daxil edilmir.",
+        "text": "1 ноября 2026 года Agrotam стал чемпионом Sumqayıt Super Liqası. Финал против Gənclərbirliyi завершился 2:2, а серию пенальти Agrotam выиграл 3:2. Gənclərbirliyi занял второе место. В матче за третье место Five Star победил Siyəzən 6:3. Удары в серии пенальти не входят в общую статистику голов сезона."
       }
     ],
     "en": [
@@ -6523,6 +6601,51 @@ window.CONTENT={
         "key": "news.ssl-final-preview-20261024.source",
         "source": "Sumqayıt Super Liqası",
         "text": "Sumgayit Super League"
+      },
+      {
+        "key": "news.ssl-season-review-20261104.title",
+        "source": "2026 mövsümü rəqəmlərlə: qrup cədvəlindən mükafat kürsüsünə",
+        "text": "The 2026 season in numbers: from the group table to the podium"
+      },
+      {
+        "key": "news.ssl-season-review-20261104.text",
+        "source": "Sumqayıt Super Liqasının ilk mövsümündə 8 komanda 28 oyun keçirdi, yekun hesablarda 184 qol qeydə alındı. Bu, bir oyuna orta hesabla 6,57 qol deməkdir. Həmin göstəricilər 4 noyabr 2026 tarixində liqanın rəsmi nəticə arxivindən götürülüb.\n\nQrup mərhələsində komandalar iki qrupa bölündü və hər komanda qrupdakı rəqibləri ilə iki dəfə qarşılaşdı. 24 qrup oyununda 161 qol vuruldu. Qrup cədvəlində ilk iki yer pley-offa vəsiqə verdi. Xallar bərabər olanda ilk fərqləndirici göstərici top fərqi idi. A qrupu: Siyəzən (12 xal, +12), Gənclərbirliyi (12 xal, +5). B qrupu: Five Star (12 xal, +11), Agrotam (12 xal, +1). Mötərizədə xaldan sonra top fərqi göstərilib.\n\nQrup sıralaması yekun mükafat sıralamasından fərqlənir. Agrotam B qrupunu ikinci pillədə bitirsə də, yarımfinalı və finalı keçərək çempion oldu. B qrupunun lideri Five Star isə mövsümü üçüncü yerdə tamamladı. Qrup cədvəlini oxuyanda yarımfinalın və finalın həmin xalları dəyişmədiyini nəzərə almaq lazımdır.\n\nİki yarımfinalda 10 qol vuruldu. Final və üçüncülük matçı birlikdə 13 qol əlavə etdi. Finalın 2:2 hesabı ümumi statistikaya dörd qol kimi düşüb. Penalti seriyasının 3:2 nəticəsi qalibi müəyyənləşdirir və matçın qol cəminə daxil edilmir.\n\nBombardirlər cədvəli oyun protokollarında adı göstərilən qol müəlliflərinə əsaslanır. Matçın yekun hesabı təsdiqlənsə də, bütün qol müəlliflərinin adı qeydə alınmaya bilər. Buna görə komandanın ümumi qol göstəricisini futbolçuların fərdi qol saylarının cəmi ilə eyniləşdirmək olmaz. Hesabları Oyunlar, qrup sıralamasını Cədvəl, final mərhələsini isə Final mərkəzi bölməsində müqayisə etmək mümkündür.",
+        "text": "The first Sumqayıt Super Liqası season brought together 8 clubs for 28 completed games. The official scorelines contain 184 goals, an average of 6.57 per match. These figures reflect the league's result archive on 4 November 2026.\n\nClubs were split into two groups and played each opponent in their group twice. The group stage produced 161 goals in 24 matches. The top two from each group advanced. Goal difference was the first tiebreaker for clubs level on points. Group A: Siyəzən (12 pts, +12), Gənclərbirliyi (12 pts, +5). Group B: Five Star (12 pts, +11), Agrotam (12 pts, +1). The signed figure beside each points total is goal difference.\n\nThe group table and the final podium tell different parts of the story. Agrotam finished second in Group B, then came through the knockout rounds to win the title. Group B leaders Five Star finished third overall. Knockout results do not change the points recorded in the group standings.\n\nThe two semi-finals produced 10 goals. The final and the third-place match added another 13. The 2–2 final contributes four goals to the season total. The 3–2 shootout determined the champion and is recorded separately.\n\nThe scoring chart counts goals credited to named players in the official match records. A confirmed result may include goals for which a scorer has not yet been entered, so the team total need not equal the sum of the individual scorers' totals. Use Fixtures and results to check a scoreline, League table to review the group campaign, and Final centre to follow the knockout results."
+      },
+      {
+        "key": "news.ssl-season-review-20261104.category",
+        "source": "Mövsüm icmalı",
+        "text": "Season review"
+      },
+      {
+        "key": "news.ssl-season-review-20261104.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası editorial team"
+      },
+      {
+        "key": "news.ssl-final-report-20261104.title",
+        "source": "Agrotam penaltilərlə çempion oldu: final gününün icmalı",
+        "text": "Agrotam win the inaugural title on penalties: finals day review"
+      },
+      {
+        "key": "news.ssl-final-report-20261104.text",
+        "source": "1 noyabrda Azfar Arenada Sumqayıt Super Liqasının ilk çempionu müəyyənləşdi. Agrotam və Gənclərbirliyi finalı 2:2 hesabı ilə başa vurdu. Penalti seriyasında 3:2 qalib gələn Agrotam kuboku qazandı, Gənclərbirliyi ikinci yeri tutdu.\n\nFinala gedən yol 18 oktyabr yarımfinallarından keçdi. Agrotam Siyəzən üzərində 2:1 hesablı qələbə qazandı. Digər oyunda Gənclərbirliyi Five Starı 6:1 məğlub etdi. Həlledici qarşılaşmaya qədər Agrotam 7 oyunda 21, Gənclərbirliyi isə 7 oyunda 32 qol vurmuşdu. Gənclərbirliyinin finala qədər daha çox qol vurması həlledici oyunda üstün hesabla nəticələnmədi: tərəflər iki qolla bərabər qaldı.\n\nÜçüncü yer uğrunda görüşdə Five Star Siyəzənə 6:3 hesabı ilə qalib gəldi. Doqquz qolluq nəticə final gününün digər mükafatçısını müəyyənləşdirdi: Five Star üçüncü, Siyəzən dördüncü oldu. Bu oyun ayrıca matçdır və çempionluq görüşünün hesabına təsir etmir.\n\nLiqanın yekun cədvəlində finalın hesabı 2:2, penalti seriyasının nəticəsi ayrıca 3:2 kimi göstərilir. Bu fərq komanda göstəricilərini və bombardirlər siyahısını düzgün oxumaq üçün vacibdir. Buradakı icmal təsdiqlənmiş nəticələri və əvvəlki mərhələnin protokollarını əsas götürür. Qol müəllifləri və digər oyun hadisələri yalnız rəsmi matç qeydlərində olduqda göstərilir.",
+        "text": "The first Sumqayıt Super Liqası title was decided at Azfar Arena on 1 November. Agrotam and Gənclərbirliyi finished the final level at 2–2. Agrotam won the shootout 3–2 and lifted the trophy, with Gənclərbirliyi finishing second.\n\nBoth clubs qualified in the semi-finals on 18 October. Agrotam defeated Siyəzən 2–1, while Gənclərbirliyi beat Five Star 6–1. Coming into the final, Agrotam had scored 21 goals in 7 matches and Gənclərbirliyi had scored 32 in 7. That difference in scoring across the earlier rounds did not translate to a lead in the final scoreline: the teams finished with two goals each.\n\nIn the third-place match, Five Star beat Siyəzən 6–3. The nine-goal game settled the remaining podium place, with Five Star third and Siyəzən fourth. It was a separate result from the championship decider.\n\nThe official match centre records the final as 2–2 and the shootout as 3–2. Keeping those numbers separate matters when comparing teams' scoring records or reading the player scoring chart. This review draws on the league's confirmed results and the preceding rounds' match records. Scorers and other match events are listed only where they have been entered in the official record."
+      },
+      {
+        "key": "news.ssl-final-report-20261104.category",
+        "source": "Mövsüm icmalı",
+        "text": "Season review"
+      },
+      {
+        "key": "news.ssl-final-report-20261104.source",
+        "source": "Sumqayıt Super Liqası",
+        "text": "Sumqayıt Super Liqası editorial team"
+      },
+      {
+        "key": "fanZone.final.recap",
+        "source": "1 noyabr 2026: Agrotam Sumqayıt Super Liqasının çempionu oldu. Gənclərbirliyi ilə final 2:2 hesabı ilə bitdi; penalti seriyasında Agrotam 3:2 qalib gəldi. Gənclərbirliyi mövsümü ikinci yerdə tamamladı. Üçüncülük oyununda Five Star Siyəzəni 6:3 hesabı ilə məğlub etdi. Penalti seriyasının qolları mövsümün qol statistikasına daxil edilmir.",
+        "text": "1 November 2026: Agrotam won the Sumqayıt Super Liqası title. The final against Gənclərbirliyi ended 2–2, and Agrotam won 3–2 on penalties. Gənclərbirliyi finished second. Five Star beat Siyəzən 6–3 in the third-place match. Shootout kicks do not count towards the season goal total."
       }
     ]
   }
