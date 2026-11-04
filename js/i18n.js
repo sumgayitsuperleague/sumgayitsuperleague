@@ -90,15 +90,29 @@ export function installLanguage(){
  const storage=safeLanguageStorage();
  let dialog;
  const closeWelcome=()=>{if(!dialog)return;dialog.close?.();dialog.remove();dialog=null;};
- if(languageWelcomeState(welcomeContext()).show){
+ const openWelcome=()=>{
+  if(dialog)return;
   dialog=document.createElement('dialog');dialog.className='language-welcome';dialog.setAttribute('lang','az');dialog.setAttribute('translate','no');dialog.setAttribute('aria-labelledby','language-welcome-title');dialog.setAttribute('aria-describedby','language-welcome-desc');dialog.innerHTML=renderLanguageWelcome();document.body.append(dialog);
   const dismiss=()=>{rememberLanguage(storage);closeWelcome();};
-  pageListen(dialog,'cancel',e=>{e.preventDefault();dismiss();});
-  pageListen(dialog,'click',e=>{if(e.target.closest('[data-language-dismiss]'))dismiss();});
+  dialog.addEventListener('cancel',e=>{e.preventDefault();dismiss();});
+  dialog.addEventListener('click',e=>{if(e.target.closest('[data-language-dismiss]'))dismiss();});
   if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
-  onPageCleanup(closeWelcome);
+ };
+ const welcome=welcomeContext(),canReopen=welcome.primary==='en'&&!welcome.preview;
+ if(canReopen){
+  const active=document.querySelector('.language-picker [aria-pressed="true"]');
+  if(active){active.setAttribute('aria-haspopup','dialog');active.setAttribute('title',t('Dil seçimi'));}
  }
- pageListen(document,'click',event=>{const button=event.target.closest('[data-language]');if(!button)return;const language=button.dataset.language;if(!isSiteLanguage(language))return;rememberLanguage(storage,language);closeWelcome();if(language===LANG)return;const href=languageHref(location.href,language);if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;});
+ if(languageWelcomeState(welcome).show)openWelcome();
+ onPageCleanup(closeWelcome);
+ pageListen(document,'click',event=>{
+  const button=event.target.closest('[data-language]');if(!button)return;
+  const language=button.dataset.language;if(!isSiteLanguage(language))return;
+  if(canReopen&&!dialog&&button.closest('.language-picker')&&language===LANG){openWelcome();return;}
+  rememberLanguage(storage,language);closeWelcome();if(language===LANG)return;
+  const href=languageHref(location.href,language);
+  if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;
+ });
  if(typeof MutationObserver!=='undefined'){let pending=false;const observer=new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length||r.type==='characterData'))return;pending=true;queueMicrotask(()=>{pending=false;enhanceRoot();});});observer.observe(document.body,{childList:true,subtree:true,characterData:true});onPageCleanup(()=>observer.disconnect());}
  document.title=t(document.title);
 }

@@ -1,17 +1,21 @@
 import {canonicalPath,explicitLanguage,isSiteLanguage,languageHref} from './routes-source.js';
 
 export const LANGUAGE_PREFERENCE='ssl.language.v1';
-export const LANGUAGE_WELCOME_SEEN='ssl.language.welcome.v1';
+export const LANGUAGE_WELCOME_SEEN='ssl.language.welcome.v2';
 export const LANGUAGES={az:'Azərbaycanca',en:'English',ru:'Русский'};
 const storageValue=(storage,key)=>{try{return storage?.getItem(key)||null;}catch{return null;}};
 const write=(storage,key,value)=>{try{storage?.setItem(key,value);}catch{}};
 export function languageWelcomeState({href,primary,storage,preview=false}){
  if(preview||primary!=='en')return {show:false,redirect:null};
  const url=new URL(href,'https://ssl.invalid');
- if(explicitLanguage(url.search)||canonicalPath(url.pathname)==='/404')return {show:false,redirect:null};
+ const path=canonicalPath(url.pathname),explicit=explicitLanguage(url.search);
+ if(path==='/404')return {show:false,redirect:null};
+ // A preference saved before this chooser was shown must not suppress it.
+ if(storageValue(storage,LANGUAGE_WELCOME_SEEN)!=='1')return {show:!explicit||path==='/',redirect:null};
+ if(explicit)return {show:false,redirect:null};
  const chosen=storageValue(storage,LANGUAGE_PREFERENCE);
  if(isSiteLanguage(chosen))return {show:false,redirect:chosen===primary?null:languageHref(url.href,chosen,primary)};
- return {show:storageValue(storage,LANGUAGE_WELCOME_SEEN)!=='1',redirect:null};
+ return {show:false,redirect:null};
 }
 export function rememberLanguage(storage,lang){
  if(isSiteLanguage(lang))write(storage,LANGUAGE_PREFERENCE,lang);
