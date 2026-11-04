@@ -28,38 +28,38 @@ function fanText(key,lang='az'){return FAN_COPY[key]?.[lang==='en'?0:lang==='ru'
 
 function fanEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-function fanHref(path,lang){const u=new URL(path,'https://ssl.invalid');if(lang==='en'||lang==='ru')u.searchParams.set('lang',lang);return u.pathname+u.search+u.hash;}
+function fanHref(path,lang,primary='az'){const u=new URL(path,'https://ssl.invalid');if(lang!==primary)u.searchParams.set('lang',lang);else u.searchParams.delete('lang');return u.pathname+u.search+u.hash;}
 
 function fanLogo(team){
  const p=String(team?.logo||'');if(/^\/assets\/(?:logo\.png|logos\/[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp))$/.test(p))return p;
  return /^[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(p)?'/assets/logos/'+p:'/assets/logo.png';
 }
 
-function renderFanLinks(data,lang='az'){
+function renderFanLinks(data,lang='az',primary='az'){
  const c=localizedFanZone(data.cms?.fanZone,data.locales,lang);if(!c.showLinks)return '';
  const entries=[['penalty','/penalti-arenasi','01'],['lineup','/ideal-altiliq','02'],['watch','/birlikde-izle','03'],['quiz','/viktorina','04'],['final','/final','05']].filter(([k])=>c[k].enabled);
- return entries.length?'<nav class="fz-hub" aria-label="'+fanEscape(fanText('Azarkeş mərkəzi',lang))+'">'+entries.map(([k,path,n])=>'<a href="'+fanHref(path,lang)+'"><span>'+n+'</span><strong>'+fanEscape(fanText(c[k].title,lang))+'</strong><b aria-hidden="true">↗</b></a>').join('')+'</nav>':'';
+ return entries.length?'<nav class="fz-hub" aria-label="'+fanEscape(fanText('Azarkeş mərkəzi',lang))+'">'+entries.map(([k,path,n])=>'<a href="'+fanHref(path,lang,primary)+'"><span>'+n+'</span><strong>'+fanEscape(fanText(c[k].title,lang))+'</strong><b aria-hidden="true">↗</b></a>').join('')+'</nav>':'';
 }
 
-function renderFanPage(data,page,lang='az'){
- if(page==='watch')return renderWatchPage(data,lang,typeof location==='undefined'?'':new URLSearchParams(location.search).get('id')||'');
+function renderFanPage(data,page,lang='az',primary='az'){
+ if(page==='watch')return renderWatchPage(data,lang,typeof location==='undefined'?'':new URLSearchParams(location.search).get('id')||'',primary);
  const c=localizedFanZone(data.cms?.fanZone,data.locales,lang),config=c[page],e=fanEscape,t=s=>fanText(s,lang);
  if(!config)return '';
- const links=renderFanLinks(data,lang);
- if(!config.enabled)return '<section class="sec fz-page"><div class="wrap"><h1>'+e(t(config.title))+'</h1><p>'+t('Bölmə hazırda bağlıdır.')+'</p><a class="btn sec" href="'+fanHref('/azarkes',lang)+'">'+t('Azarkeş mərkəzi')+'</a></div></section>';
- if(page==='penalty')return renderArenaPage(data,page,c,lang,links);
+ const links=renderFanLinks(data,lang,primary);
+ if(!config.enabled)return '<section class="sec fz-page"><div class="wrap"><h1>'+e(t(config.title))+'</h1><p>'+t('Bölmə hazırda bağlıdır.')+'</p><a class="btn sec" href="'+fanHref('/azarkes',lang,primary)+'">'+t('Azarkeş mərkəzi')+'</a></div></section>';
+ if(page==='penalty')return renderArenaPage(data,page,c,lang,links,primary);
  let body='';
  if(page==='final'){
-  const f=finalContext(data,c),m=f.match,state=t({upcoming:'Planlaşdırılıb',live:'Canlı',completed:'Tamamlanıb',archived:'Arxiv'}[f.state]),teamCard=id=>{const a=f.teams.get(id);return '<a class="fz-final-club" href="'+fanHref('/komanda?t='+encodeURIComponent(id),lang)+'"><img src="'+e(fanLogo(a))+'" alt=""><strong>'+e(a.name)+'</strong></a>';};
-  const game=(g,small=false)=>'<div class="fz-scoreboard'+(small?' fz-scoreboard-small':'')+'">'+teamCard(g.home)+'<div class="fz-score"><b>'+(g.status==='planned'?'VS':g.hs+' : '+g.as)+'</b>'+(g.penalties?'<span>'+t('Penaltilər')+': '+g.penalties.home+' : '+g.penalties.away+'</span>':'')+'<span>'+e(g.date?leagueDate(g.date,lang)+(g.time?' · '+g.time:''):t('Tarix və saat təyin edilməyib'))+'</span><small>'+e(g.venue||data.league?.venue||'')+'</small><a href="'+fanHref('/matc?id='+encodeURIComponent(g.id),lang)+'">'+t('Matç mərkəzi')+' ↗</a></div>'+teamCard(g.away)+'</div>';
+  const f=finalContext(data,c),m=f.match,state=t({upcoming:'Planlaşdırılıb',live:'Canlı',completed:'Tamamlanıb',archived:'Arxiv'}[f.state]),teamCard=id=>{const a=f.teams.get(id);return '<a class="fz-final-club" href="'+fanHref('/komanda?t='+encodeURIComponent(id),lang,primary)+'"><img src="'+e(fanLogo(a))+'" alt=""><strong>'+e(a.name)+'</strong></a>';};
+  const game=(g,small=false)=>'<div class="fz-scoreboard'+(small?' fz-scoreboard-small':'')+'">'+teamCard(g.home)+'<div class="fz-score"><b>'+(g.status==='planned'?'VS':g.hs+' : '+g.as)+'</b>'+(g.penalties?'<span>'+t('Penaltilər')+': '+g.penalties.home+' : '+g.penalties.away+'</span>':'')+'<span>'+e(g.date?leagueDate(g.date,lang)+(g.time?' · '+g.time:''):t('Tarix və saat təyin edilməyib'))+'</span><small>'+e(g.venue||data.league?.venue||'')+'</small><a href="'+fanHref('/matc?id='+encodeURIComponent(g.id),lang,primary)+'">'+t('Matç mərkəzi')+' ↗</a></div>'+teamCard(g.away)+'</div>';
   body='<section class="fz-final-hero'+(config.cover?' fz-with-cover':'')+'">'+(config.cover?'<img class="fz-hero-cover" src="'+e(config.cover)+'" alt="">':'')+'<div class="fz-hero-content"><span class="fz-eyebrow">'+e(data.league?.season||'')+' · '+e(state)+'</span><h1>'+e(t(f.state==='archived'?config.archiveTitle:config.title))+'</h1>'+(config.description?'<p>'+e(t(config.description))+'</p>':'')+(m?game(m):'<p class="fz-pending">'+t('Final qarşılaşması hələ təyin edilməyib.')+'</p>')+(config.showCountdown&&f.state==='upcoming'&&Number.isFinite(f.kickoff)&&f.kickoff>Date.now()?'<div class="fz-countdown" data-fan-countdown="'+f.kickoff+'" aria-label="'+t('Final')+'">'+['Gün','Saat','Dəqiqə','Saniyə'].map(x=>'<div><b>00</b><span>'+t(x)+'</span></div>').join('')+'</div>':'')+'</div></section>';
   if(f.champion){
    body=body.replace('<h1>','<h2>').replace('</h1>','</h2>').replace(e(t(config.title)),e(t('Finalın nəticəsi')));
-   body='<header class="fz-heading"><span class="fz-eyebrow">'+e(data.league?.season||'')+'</span><h1>'+t('Mövsümün yekunu')+'</h1></header>'+renderSeasonHonours(f,{season:data.league?.season,lang,esc:e,href:path=>fanHref(path,lang)})+body;
+   body='<header class="fz-heading"><span class="fz-eyebrow">'+e(data.league?.season||'')+'</span><h1>'+t('Mövsümün yekunu')+'</h1></header>'+renderSeasonHonours(f,{season:data.league?.season,lang,esc:e,href:path=>fanHref(path,lang,primary)})+body;
   }
   if(config.recap&&['completed','archived'].includes(f.state))body+='<section class="fz-panel"><h2>'+t('Yekun')+'</h2><div class="fz-prose">'+e(config.recap).replace(/\n/g,'<br>')+'</div></section>';
   if(m&&config.showStats)body+='<section class="fz-panel"><h2>'+t('Finaldan əvvəlki göstəricilər')+'</h2><div class="fz-table-wrap"><table class="fz-stats"><thead><tr><th>'+t('Komanda')+'</th>'+['Oyun','Qələbə','Vurulan qol','Buraxılan qol'].map(x=>'<th scope="col">'+t(x)+'</th>').join('')+'</tr></thead><tbody>'+[m.home,m.away].map(id=>{const s=f.stats(id);return '<tr><th scope="row">'+e(f.teams.get(id).name)+'</th>'+[s.played,s.wins,s.goals,s.against].map(n=>'<td>'+n+'</td>').join('')+'</tr>';}).join('')+'</tbody></table></div></section>';
-  if(m&&config.showJourney)body+='<section class="fz-panel"><h2>'+t('Finala gedən yol')+'</h2><div class="fz-journeys">'+[m.home,m.away].map(id=>'<div><h3>'+e(f.teams.get(id).name)+'</h3>'+f.journey(id).map(g=>'<a class="fz-journey" href="'+fanHref('/matc?id='+encodeURIComponent(g.id),lang)+'"><span>'+e(f.teams.get(g.home).name)+'<small>'+e(g.date)+'</small></span><b>'+g.hs+' : '+g.as+'</b><span>'+e(f.teams.get(g.away).name)+'</span></a>').join('')+(!f.journey(id).length?'<p>'+t('Qeyd olunmuş oyun yoxdur.')+'</p>':'')+'</div>').join('')+'</div></section>';
+  if(m&&config.showJourney)body+='<section class="fz-panel"><h2>'+t('Finala gedən yol')+'</h2><div class="fz-journeys">'+[m.home,m.away].map(id=>'<div><h3>'+e(f.teams.get(id).name)+'</h3>'+f.journey(id).map(g=>'<a class="fz-journey" href="'+fanHref('/matc?id='+encodeURIComponent(g.id),lang,primary)+'"><span>'+e(f.teams.get(g.home).name)+'<small>'+e(g.date)+'</small></span><b>'+g.hs+' : '+g.as+'</b><span>'+e(f.teams.get(g.away).name)+'</span></a>').join('')+(!f.journey(id).length?'<p>'+t('Qeyd olunmuş oyun yoxdur.')+'</p>':'')+'</div>').join('')+'</div></section>';
   if(config.showThirdPlace&&f.thirdPlace)body+='<section class="fz-panel"><h2>'+t('Üçüncülük oyunu')+'</h2>'+game(f.thirdPlace,true)+'</section>';
   if(config.showSponsors&&data.cms?.sponsors?.enabled)body+='<section class="fz-panel"><h2>'+t('Tərəfdaşlar')+'</h2><div class="fz-partners">'+data.cms.sponsors.items.filter(p=>p.visible).map(p=>'<a href="'+e(p.url||p.instagram||'/sponsorlar')+'" rel="noopener noreferrer"><img src="'+e(p.logo||p.image||'/assets/logo.png')+'" alt="'+e(p.name)+'" loading="lazy"></a>').join('')+'</div></section>';
   if(config.linkLabel&&config.linkUrl)body+='<p class="fz-extra-link"><a class="btn pri" href="'+e(config.linkUrl)+'" rel="noopener noreferrer">'+e(config.linkLabel)+' ↗</a></p>';
@@ -225,7 +225,7 @@ let arenaDispose=null;
 function mountFanZone(previewPenalty){
  arenaDispose?.();arenaDispose=null;const original=window.CONTENT;
  const source=previewPenalty?{...original,cms:{...original?.cms,fanZone:{...original?.cms?.fanZone,penalty:previewPenalty}}}:original;if(!source?.league)return;
- const lang=['en','ru'].includes(new URLSearchParams(location.search).get('lang'))?new URLSearchParams(location.search).get('lang'):'az',settings=localizedFanZone(source.cms?.fanZone,source.locales,lang);
+ const lang=document.documentElement.lang||'az',settings=localizedFanZone(source.cms?.fanZone,source.locales,lang);
  const path=document.body.dataset.previewPath||location.pathname,page=FAN_PAGES[path]||({'final':'final','lineup':'lineup','quiz':'quiz','penalty':'penalty','watch':'watch'}[document.body.dataset.page]);
  if(page){
   const app=document.querySelector('#app');if(!app)return;app.innerHTML=renderFanPage(source,page,lang);document.title=fanText(settings[page].title,lang)+' · '+(source.site?.name||'Sumqayıt Super Liqası');

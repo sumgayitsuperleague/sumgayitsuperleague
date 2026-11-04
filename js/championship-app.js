@@ -142,7 +142,7 @@ export function bindChampionship(data,lang='az'){
 function localStorageSafe(key){try{return localStorage.getItem(key);}catch{return null;}}
 
 export function installChampionship({P,CONTENT,L,PAGE}){
- const data=CONTENT||window.CONTENT||{league:L},lang=['ru','en'].includes(new URLSearchParams(location.search).get('lang'))?new URLSearchParams(location.search).get('lang'):'az',t=text(lang),config=championshipSettings(data.cms?.fanZone?.championship);
+ const data=CONTENT||window.CONTENT||{league:L},lang=document.documentElement.lang||'az',t=text(lang),config=championshipSettings(data.cms?.fanZone?.championship);
  const card=()=>config.enabled?`<section class="cs-promo-section"><div class="wrap"><a class="cs-promo" href="/ssenari${lang==='az'?'':'?lang='+lang}"><span class="cs-promo-cup">${trophy}</span><div><span class="cs-eyebrow">${t('AZARKEŞ SSENARİSİ')}</span><h2>${e(t(config.title))}</h2><p>${t('Hesabları dəyiş, cədvəlin və final yolunun necə dəyişdiyini gör.')}</p></div><strong>${t('Ssenarini aç')} ↗</strong></a></div></section>`:'';
  P.championship=()=>renderChampionship(data,lang);P.championship.init=()=>bindChampionship(data,lang);
  if(['fans','table','playoffs'].includes(PAGE)&&config.enabled){const old=P[PAGE],init=old?.init;if(old){P[PAGE]=()=>{const html=old(),end=html.indexOf('</section>');return end<0?card()+html:html.slice(0,end+10)+card()+html.slice(end+10);};P[PAGE].init=init;}}

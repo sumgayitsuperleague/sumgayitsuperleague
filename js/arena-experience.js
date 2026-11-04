@@ -30,13 +30,13 @@ export const arenaText=(s,lang='az')=>COPY[s]?.[lang==='en'?0:lang==='ru'?1:-1]|
 export const penaltyInterfaceCopy=Object.entries(COPY).filter(([text])=>!['Seriya','Məşq','Penalti dueli','Rekord','Yüngül','Qrafika','Avtomatik','Küncü seç. Topu sürüşdür. Seriyanı davam etdir.','Dueldə öz zərbəni vur, sonra rəqibin zərbəsinə bax. Bərabərlikdə əlavə zərbələr oynanır.','Zərbəni vur, sonra qapını özün qoru. Kubokda üç mərhələni keç.','Mövsümün zaman tuneli','İlk fitdən finala. Bu mövsümün hekayəsini birlikdə yenidən yaşa.','Tunelə daxil ol','Əvvəlki fəsil','Növbəti fəsil','Fəsil seç','Hekayə','Bu mövsümün hekayəsi tezliklə burada olacaq.','Təşkilatçı qeydi','İlk qeydə alınan oyun','İlk fit'].includes(text)).map(([az,[en,ru]])=>[az,en,ru]);
 const escapeHTML=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const e=escapeHTML;
-const href=(path,lang)=>path+(['en','ru'].includes(lang)?'?lang='+lang:'');
-export function renderArenaHome(data,lang='az'){
+const href=(path,lang,primary='az')=>path+(lang!==primary?'?lang='+lang:'');
+export function renderArenaHome(data,lang='az',primary='az'){
  const c=arenaSettings(data.cms?.fanZone).penalty,t=s=>arenaText(s,lang);if(!c.enabled||!c.showOnHome)return '';
- return `<section class="ax-home"><div class="wrap ax-home-grid"><a class="ax-home-card ax-home-penalty" href="${href('/penalti-arenasi',lang)}"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M6 33V9h36v24M6 13h36M12 9v24m8-24v16m8-16v16m8-16v24" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="34" r="8" stroke="currentColor" stroke-width="1.5"/></svg><div><strong>${e(t(c.title))}</strong><span>${e(t('Meydana çıx'))} ↗ · ${arenaTeams(data).length} ${t('komanda')}</span></div><b aria-hidden="true">SSL</b></a></div></section>`;
+ return `<section class="ax-home"><div class="wrap ax-home-grid"><a class="ax-home-card ax-home-penalty" href="${href('/penalti-arenasi',lang,primary)}"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M6 33V9h36v24M6 13h36M12 9v24m8-24v16m8-16v16m8-16v24" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="34" r="8" stroke="currentColor" stroke-width="1.5"/></svg><div><strong>${e(t(c.title))}</strong><span>${e(t('Meydana çıx'))} ↗ · ${arenaTeams(data).length} ${t('komanda')}</span></div><b aria-hidden="true">SSL</b></a></div></section>`;
 }
 const trophyIcon=()=>'<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M14 7h20v12c0 9-5 13-10 13s-10-4-10-13V7Zm0 4H7v7c0 6 5 9 10 9m17-16h7v7c0 6-5 9-10 9M24 32v9m-9 1h18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-export function renderArenaPage(data,page,settings,lang='az',links=''){
+export function renderArenaPage(data,page,settings,lang='az',links='',primary='az'){
  if(page!=='penalty')return '';
  const c=arenaSettings(settings).penalty,t=s=>arenaText(s,lang),clubs=chooseArenaClubs(data,c.defaultTeam,c.defaultOpponent),sponsors=arenaSponsors(data,settings),mode=c.defaultMode;
  const options=(selected,excluded='')=>clubs.teams.map(q=>`<option value="${e(q.id)}"${q.id===selected?' selected':''}${q.id===excluded?' disabled':''}>${e(q.name)}</option>`).join('');

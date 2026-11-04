@@ -14,11 +14,24 @@ import {FAN_COPY} from './fan-copy.js';
 import {REFINEMENT_COPY} from './refinement-copy.js';
 import {GUIDE_TRANSLATIONS} from './guide-source.js';
 import {localizedContent} from './localization-source.js';
-import {canonicalPath,languageHref,siteAnchor} from './routes-source.js';
+import {canonicalPath,languageHref,siteAnchor,explicitLanguage,languageFor,configureRouteLanguage,isSiteLanguage} from './routes-source.js';
+import {LANGUAGE_PREFERENCE,languageWelcomeState,rememberLanguage,renderLanguageWelcome} from './language-welcome.js';
 export const LANGUAGE_NAMES={az:'Azərbaycan dili',ru:'Русский',en:'English'};
-export function languageFrom(search,storage){const q=new URLSearchParams(search).get('lang');if(['az','ru','en'].includes(q))return q;try{const saved=storage?.getItem('ssl.language.v1');if(['az','ru','en'].includes(saved))return saved;}catch{}return 'az';}
-export let LANG=languageFrom(location.search,typeof localStorage==='undefined'?null:localStorage);
-export function configureLanguage(){LANG=languageFrom(location.search,typeof localStorage==='undefined'?null:localStorage);}
+const safeLanguageStorage=()=>{try{return typeof localStorage==='undefined'?null:localStorage;}catch{return null;}};
+export function languageFrom(search,storage){const q=explicitLanguage(search);if(q)return q;try{const saved=storage?.getItem(LANGUAGE_PREFERENCE);if(isSiteLanguage(saved))return saved;}catch{}return 'az';}
+export let LANG=languageFrom(location.search,safeLanguageStorage());
+const welcomeContext=()=>({href:location.href,primary:document.body.dataset.siteDefaultLanguage,storage:safeLanguageStorage(),preview:!!document.body.dataset.previewPath});
+export function restoreLanguagePreference(){
+ const {redirect}=languageWelcomeState(welcomeContext());
+ if(!redirect)return false;
+ location.replace(redirect);return true;
+}
+export function configureLanguage(){
+ const primary=document.body.dataset.siteDefaultLanguage;
+ configureRouteLanguage(primary);
+ LANG=primary?languageFor(location.search,primary):languageFrom(location.search,safeLanguageStorage());
+ document.documentElement.lang=LANG;
+}
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
 export const localeContent=data=>localizedContent(data,LANG);
 const rows=[...BASE_TRANSLATIONS,['Final mərkəzi','Final centre','Центр финала'],['Final səhifəsinə bax','Explore the final','Открыть финал'],['Final qarşılaşması hələ təyin edilməyib.','The final fixture has not been set yet.','Финальный матч пока не назначен.']];
@@ -70,7 +83,18 @@ export function enhanceRoot(root=document.body,force=false){
 }
 export function installLanguage(){
  document.documentElement.lang=LANG;enhanceRoot();
- pageListen(document,'click',event=>{const button=event.target.closest('[data-language]');if(!button)return;const language=button.dataset.language;if(!['az','ru','en'].includes(language)||language===LANG)return;try{localStorage.setItem('ssl.language.v1',language);}catch{}const href=languageHref(location.href,language);if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;});
+ const storage=safeLanguageStorage();
+ let dialog;
+ const closeWelcome=()=>{if(!dialog)return;dialog.close?.();dialog.remove();dialog=null;};
+ if(languageWelcomeState(welcomeContext()).show){
+  dialog=document.createElement('dialog');dialog.className='language-welcome';dialog.setAttribute('lang','az');dialog.setAttribute('translate','no');dialog.setAttribute('aria-labelledby','language-welcome-title');dialog.setAttribute('aria-describedby','language-welcome-desc');dialog.innerHTML=renderLanguageWelcome();document.body.append(dialog);
+  const dismiss=()=>{rememberLanguage(storage);closeWelcome();};
+  pageListen(dialog,'cancel',e=>{e.preventDefault();dismiss();});
+  pageListen(dialog,'click',e=>{if(e.target.closest('[data-language-dismiss]'))dismiss();});
+  if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+  onPageCleanup(closeWelcome);
+ }
+ pageListen(document,'click',event=>{const button=event.target.closest('[data-language]');if(!button)return;const language=button.dataset.language;if(!isSiteLanguage(language))return;rememberLanguage(storage,language);closeWelcome();if(language===LANG)return;const href=languageHref(location.href,language);if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;});
  if(typeof MutationObserver!=='undefined'){let pending=false;const observer=new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length||r.type==='characterData'))return;pending=true;queueMicrotask(()=>{pending=false;enhanceRoot();});});observer.observe(document.body,{childList:true,subtree:true,characterData:true});onPageCleanup(()=>observer.disconnect());}
  document.title=t(document.title);
 }

@@ -15,7 +15,7 @@ export function installPageExperience(ctx){
  const originalBind=P.news?.init;
  pageListen(document,'click',async event=>{
   const reset=event.target.closest('[data-reset-preferences]');if(reset){
-   for(const key of ['ssl.language.v1','ssl.favoriteTeam.v1','ssl.savedVideos.v1'])try{localStorage.removeItem(key);}catch{}
+   for(const key of ['ssl.language.v1','ssl.language.welcome.v1','ssl.favoriteTeam.v1','ssl.savedVideos.v1'])try{localStorage.removeItem(key);}catch{}
    window.dispatchEvent(new window.Event('ssl-preferences-reset'));const status=document.querySelector('#preferences-status');if(status)status.textContent=UI.t('Seçimlər sıfırlandı.');return;
   }
   const share=event.target.closest('[data-share-page]');if(!share||document.body.dataset.previewPath)return;

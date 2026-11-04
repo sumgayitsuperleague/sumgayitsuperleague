@@ -1,4 +1,14 @@
 export const POLICY_SLUGS=Object.freeze(['mexfilik','kukiler','redaksiya']);
+export const isSiteLanguage=value=>['az','en','ru'].includes(value);
+export const siteDefaultLanguage=value=>isSiteLanguage(value)?value:'az';
+export const explicitLanguage=search=>{const value=new URLSearchParams(search).get('lang');return isSiteLanguage(value)?value:null;};
+export const languageFor=(search,fallback='az')=>explicitLanguage(search)||siteDefaultLanguage(fallback);
+let browserDefault='az';
+export function configureRouteLanguage(value){browserDefault=siteDefaultLanguage(value);}
+export function setRouteLanguage(url,lang,primary=browserDefault){
+ if(isSiteLanguage(lang)&&lang!==siteDefaultLanguage(primary))url.searchParams.set('lang',lang);else url.searchParams.delete('lang');
+ return url;
+}
 // Public routes stay independent of the GitHub Pages file layout.
 export const PAGE_ROUTES = Object.freeze({
  '/mekan':'mekan.html','/ssenari':'ssenari.html',
@@ -23,12 +33,12 @@ export function publicHref(value,lang='az') {
  if(typeof value!=='string'||!value||/^(?:[a-z]+:|\/\/|#)/i.test(value))return value;
  const u=new URL(value.startsWith('/')?value:'/'+value,'https://ssl.invalid');
  u.pathname=canonicalPath(u.pathname);
- if(lang==='ru'||lang==='en')u.searchParams.set('lang',lang);else u.searchParams.delete('lang');
+ setRouteLanguage(u,lang);
  return u.pathname+u.search+u.hash;
 }
-export function languageHref(value,lang) {
+export function languageHref(value,lang,primary=browserDefault) {
  const u=new URL(value,'https://ssl.invalid');u.pathname=canonicalPath(u.pathname);
- if(lang==='az')u.searchParams.delete('lang');else u.searchParams.set('lang',lang);
+ setRouteLanguage(u,lang,primary);
  return u.pathname+u.search+u.hash;
 }
 // Generated page-file links belong to the site root; fragments belong to this document.
@@ -39,6 +49,6 @@ export function siteAnchor(value,current,lang='az',clean=true){
  const url=new URL(value,relativeFile?new URL('/',base):base);
  if(url.origin!==base.origin)return value;
  const path=clean?canonicalPath(url.pathname):url.pathname;
- if(!value.startsWith('#')){if(lang==='ru'||lang==='en')url.searchParams.set('lang',lang);else url.searchParams.delete('lang');}
+ if(!value.startsWith('#'))setRouteLanguage(url,lang);
  return path+url.search+url.hash;
 }

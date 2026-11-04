@@ -1,6 +1,22 @@
 @import url("fan-identity.css?v=20261102champion1");
 @import url("venue.css?v=20261027map3d1");
 @import url("home-finals.css?v=20261102champion1");
+
+/* The first-visit language picker. */
+dialog.language-welcome{position:fixed;inset:0;z-index:10000;margin:auto;box-sizing:border-box;width:min(430px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:clamp(22px,5vw,35px);border:1px solid #d7e2f4;border-radius:24px;background:linear-gradient(160deg,#f0f5ff,#fff 54%);color:#112653;box-shadow:0 22px 85px #06173763;font-family:inherit}
+dialog.language-welcome::backdrop{background:#071b43a8;backdrop-filter:blur(3px)}
+.language-welcome-close{position:absolute;inset:12px 12px auto auto;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;background:#e6edf9;color:#163366;cursor:pointer;font:24px/1 system-ui}
+.language-welcome-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px;color:#1c44be;font-size:11px;letter-spacing:.1em;font-weight:800;padding-right:26px}
+.language-welcome-brand img{flex:none;object-fit:contain;width:44px;height:44px}
+dialog.language-welcome h2{margin:0;color:#112653;font-size:clamp(23px,5vw,29px);font-weight:800;letter-spacing:-.027em;line-height:1.14;text-transform:none}
+dialog.language-welcome p{margin:8px 0 20px;color:#5c6e8e;font-size:14px;line-height:1.4}
+.language-welcome-options{display:grid;gap:8px}
+.language-welcome-options button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:11px 13px;min-height:52px;border:1px solid #d7e2f4;border-radius:12px;background:#fff;color:#18356d;cursor:pointer;font:inherit;font-weight:750}
+.language-welcome-options button:first-child{background:#1c44be;color:#fff;border-color:#1c44be}
+.language-welcome-options button:hover{box-shadow:0 0 0 2px #7da7fb}
+.language-welcome-options img{width:28px;height:28px;object-fit:contain;flex:none}
+.language-welcome-arrow{margin-left:auto;font-size:23px;line-height:1;opacity:.72}
+.language-welcome button:focus-visible{outline:2px solid #1c44be;outline-offset:3px}
 /* ===============================================================
    SUMQAYIT SUPER LİQA / PRO 2026
    Editorial sports experience. Existing team and league assets kept.
