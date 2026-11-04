@@ -46,7 +46,11 @@ let copyOverrides=new Map(),copyAliases=new Map(),translatedDefaults=new Map();
 export function configureEditorTexts(editor,source,path=location.pathname){
  const route=canonicalPath(path);copyOverrides=new Map();copyAliases=new Map();translatedDefaults=new Map();
  for(const [az,en,ru] of rows){if(LANG==='en')copyAliases.set(copyKey(en),az);if(LANG==='ru')copyAliases.set(copyKey(ru),az);}
- for(const row of source?.locales?.[LANG]||[]){copyAliases.set(copyKey(row.text),row.source);translatedDefaults.set(copyKey(row.source),row.text);}
+ for(const row of source?.locales?.[LANG]||[]){
+  // Article credits are translated on their records, not as site-wide UI text.
+  if(/^news\.[^.]+\.source$/.test(row.key))continue;
+  copyAliases.set(copyKey(row.text),row.source);translatedDefaults.set(copyKey(row.source),row.text);
+ }
  for(const row of (editor?.labels||[]).filter(r=>r.scope==='*'||r.scope===route).sort((a,b)=>(a.scope==='*'?-1:1)-(b.scope==='*'?-1:1)))copyOverrides.set(copyKey(row.source),row);
  for(const row of copyOverrides.values())for(const value of [row.az,row[LANG]])if(value?.trim()&&!copyOverrides.has(copyKey(value)))copyAliases.set(copyKey(value),row.source);
 }

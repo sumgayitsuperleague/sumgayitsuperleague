@@ -7,7 +7,7 @@ dialog.language-welcome{position:fixed;inset:0;z-index:10000;margin:auto;box-siz
 dialog.language-welcome::backdrop{background:#071b43a8;backdrop-filter:blur(3px)}
 .language-welcome-close{position:absolute;inset:12px 12px auto auto;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;background:#e6edf9;color:#163366;cursor:pointer;font:24px/1 system-ui}
 .language-welcome-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px;color:#1c44be;font-size:11px;letter-spacing:.1em;font-weight:800;padding-right:26px}
-.language-welcome-brand img{flex:none;object-fit:contain;width:44px;height:44px}
+.language-welcome-brand img{flex:none;object-fit:contain;width:44px;height:44px;box-sizing:border-box;padding:5px;border-radius:11px;background:#1c44be}
 dialog.language-welcome h2{margin:0;color:#112653;font-size:clamp(23px,5vw,29px);font-weight:800;letter-spacing:-.027em;line-height:1.14;text-transform:none}
 dialog.language-welcome p{margin:8px 0 20px;color:#5c6e8e;font-size:14px;line-height:1.4}
 .language-welcome-options{display:grid;gap:8px}
