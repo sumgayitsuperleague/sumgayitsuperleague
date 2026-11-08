@@ -1,7 +1,7 @@
 # Yeni mövsüm · Komanda qeydiyyatı
 
-- Ana səhifə yeni mövsümü önə çıxarır; köhnə final, üçüncülük, çempion və penalti kartları burada göstərilmir.
-- Mövsüm menyusunda yeni mövsüm və Sumqayıtın 77 illiyinə həsr olunmuş 2026 mövsümünün arxivi ayrıca açılır.
+- Mövsüm başa çatanda ana səhifədə yeni mövsüm qalır. Əvvəlki nəticələr öz mövsüm səhifəsində saxlanılır.
+- Yığcam Mövsüm menyusunda yeni mövsüm və Sumqayıtın 77 illiyinə həsr olunmuş 2026 mövsümü ayrıca açılır. Azərbaycanca ana səhifə dil parametrsiz işləyir.
 - Xəbər siyahısı Media daxilindədir. Köhnə xəbər keçidləri və oyun nəticələri qorunur.
 - Komanda kartında sıralama və xal forma göstəricisindən ayrı göstərilir. Five Star loqosu dairəvi çərçivəyə tam sığır.
 - Sayt yalnız qeydiyyat xidməti açıq olduğunu təsdiqlədikdə müraciət formasını göstərir. Göndərilən müraciətlər qorunan admin panelində idarə olunur.

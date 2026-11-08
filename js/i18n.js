@@ -18,18 +18,27 @@ import {canonicalPath,languageHref,siteAnchor,explicitLanguage,languageFor,confi
 import {LANGUAGE_PREFERENCE,languageWelcomeState,rememberLanguage,renderLanguageWelcome} from './language-welcome.js';
 export const LANGUAGE_NAMES={az:'Azərbaycan dili',ru:'Русский',en:'English'};
 const safeLanguageStorage=()=>{try{return typeof localStorage==='undefined'?null:localStorage;}catch{return null;}};
-export function languageFrom(search,storage){const q=explicitLanguage(search);if(q)return q;try{const saved=storage?.getItem(LANGUAGE_PREFERENCE);if(isSiteLanguage(saved))return saved;}catch{}return 'az';}
+const savedLanguage=storage=>{try{const saved=storage?.getItem(LANGUAGE_PREFERENCE);return isSiteLanguage(saved)?saved:null;}catch{return null;}};
+export function languageFrom(search,storage){return explicitLanguage(search)||savedLanguage(storage)||'az';}
 export let LANG=languageFrom(location.search,safeLanguageStorage());
-const welcomeContext=()=>({href:location.href,primary:document.body.dataset.siteDefaultLanguage,storage:safeLanguageStorage(),preview:!!document.body.dataset.previewPath});
+let tabLanguage=null;
+const welcomeContext=()=>({href:location.href,primary:document.body.dataset.siteDefaultLanguage,storage:safeLanguageStorage(),preview:!!document.body.dataset.previewPath,cleanHome:true});
 export function restoreLanguagePreference(){
  const {redirect}=languageWelcomeState(welcomeContext());
  if(!redirect)return false;
  location.replace(redirect);return true;
 }
 export function configureLanguage(){
- const primary=document.body.dataset.siteDefaultLanguage;
- configureRouteLanguage(primary);
- LANG=primary?languageFor(location.search,primary):languageFrom(location.search,safeLanguageStorage());
+ const {primary,storage,preview,href}=welcomeContext(),url=new URL(href||(location.pathname||'/')+(location.search||''),'https://sumgayitsuperleague.com'),explicit=explicitLanguage(url.search);
+ const home=!preview&&canonicalPath(url.pathname)==='/';
+ configureRouteLanguage(primary,{cleanHome:!preview});
+ if(explicit&&!preview)tabLanguage=explicit;
+ if(home&&explicit==='az'){
+  rememberLanguage(storage,'az');
+  url.pathname='/';url.searchParams.delete('lang');
+  try{history.replaceState(history.state,'',url.pathname+url.search+url.hash);}catch{}
+ }
+ LANG=explicit||(home&&(tabLanguage||savedLanguage(storage))==='az'?'az':primary?languageFor(url.search,primary):languageFrom(url.search,storage));
  document.documentElement.lang=LANG;
 }
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
@@ -109,7 +118,7 @@ export function installLanguage(){
   const button=event.target.closest('[data-language]');if(!button)return;
   const language=button.dataset.language;if(!isSiteLanguage(language))return;
   if(canReopen&&!dialog&&button.closest('.language-picker')&&language===LANG){openWelcome();return;}
-  rememberLanguage(storage,language);closeWelcome();if(language===LANG)return;
+  tabLanguage=language;rememberLanguage(storage,language);closeWelcome();if(language===LANG)return;
   const href=languageHref(location.href,language);
   if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;
  });
