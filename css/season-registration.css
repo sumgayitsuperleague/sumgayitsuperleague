@@ -105,3 +105,73 @@
  .ssl-season-lead h1{font-size:clamp(2.1rem,9vw,2.6rem)}
 }
 @media(prefers-reduced-motion:reduce){.ssl-season-ticket,.ssl-season-button{transition:none}.ssl-season-ticket{transform:rotateZ(-3deg)}}
+
+/* Season launch surface and the shared desktop and mobile season disclosure. */
+body[data-page=home] #app [data-readable-document] :is([data-season-honours],[data-home-final],.ax-home){display:none!important}
+.ssl-season-hero::before{background:linear-gradient(99deg,#06132ff9 5%,#0a2253eb 46%,#0d2d6594 100%),url("/assets/editorial/matchnight-field.webp") center 55%/cover no-repeat}
+.ssl-season-hero::after{background:radial-gradient(ellipse at 76% 19%,#91c6ff56,transparent 43%),linear-gradient(173deg,transparent 72%,#1b4ab36b 72.2%,transparent 72.45%);pointer-events:none}
+.ssl-season-hero-inner{min-height:clamp(410px,43vw,604px);padding-block:clamp(46px,7vw,90px);grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+.ssl-season-overline{margin-bottom:18px}
+.ssl-season-overline>span:first-child{display:flex;align-items:center;gap:9px}
+.ssl-season-overline>span:first-child::before{content:"";width:21px;height:2px;background:#8fbbff;box-shadow:0 0 14px #6da6ff}
+.ssl-season-lead h1{max-width:17ch;text-wrap:pretty}
+.ssl-season-hero .ssl-season-actions .ssl-season-button{min-height:50px;border-radius:10px}
+.ssl-season-ticket{background:radial-gradient(ellipse at 75% 3%,#6089d87c,transparent 53%),linear-gradient(139deg,#1b489b,#0a2254 61%,#1b3d85);box-shadow:8px 10px 0 #061433,10px 13px 0 #8cbaff5e,0 30px 63px #020916b0}
+.ssl-season-ticket-top>span:first-child{display:flex;align-items:center;gap:8px}
+.ssl-season-ticket-top i{height:3px;width:3px;border-radius:50%;background:currentColor}
+.ssl-season-ticket-crest img{height:auto}
+.ssl-season-shortcuts{display:grid;grid-template-columns:1.24fr 1fr 1fr;gap:12px;margin-block:clamp(18px,3vw,36px) clamp(28px,4vw,48px)}
+.ssl-season-shortcuts>a,.ssl-season-menu-panel>a:not(.ssl-season-menu-all){display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;text-decoration:none;text-align:start}
+.ssl-season-shortcuts>a{min-height:86px;padding:15px;border:1px solid #d8e4f8;border-radius:14px;background:#fff;color:#15376e;box-shadow:0 8px 24px #1229560b;transition:border-color .18s,background-color .18s}
+.ssl-season-shortcuts>a:hover{border-color:#90b6ef;background:#f6f9ff}
+.ssl-season-shortcuts strong,.ssl-season-menu-panel strong{display:block;color:#122e5e;font-size:.98rem;line-height:1.2;font-weight:790}
+.ssl-season-shortcuts small,.ssl-season-menu-panel small{display:block;margin-top:4px;color:#486482;font-size:.78rem;line-height:1.36;font-weight:520;text-wrap:pretty}
+.ssl-season-shortcut-icon{display:grid;place-items:center;width:43px;aspect-ratio:1;color:#285ab5;background:#e9f1ff;border:1px solid #dceaff;border-radius:11px}
+body.ux-site.ssl-official .ssl-season-hero~.league-entry--official .official-hero-grid{min-height:0;padding-block:clamp(22px,4vw,50px)}
+.ssl-season-menu{position:relative;min-width:0}
+.ssl-season-menu-toggle{appearance:none;display:flex;align-items:center;justify-content:center;gap:5px;min-height:44px;margin:0;padding:10px;color:#34465f;background:transparent;border:0;border-radius:7px;white-space:nowrap;cursor:pointer;font:inherit;font-weight:720;font-size:13px;line-height:1.3}
+.ssl-season-menu-toggle:hover,.ssl-season-menu-toggle[aria-expanded=true],.ssl-season-menu-toggle.on{color:#1a419d;background:#edf3ff}
+.ssl-season-menu-toggle:focus-visible,.ssl-season-menu-panel a:focus-visible,.ssl-season-shortcuts>a:focus-visible,.ssl-reg-retry:focus-visible{outline:2px solid #2765d2;outline-offset:2px}
+.ssl-season-menu-toggle[aria-expanded=true] .ssl-season-menu-chevron{transform:rotate(180deg)}
+.ssl-season-menu-panel{position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);z-index:75;width:min(340px,calc(100vw - 32px));padding:10px;background:#fff;border:1px solid #d5e3fa;border-radius:15px;box-shadow:0 16px 44px #0c28532a;color:#142c55;text-align:start;line-height:1.3}
+.ssl-season-menu-panel[hidden],.ssl-reg-form[hidden],.ssl-reg-success[hidden]{display:none!important}
+.ssl-season-menu-caption{display:flex;align-items:center;gap:8px;padding:4px 7px 9px;color:#435f87;font-size:.75rem;font-weight:710}
+.ssl-season-menu-caption b{display:grid;place-items:center;padding:5px 7px;background:#183e98;border-radius:6px;color:#fff;letter-spacing:.07em;line-height:1}
+#links .ssl-season-menu-panel>a,.ssl-season-menu-panel>a{padding:9px 8px;border:0;border-radius:9px;color:#1f4e9b;background:#fff;font-size:.85rem;min-height:45px}
+#links .ssl-season-menu-panel>a:hover,.ssl-season-menu-panel>a:hover{background:#edf4ff;color:#16377c}
+.ssl-season-menu-panel .ssl-season-shortcut-icon{width:38px;border-radius:9px}
+.ssl-season-menu-panel .ssl-season-shortcut-icon svg{width:20px;height:20px}
+.ssl-season-menu-panel>a.ssl-season-menu-all{display:flex;justify-content:space-between;align-items:center;font-weight:750;margin:4px 0 0;border-top:1px solid #e1e9f6;border-radius:0}
+.ssl-reg-panel-head .ssl-season-status{background:#ebf1ff;color:#244570;border-color:#cfdef8}
+.ssl-reg-panel-head .ssl-season-status i{background:#168756;box-shadow:0 0 0 3px #0d9f3c16}
+.ssl-reg-panel-head .ssl-season-status.is-closed i{background:#7288a7;box-shadow:none}
+.ssl-reg-closed p{margin:0 0 10px;max-width:48ch;color:#374f71;line-height:1.6}
+.ssl-reg-retry{appearance:none;display:inline-flex;align-items:center;min-height:42px;padding:7px 12px;border:1px solid #c3d5f1;border-radius:8px;background:#f2f7ff;color:#153b91;font:inherit;font-size:.89rem;font-weight:730;cursor:pointer}
+.ssl-reg-retry:disabled{opacity:.6;cursor:wait}
+.ssl-reg-steps{margin:12px 0 0;padding:14px 16px;border:1px solid #c2dbff50;border-radius:12px;background:#0c2258a0;color:#e4edff;max-width:385px}
+.ssl-reg-steps strong{font-size:.9rem}
+.ssl-reg-steps ol{margin:6px 0 0;padding-inline-start:21px;font-size:.88rem;line-height:1.6}
+@media(min-width:1001px){body .nav #links:has(>.ssl-season-menu){overflow:visible}}
+@media(max-width:1000px){
+ #links .ssl-season-menu-toggle{width:100%;justify-content:space-between;padding:10px 8px;font-size:14px}
+ #links .ssl-season-menu-panel{position:static;transform:none;width:100%;margin:3px 0 8px;box-shadow:none}
+ .mobile-dock .ssl-season-menu--dock{position:static;align-self:stretch;min-width:0}
+ .mobile-dock .ssl-season-menu-toggle{width:100%;height:100%;padding:4px 0;display:flex;flex-direction:column;gap:4px;font-size:11px;white-space:normal}
+ .mobile-dock .ssl-season-menu-toggle svg{width:20px;height:20px;flex:none}
+ .mobile-dock .ssl-season-menu-toggle>span{line-height:1.2}
+ .mobile-dock .ssl-season-menu-panel{position:absolute;top:auto;bottom:calc(100% + 10px);left:50%;width:min(390px,calc(100vw - 26px));transform:translateX(-50%)}
+ .mobile-dock .ssl-season-menu-panel>a{min-width:0;gap:10px}
+ .mobile-dock .ssl-season-menu-panel strong,.mobile-dock .ssl-season-menu-panel small{font-size:inherit}
+ .mobile-dock .ssl-season-menu-panel small{font-size:.76rem}
+}
+@media(max-width:760px){
+ .ssl-season-hero-inner{grid-template-columns:minmax(0,1fr);min-height:0;padding-block:35px 30px;gap:20px}
+ .ssl-season-ticket-stage{width:min(76%,340px)}
+ .ssl-season-shortcuts{grid-template-columns:1fr;gap:8px;margin-block:16px 26px}
+ .ssl-season-shortcuts>a{min-height:65px;padding:10px 13px}
+ .ssl-season-shortcuts .ssl-season-shortcut-icon{width:36px}
+ .ssl-season-shortcuts .ssl-season-shortcut-icon svg{width:20px;height:20px}
+ .ssl-season-shortcuts small{margin-top:3px}
+ .ssl-reg-steps{margin-top:15px}
+}
+@media(prefers-reduced-motion:reduce){.ssl-season-shortcuts>a{transition:none}}
