@@ -1,5 +1,6 @@
-import {normalizeRegistration,REGISTRATION_PATH,SEASON_ARCHIVE,seasonSettings} from './season-model.js';
+import {normalizeRegistration,registrationOpenFromResponse,REGISTRATION_API,REGISTRATION_PATH,SEASON_ARCHIVE,seasonSettings} from './season-model.js';
 import {onPageCleanup,pageListen} from './page-lifecycle.js';
+import {publicHref} from './routes-source.js';
 
 const words={
  az:{next:'Yeni mövsüm',open:'Qeydiyyat açıqdır',closed:'Qeydiyyat bağlıdır',pending:'Qeydiyyat hazırlanır',pendingBody:'Yeni mövsüm üçün hazırlıq gedir. Qeydiyyat açıldıqda komandan üçün buradan müraciət edə biləcəksən.',apply:'Komandanı qeydiyyata al',archive:'Mövsüm arxivi',archiveAction:'Arxivə bax',seasons:'Mövsüm',pick:'Mövsümü seç',intro:'Yeni mövsümə qoşul və ya əvvəlki mövsümün nəticələrinə bax.',formTitle:'Komanda qeydiyyatı',firstName:'Ad',lastName:'Soyad',team:'Komanda adı',phone:'Əlaqə nömrəsi',phoneHint:'Məsələn: +994 50 123 45 67',privacy:'Məlumatları müraciətini nəzərdən keçirmək və səninlə əlaqə saxlamaq üçün istifadə edirik.',privacyLink:'Məxfilik siyasəti',send:'Müraciəti göndər',sending:'Müraciət göndərilir…',sent:'Müraciət qəbul olundu',sentBody:'Liqa komandası qeyd etdiyin nömrə ilə səninlə əlaqə saxlayacaq.',close:'Bağla',back:'Mövsümlərə qayıt',preview:'Bu ön baxışdır. Buradan müraciət göndərilmir.',unavailable:'Müraciət göndərilmədi. Bir qədər sonra yenidən sına.',rate:'Çox sayda cəhd oldu. Bir dəqiqə sonra yenidən sına.',closedBody:'Hazırda yeni müraciət qəbul edilmir.',invalid:'Məlumatı yoxlayıb yenidən daxil et.',seasonPass:'YENİ MÖVSÜM',step:'01 / MÜRACİƏT',yearArchive:'BAŞA ÇATIB',registration:'Qeydiyyat'},
@@ -8,47 +9,63 @@ const words={
 };
 export const seasonWords=lang=>words[lang]||words.az;
 
-export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,registrationAvailable=true}) {
- const c=seasonWords(lang),settings=seasonSettings(CMS.seasons,lang),active=registrationAvailable&&settings.registrationOpen;
- const statusLabel=active?c.open:registrationAvailable?c.closed:c.pending,description=active?settings.description:registrationAvailable?c.closedBody:c.pendingBody;
- const archiveName=archiveTitle||settings.archiveTitle;
- const season=esc(L.season);
+const detailWords={
+ az:{join:'Komandanı yeni mövsümə qoş',archiveNote:'2026 mövsümünün nəticələri',all:'Bütün mövsümlər',links:'Liqanı kəşf et',teams:'Komandalar',teamsNote:'Liqa klubları və heyətləri',media:'Media',mediaNote:'Oyun videoları və xəbərlər',passLabel:'II MÖVSÜM',summary:'Müraciətin gedişi',applyStep:'Məlumatlarını göndər',contactStep:'Liqa komandası sənə zəng edəcək',tryAgain:'Yenidən yoxla'},
+ en:{join:'Enter your team in the new season',archiveNote:'Results from the 2026 season',all:'All seasons',links:'Explore the league',teams:'Clubs',teamsNote:'League clubs and squads',media:'Media',mediaNote:'Match videos and news',passLabel:'SEASON II',summary:'What happens next',applyStep:'Send your details',contactStep:'The league team will call you',tryAgain:'Check again'},
+ ru:{join:'Заяви команду на новый сезон',archiveNote:'Результаты сезона 2026',all:'Все сезоны',links:'О лиге',teams:'Команды',teamsNote:'Клубы и составы лиги',media:'Медиа',mediaNote:'Видео матчей и новости',passLabel:'II СЕЗОН',summary:'Что дальше',applyStep:'Отправь свои данные',contactStep:'Организаторы свяжутся с тобой',tryAgain:'Проверить ещё раз'}
+};
+const seasonGlyph={
+ archive:'<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4m8-4v4M4 10h16m-11 5h6m-6 3h4"/>',
+ teams:'<path d="m12 3 8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6Z"/><path d="m9 12 2 2 4-4"/>',
+ media:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3Z"/>',
+ join:'<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="5"/>',
+};
+const glyph=name=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${seasonGlyph[name]}</svg>`;
+
+export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=false}) {
+ const c=seasonWords(lang),d=detailWords[lang]||detailWords.az,settings=seasonSettings(CMS.seasons,lang);
+ let open=preview?settings.registrationOpen:null;
+ const active=()=>open===true;
+ const statusLabel=()=>active()?c.open:open===false?c.closed:c.pending;
+ const description=()=>active()?settings.description:open===false?c.closedBody:c.pendingBody;
+ const archiveName=archiveTitle||settings.archiveTitle,season=esc(L.season);
+ const href=route=>esc(publicHref(route,lang));
+ const archiveHref=href(SEASON_ARCHIVE),registrationHref=href(REGISTRATION_PATH),seasonsHref=href('/movsum');
  const icon='<span class="ssl-season-arrow" aria-hidden="true">↗</span>';
- const state=(label,closed=false)=>`<span class="ssl-season-status${closed?' is-closed':''}"><i aria-hidden="true"></i>${label}</span>`;
- const registrationLink=(className='ssl-season-button')=>!registrationAvailable?'':`<a class="${className}" href="${REGISTRATION_PATH}"${active?' data-season-open aria-haspopup="dialog"':''}>${active?c.apply:c.registration}${icon}</a>`;
+ const state=(label=statusLabel(),closed=!active())=>`<span class="ssl-season-status${closed?' is-closed':''}"><i aria-hidden="true"></i>${label}</span>`;
+ const slot=(name,html)=>`<div data-season-slot="${name}"${name==='status'?' role="status"':''}>${html}</div>`;
+ const registrationLink=(className='ssl-season-button')=>active()?`<a class="${className}" href="${registrationHref}" data-season-open aria-haspopup="dialog">${c.apply}${icon}</a>`:'';
  const pitch='<svg class="ssl-season-pitch" viewBox="0 0 300 180" fill="none" aria-hidden="true"><rect x="13" y="13" width="274" height="154" rx="3"/><path d="M150 13v154M13 51h44v78H13m274-78h-44v78h44"/><circle cx="150" cy="90" r="27"/><circle cx="150" cy="90" r="2"/></svg>';
- const ticket=()=>`<div class="ssl-season-ticket-stage" data-season-tilt aria-hidden="true"><div class="ssl-season-ticket"><div class="ssl-season-ticket-top"><span>SSL / 02</span><span>SUMQAYIT</span></div>${pitch}<div class="ssl-season-ticket-crest"><img src="${esc(logo)}" alt=""></div><div class="ssl-season-ticket-bottom"><strong>${c.seasonPass}</strong><span>02</span></div></div></div>`;
- const hero=()=>`<section class="ssl-season-hero"><div class="wrap ssl-season-hero-inner"><div class="ssl-season-lead"><div class="ssl-season-overline"><span>SUMQAYIT SUPER LİQASI</span>${state(statusLabel,!active)}</div><h1>${esc(settings.title)}</h1><p>${esc(description)}</p><div class="ssl-season-actions">${active?registrationLink():''}<a class="ssl-season-button is-outline" href="/movsum">${c.seasons}${icon}</a></div></div>${ticket()}</div></section>`;
- const archiveLabel=()=>`<div class="ssl-season-archive-strip wrap"><div><span class="ssl-season-kicker">${c.archive} / ${season}</span><strong>${esc(archiveName)}</strong></div><a href="${SEASON_ARCHIVE}">${c.archiveAction} ${icon}</a></div>`;
- const field=(name,opts={})=>`<label for="ssl-reg-${name}"><span>${c[name]}</span><input id="ssl-reg-${name}" name="${name}" type="${opts.type||'text'}" autocomplete="${opts.autocomplete||'off'}" required maxlength="${opts.max||60}"${opts.type==='tel'?` inputmode="tel" aria-describedby="ssl-reg-phone-hint" placeholder="+994 50 123 45 67"`:' minlength="2"'}>${opts.type==='tel'?`<small id="ssl-reg-phone-hint">${c.phoneHint}</small>`:''}</label>`;
- const form=()=>active?`<form class="ssl-reg-form" data-season-registration><div class="ssl-reg-fields">${field('firstName',{autocomplete:'given-name'})}${field('lastName',{autocomplete:'family-name'})}${field('team',{autocomplete:'organization',max:100})}${field('phone',{type:'tel',autocomplete:'tel',max:32})}</div><div hidden aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div><p class="ssl-reg-privacy">${c.privacy} ${CMS.pages?.some(p=>p.slug==='mexfilik'&&p.published)?`<a href="/sehife/mexfilik" target="_blank" rel="noopener noreferrer">${c.privacyLink}</a>`:''}</p><button type="submit" class="ssl-season-button">${c.send}${icon}</button><p class="ssl-reg-message" data-reg-message role="status" aria-live="polite"></p></form><div class="ssl-reg-success" data-reg-success hidden tabindex="-1"><span aria-hidden="true">✓</span><h3>${c.sent}</h3><p>${c.sentBody}</p></div>`:`<p class="ssl-reg-closed">${esc(description)}</p>`;
- const formPanel=(tag,id)=>`<div class="ssl-reg-panel"><div class="ssl-reg-panel-head"><span class="ssl-season-kicker">${c.step}</span><${tag} id="${id}">${c.formTitle}</${tag}><p>${active?esc(settings.description):statusLabel}</p></div>${form()}</div>`;
- const seasons=()=>`<section class="ssl-season-directory"><div class="wrap"><header class="ssl-season-section-head"><span class="ssl-season-kicker">SSL / ${c.seasons}</span><h1>${c.pick}</h1><p>${c.intro}</p></header><div class="ssl-season-choices"><article class="ssl-season-choice ssl-season-choice-next"><div class="ssl-season-choice-content">${state(statusLabel,!active)}<h2>${c.next}</h2><p>${esc(description)}</p>${registrationLink()}</div><span class="ssl-season-choice-number" aria-hidden="true">02</span></article><article class="ssl-season-choice ssl-season-choice-archive"><div class="ssl-season-choice-content">${state(season+' / '+c.yearArchive,true)}<h2>${esc(archiveName)}</h2><p>${esc(settings.archiveDescription)}</p><a class="ssl-season-button is-outline" href="${SEASON_ARCHIVE}">${c.archiveAction}${icon}</a></div><span class="ssl-season-choice-number" aria-hidden="true">01</span></article></div></div></section>`;
- const oldHome=P.home, oldArchive=P.playoffs;
+ const ticket=()=>`<div class="ssl-season-ticket-stage" data-season-tilt aria-hidden="true"><div class="ssl-season-ticket"><div class="ssl-season-ticket-top"><span>SSL <i></i> ${d.passLabel}</span><span>SUMQAYIT</span></div>${pitch}<div class="ssl-season-ticket-crest"><img src="${esc(logo)}" alt="" width="120" height="120"></div><div class="ssl-season-ticket-bottom"><strong>${c.seasonPass}</strong><span>02</span></div></div></div>`;
+ const heroCopy=()=>`<p>${esc(description())}</p><div class="ssl-season-actions">${registrationLink()}<a class="ssl-season-button is-outline" href="${seasonsHref}">${d.all}${icon}</a></div>`;
+ const hero=()=>`<section class="ssl-season-hero"><div class="wrap ssl-season-hero-inner"><div class="ssl-season-lead"><div class="ssl-season-overline"><span>SUMQAYIT SUPER LİQASI</span>${slot('status',state())}</div><h1>${esc(settings.title)}</h1>${slot('hero',heroCopy())}</div>${ticket()}</div></section>`;
+ const shortcut=(url,title,sub,key)=>`<a href="${url}"><span class="ssl-season-shortcut-icon">${glyph(key)}</span><span><strong>${title}</strong><small>${sub}</small></span>${icon}</a>`;
+ const shortcuts=()=>`<nav class="ssl-season-shortcuts wrap" aria-label="${d.links}">${shortcut(archiveHref,c.archive,esc(archiveName),'archive')}${shortcut(href('/komandalar'),d.teams,d.teamsNote,'teams')}${shortcut(href('/media'),d.media,d.mediaNote,'media')}</nav>`;
+ const menu=({label=c.seasons,dock=false,current=false,icon:tabIcon=''})=>{
+  const id=dock?'ssl-dock-seasons':'ssl-nav-seasons';
+  return `<div class="ssl-season-menu${dock?' ssl-season-menu--dock':''}" data-season-menu><button type="button" class="ssl-season-menu-toggle${current?' on':''}" aria-expanded="false" aria-controls="${id}">${tabIcon}<span>${esc(label)}</span>${dock?'':'<svg class="ssl-season-menu-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>'}</button><div class="ssl-season-menu-panel" id="${id}" hidden><div class="ssl-season-menu-caption"><b>SSL</b><span>${c.seasons}</span></div>${shortcut(registrationHref,c.next,d.join,'join')}${shortcut(archiveHref,season+' · '+c.archive,esc(archiveName),'archive')}<a class="ssl-season-menu-all" href="${seasonsHref}">${d.all}${icon}</a></div></div>`;
+ };
+ const field=(name,opts={})=>`<label for="ssl-reg-${name}"><span>${c[name]}</span><input id="ssl-reg-${name}" name="${name}" type="${opts.type||'text'}" autocomplete="${opts.autocomplete||'off'}" required maxlength="${opts.max||60}"${opts.type==='tel'?' inputmode="tel" aria-describedby="ssl-reg-phone-hint" placeholder="+994 50 123 45 67"':' minlength="2"'}>${opts.type==='tel'?`<small id="ssl-reg-phone-hint">${c.phoneHint}</small>`:''}</label>`;
+ const form=()=>active()?`<form class="ssl-reg-form" action="${REGISTRATION_API}" method="post" data-season-registration><div class="ssl-reg-fields">${field('firstName',{autocomplete:'given-name'})}${field('lastName',{autocomplete:'family-name'})}${field('team',{autocomplete:'organization',max:100})}${field('phone',{type:'tel',autocomplete:'tel',max:32})}</div><div hidden aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div><p class="ssl-reg-privacy">${c.privacy} ${CMS.pages?.some(p=>p.slug==='mexfilik'&&p.published)?`<a href="${href('/sehife/mexfilik')}" target="_blank" rel="noopener noreferrer">${c.privacyLink}</a>`:''}</p><button type="submit" class="ssl-season-button">${c.send}${icon}</button><p class="ssl-reg-message" data-reg-message role="status" aria-live="polite"></p></form><div class="ssl-reg-success" data-reg-success hidden tabindex="-1"><span aria-hidden="true">✓</span><h3>${c.sent}</h3><p>${c.sentBody}</p></div>`:`<div class="ssl-reg-closed"><p>${esc(description())}</p>${open===null?`<button class="ssl-reg-retry" type="button" data-season-retry>${d.tryAgain}</button>`:''}</div>`;
+ const formPanel=(tag,id)=>`<div class="ssl-reg-panel"><div class="ssl-reg-panel-head"><span class="ssl-season-kicker">${c.step}</span><${tag} id="${id}">${c.formTitle}</${tag}>${slot('status',state())}</div>${slot('form',form())}</div>`;
+ const seasonNew=()=>`${state()}<h2>${c.next}</h2><p>${esc(description())}</p>${registrationLink()}`;
+ const seasons=()=>`<section class="ssl-season-directory"><div class="wrap"><header class="ssl-season-section-head"><span class="ssl-season-kicker">SSL / ${c.seasons}</span><h1>${c.pick}</h1><p>${c.intro}</p></header><div class="ssl-season-choices"><article class="ssl-season-choice ssl-season-choice-next"><div class="ssl-season-choice-content" data-season-slot="new">${seasonNew()}</div><span class="ssl-season-choice-number" aria-hidden="true">02</span></article><article class="ssl-season-choice ssl-season-choice-archive"><div class="ssl-season-choice-content">${state(season+' / '+c.yearArchive,true)}<h2>${esc(archiveName)}</h2><p>${esc(settings.archiveDescription)}</p><a class="ssl-season-button is-outline" href="${archiveHref}">${c.archiveAction}${icon}</a></div><span class="ssl-season-choice-number" aria-hidden="true">01</span></article></div></div></section>`;
+ const oldHome=P.home,oldArchive=P.playoffs;
  if(settings.showHome){
-  P.home=()=>hero()+archiveLabel()+oldHome().replace(/<h1(\s[^>]*)?>([\s\S]*?)<\/h1>/i,(_,attrs='',copy)=>`<h2${attrs}>${copy}</h2>`);
+  P.home=()=>hero()+shortcuts()+oldHome().replace(/<h1(\s[^>]*)?>([\s\S]*?)<\/h1>/i,(_,attrs='',copy)=>`<h2${attrs}>${copy}</h2>`);
   P.home.init=oldHome.init;
  }
  P.seasons=seasons;
- P.registration=()=>`<section class="ssl-reg-page"><div class="wrap ssl-reg-page-grid"><div class="ssl-reg-aside"><a class="ssl-reg-back" href="/movsum">← ${c.back}</a>${ticket()}</div>${formPanel('h1','ssl-reg-page-title')}</div></section>`;
+ P.registration=()=>`<section class="ssl-reg-page"><div class="wrap ssl-reg-page-grid"><div class="ssl-reg-aside"><a class="ssl-reg-back" href="${seasonsHref}">← ${c.back}</a>${ticket()}<div class="ssl-reg-steps"><strong>${d.summary}</strong><ol><li>${d.applyStep}</li><li>${d.contactStep}</li></ol></div></div>${formPanel('h1','ssl-reg-page-title')}</div></section>`;
  P.playoffs=()=>oldArchive().replace(/<h1(\s[^>]*)?>[\s\S]*?<\/h1>/i,(_,attrs='')=>`<h1${attrs}>${esc(archiveName)}</h1>`);
  P.playoffs.init=oldArchive.init;
- return {mount(page){
-  const preview=!!document.body.dataset.previewPath;
-  let dialog=null,trigger=null;
-  if(page!=='registration'&&active&&document.querySelector('[data-season-open]')){
-   document.body.insertAdjacentHTML('beforeend',`<dialog class="ssl-reg-dialog" aria-labelledby="ssl-reg-dialog-title"><div class="ssl-reg-dialog-inner"><button type="button" class="ssl-reg-dialog-close" data-reg-close aria-label="${c.close}">×</button>${formPanel('h2','ssl-reg-dialog-title')}</div></dialog>`);
-   dialog=document.querySelector('.ssl-reg-dialog');
-   pageListen(document,'click',event=>{
-    const link=event.target.closest?.('[data-season-open]');
-    if(!link||event.defaultPrevented||event.button>0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||typeof dialog.showModal!=='function')return;
-    event.preventDefault();trigger=link;if(!dialog.open)dialog.showModal();dialog.querySelector('input[name="firstName"]')?.focus();
-   },true);
-   pageListen(dialog,'click',event=>{if(event.target.closest?.('[data-reg-close]'))dialog.close();});
-   pageListen(dialog,'close',()=>trigger?.focus());
-   onPageCleanup(()=>{if(dialog.open)dialog.close();dialog.remove();});
-  }
-  for(const formNode of document.querySelectorAll('[data-season-registration]')){
+ return {menu,mount(page){
+  bindSeasonMenus();
+  let dialog=null,trigger=null,checking=false;
+  const availability=typeof AbortController==='function'?new AbortController():null;
+  onPageCleanup(()=>availability?.abort());
+
+  const bindForm=formNode=>{
    const message=formNode.querySelector('[data-reg-message]'),button=formNode.querySelector('button[type="submit"]');
    const say=(value,error=false)=>{message.textContent=value;message.classList.toggle('is-error',error);};
    let responseController=null;
@@ -62,8 +79,9 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,registra
     if(result.field){invalid(result.field);return;}
     responseController=new AbortController();
     button.disabled=true;formNode.dataset.dirty='true';formNode.setAttribute('aria-busy','true');say(c.sending);
+    const timeout=setTimeout(()=>responseController.abort('timeout'),12000);
     try{
-     const response=await fetch('/api/season-registration',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-SSL-Registration':'1'},body:JSON.stringify({...result.value,website:body.website||''}),signal:AbortSignal.any([responseController.signal,AbortSignal.timeout(12000)])});
+     const response=await fetch(REGISTRATION_API,{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-SSL-Registration':'1'},body:JSON.stringify({...result.value,website:body.website||''}),signal:responseController.signal});
      const payload=await response.json().catch(()=>null);
      if(response.status===201&&payload?.ok===true){
       formNode.reset();formNode.hidden=true;formNode.dataset.dirty='false';const success=formNode.nextElementSibling;success.hidden=false;success.focus();
@@ -71,10 +89,44 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,registra
      else if(response.status===429)say(c.rate,true);
      else if(payload?.field&&Object.hasOwn(c,payload.field))invalid(payload.field);
      else say(c.unavailable,true);
-    }catch{if(!responseController.signal.aborted)say(c.unavailable,true);}
-    finally{formNode.removeAttribute('aria-busy');button.disabled=false;}
+    }catch{if(!responseController.signal.aborted||responseController.signal.reason==='timeout')say(c.unavailable,true);}
+    finally{clearTimeout(timeout);formNode.removeAttribute('aria-busy');button.disabled=false;}
    });
-  }
+  };
+  const checkAvailability=async()=>{
+   if(checking||preview||!availability||availability.signal.aborted||typeof fetch!=='function')return;
+   checking=true;
+   const retry=document.querySelector('[data-season-retry]');if(retry)retry.disabled=true;
+   const request=new AbortController(),stop=()=>request.abort(),timeout=setTimeout(stop,4500);
+   availability.signal.addEventListener('abort',stop,{once:true});
+   try{
+    const response=await fetch(REGISTRATION_API,{credentials:'same-origin',cache:'no-store',signal:request.signal});
+    if(!response.ok||!response.headers.get('content-type')?.includes('application/json'))return;
+    const result=registrationOpenFromResponse(await response.json());
+    if(result===null||result===open||availability.signal.aborted)return;
+    open=result;
+    const views={status:state,hero:heroCopy,new:seasonNew,form};
+    for(const element of document.querySelectorAll('[data-season-slot]'))element.innerHTML=views[element.dataset.seasonSlot]();
+    const standalone=document.querySelector('.ssl-reg-page [data-season-registration]');if(standalone)bindForm(standalone);
+   }catch{}finally{clearTimeout(timeout);availability.signal.removeEventListener('abort',stop);checking=false;if(retry?.isConnected)retry.disabled=false;}
+  };
+  const standalone=document.querySelector('.ssl-reg-page [data-season-registration]');if(standalone)bindForm(standalone);
+  if((page==='home'&&settings.showHome)||page==='seasons'||page==='registration')checkAvailability();
+  pageListen(document,'click',event=>{
+   if(event.target.closest?.('[data-season-retry]')){checkAvailability();return;}
+   const link=event.target.closest?.('[data-season-open]');
+   if(!active()||!link||event.defaultPrevented||event.button>0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||typeof HTMLDialogElement==='undefined'||typeof HTMLDialogElement.prototype.showModal!=='function')return;
+   event.preventDefault();trigger=link;
+   if(!dialog){
+    document.body.insertAdjacentHTML('beforeend',`<dialog class="ssl-reg-dialog" aria-labelledby="ssl-reg-dialog-title"><div class="ssl-reg-dialog-inner"><button type="button" class="ssl-reg-dialog-close" data-reg-close aria-label="${c.close}">×</button>${formPanel('h2','ssl-reg-dialog-title')}</div></dialog>`);
+    dialog=document.querySelector('.ssl-reg-dialog');
+    bindForm(dialog.querySelector('[data-season-registration]'));
+    pageListen(dialog,'click',e=>{if(e.target===dialog||e.target.closest?.('[data-reg-close]'))dialog.close();});
+    pageListen(dialog,'close',()=>trigger?.focus());
+    onPageCleanup(()=>{if(dialog.open)dialog.close();dialog.remove();});
+   }
+   if(!dialog.open)dialog.showModal();(dialog.querySelector('[data-reg-success]:not([hidden])')||dialog.querySelector('input[name="firstName"]'))?.focus();
+  },true);
   if(typeof matchMedia==='function'&&matchMedia('(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)').matches){
    for(const stage of document.querySelectorAll('[data-season-tilt]')){
     const card=stage.firstElementChild;
@@ -83,4 +135,25 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,registra
    }
   }
  }};
+}
+
+function bindSeasonMenus(){
+ const desktop=window.matchMedia?.('(min-width:1001px) and (hover:hover) and (pointer:fine)');
+ for(const menu of document.querySelectorAll('[data-season-menu]')){
+  const toggle=menu.querySelector('button'),panel=menu.querySelector('.ssl-season-menu-panel');
+  let mode='',leave;
+  const set=value=>{clearTimeout(leave);mode=value;panel.hidden=!mode;toggle.setAttribute('aria-expanded',String(!!mode));};
+  pageListen(toggle,'click',()=>set(mode==='hover'?'press':mode?'':'press'));
+  pageListen(toggle,'keydown',event=>{if(event.key==='ArrowDown'){event.preventDefault();set('press');panel.querySelector('a')?.focus();}});
+  pageListen(menu,'pointerenter',event=>{clearTimeout(leave);if(desktop?.matches&&event.pointerType!=='touch'&&!mode)set('hover');});
+  pageListen(menu,'pointerleave',()=>{if(mode==='hover')leave=setTimeout(()=>{if(!menu.contains(document.activeElement))set('');},160);});
+  pageListen(menu,'focusout',event=>{if(mode&&event.relatedTarget&&!menu.contains(event.relatedTarget))set('');});
+  pageListen(panel,'click',event=>{if(event.target.closest?.('a'))set('');});
+  pageListen(document,'pointerdown',event=>{if(mode&&!menu.contains(event.target))set('');});
+  pageListen(document,'keydown',event=>{
+   if(event.key!=='Escape'||!mode)return;
+   event.stopPropagation();event.preventDefault();const inside=menu.contains(document.activeElement);set('');if(inside)toggle.focus();
+  },true);
+  onPageCleanup(()=>clearTimeout(leave));
+ }
 }

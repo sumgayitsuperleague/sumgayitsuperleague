@@ -1,7 +1,9 @@
 export const REGISTRATION_EDITION = 'ssl-season-2';
+export const REGISTRATION_API = '/api/season-registration';
 export const SEASON_APP_VERSION = '20261108season1';
 export const SEASON_ARCHIVE = '/movsum/arxiv';
 export const REGISTRATION_PATH = '/qeydiyyat';
+export const registrationOpenFromResponse = value => value?.edition === REGISTRATION_EDITION && typeof value.open === 'boolean' ? value.open : null;
 export const SEASON_DEFAULTS = Object.freeze({
   registrationOpen: true,
   showHome: true,

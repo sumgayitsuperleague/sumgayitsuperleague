@@ -5,7 +5,12 @@ export function mobileNavigation(ctx){
  if(ctx.CMS.appearance.mobileNav===false)return '';
  const routes=ctx.NAV.filter(([, ,id])=>Object.hasOwn(icons,id)&&!['fans','table'].includes(id)),current=['seasons','registration'].includes(ctx.PAGE)?'playoffs':ctx.PAGE==='match'?'games':['team','player','players'].includes(ctx.PAGE)?'teams':ctx.PAGE;
  if(routes.length<2)return '';
- return `<nav class="mobile-dock" style="--mobile-nav-count:${routes.length}" aria-label="${UI.t('Sürətli naviqasiya')}">${routes.map(([href,label,id])=>`<a href="${ctx.esc(href)}"${current===id?' aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[id]}</svg><span>${ctx.esc(id==='fans'?'Azarkeş':label)}</span></a>`).join('')}</nav>`;
+ const item=([href,label,id])=>{
+  const icon=`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[id]}</svg>`;
+  if(id==='playoffs'&&ctx.seasonMenu)return ctx.seasonMenu({label:UI.t(label),current:current===id,dock:true,icon});
+  return `<a href="${ctx.esc(href)}"${current===id?' aria-current="page"':''}>${icon}<span>${ctx.esc(id==='fans'?'Azarkeş':label)}</span></a>`;
+ };
+ return `<nav class="mobile-dock" style="--mobile-nav-count:${routes.length}" aria-label="${UI.t('Sürətli naviqasiya')}">${routes.map(item).join('')}</nav>`;
 }
 export function kickoffText(match,now=Date.now()){
  if(!match||match.status!=='planned')return '';

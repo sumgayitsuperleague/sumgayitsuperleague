@@ -1,7 +1,7 @@
 import {installVenue,mountVenue} from './venue-app.js';
 import {installSeasonLaunch,seasonWords} from './season-launch.js';
 import {SEASON_APP_VERSION} from './season-model.js';
-import {configureSeasonRoutes} from './routes-source.js';
+import {canonicalPath,configureSeasonRoutes} from './routes-source.js';
 import {installTraffic} from './traffic.js';
 import {pageListen,pageInterval,pageTimeout,pageFrame,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {installConsistentIcons} from './ui-icons.js';
@@ -49,10 +49,11 @@ function mvps(){const mp=new Map();DONE.forEach(m=>{if(!m.mvp)return;const k=tok
 /* ---------- ümumi komponentlər ---------- */
 const brandName=()=>S.name==='Sumqayıt Super Liqası'?'SUMQAYIT<br>SUPER LİQASI':esc(S.name||L.name);
 const entryScript=$('script[src*="/js/app.js"]')?.getAttribute('src');
-const registrationAvailable=!!document.body.dataset.previewPath||!entryScript||document.body.dataset.cleanRoutes==='1'&&new URL(entryScript,location.href).searchParams.get('v')===SEASON_APP_VERSION;
-configureSeasonRoutes(registrationAvailable);
-const legacySeasonRoute=!registrationAvailable&&['/movsum','/movsum/','/movsum.html'].includes(location.pathname);
-const PAGE=legacySeasonRoute?(new URLSearchParams(location.search).has('arxiv')?'playoffs':'seasons'):document.body.dataset.page||'';
+const previewPath=document.body.dataset.previewPath;
+const seasonRoutesReady=!!previewPath||!entryScript||document.body.dataset.cleanRoutes==='1'&&new URL(entryScript,location.href).searchParams.get('v')===SEASON_APP_VERSION;
+configureSeasonRoutes(seasonRoutesReady);
+const path=canonicalPath(previewPath||location.pathname);
+const PAGE=path==='/movsum'?(new URLSearchParams(location.search).get('arxiv')==='2026'?'playoffs':'seasons'):path==='/movsum/arxiv'?'playoffs':path==='/qeydiyyat'?'registration':document.body.dataset.page||'';
 const DEFAULT_NAV=CMSKit.NAV_ITEMS.map(([id,label,href])=>[href,label,id]);
 const NAV=(CMS.navigation?CMS.navigation.filter(n=>n.visible&&n.id!=='news').flatMap(n=>{const row=DEFAULT_NAV.find(x=>x[2]===n.id);return row?[[row[0],n.label,n.id]]:[];}):DEFAULT_NAV.filter(([, ,id])=>id!=='news')).concat((CMS.pages||[]).filter(p=>p.published&&p.showInMenu).map(p=>['/sehife/'+p.slug,p.menuLabel,'custom-'+p.slug]));
 const siteLogo=B.logo||'/assets/logo.png';
@@ -179,8 +180,10 @@ P.stats=()=>{const stages=[...new Set(DONE.map(League.matchStageKey))],stageOrde
  ${hat.length?`<div class="card rv" style="margin-top:22px"><div class="ch">3 VƏ DAHA ÇOX QOL (HET-TRİK)</div><div class="lst">${hat.map(x=>`<a class="li" href="matc.html?id=${encodeURIComponent(x.m.id)}">${ball(x.t,'sm')}<div><b>${esc(x.p)}</b><small>${esc(T[x.m.home].name)} ${x.m.hs}–${x.m.as} ${esc(T[x.m.away].name)} · ${fd(x.m.date)}</small></div><span class="v">${x.n} qol</span></a>`).join('')}</div></div>`:''}
  <div class="g2" style="margin-top:22px"><div class="card rv"><div class="ch">ƏN BÖYÜK QƏLƏBƏLƏR</div><div class="lst">${big.map(mrow).join('')}</div></div><div class="card rv"><div class="ch">ƏN QOLLU OYUNLAR</div><div class="lst">${hi.map(mrow).join('')}</div></div></div></div></section>`};
 /* ---------- işə sal ---------- */
-const arena=installArena({P,L,S,C,CMS,H,B,T,M,DONE,PLAN,GROUPS,ST,STX,SC,PAGE,NAV,$,$$,esc,fd,fs,fmtShort,ball,mcard,tableHTML,head,sech,formHTML,homeMedia,homeNews,mvps,playerLink,NEWS,VIDEOS,newsCard,videoCard,thumb,videoForMatch,videoKind,coverFallback,newsArtwork,isVideoSaved,setSaveRefresh:fn=>{refreshVideoSaves=fn;}});
-const seasons=installSeasonLaunch({P,CMS,L,lang:UI.LANG,esc,logo:siteLogo,registrationAvailable});
+const ctx={P,L,S,C,CMS,H,B,T,M,DONE,PLAN,GROUPS,ST,STX,SC,PAGE,NAV,$,$$,esc,fd,fs,fmtShort,ball,mcard,tableHTML,head,sech,formHTML,homeMedia,homeNews,mvps,playerLink,NEWS,VIDEOS,newsCard,videoCard,thumb,videoForMatch,videoKind,coverFallback,newsArtwork,isVideoSaved,setSaveRefresh:fn=>{refreshVideoSaves=fn;}};
+const arena=installArena(ctx);
+const seasons=installSeasonLaunch({P,CMS,L,lang:UI.LANG,esc,logo:siteLogo,preview:!!previewPath});
+ctx.seasonMenu=seasons.menu;
 chrome();installMatchLive({P,M,T,ball,fd,videoForMatch,playerLink,$,$$,mcard,CMS});installVenue({P,L,CMS,lang:UI.LANG});const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}seasons.mount(PAGE);arena.bind();pageEnd();
 const titleLabels={venue:'Oyuna gəlmək üçün məlumat',seasons:seasonWords(UI.LANG).seasons,registration:seasonWords(UI.LANG).registration,sponsors:'Sponsorlar və tərəfdaşlar',fans:'Azarkeş mərkəzi',guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
 document.title=(titleLabels[PAGE]?UI.t(titleLabels[PAGE])+' · ':'')+(PAGE==='team'&&T[new URLSearchParams(location.search).get('t')]?T[new URLSearchParams(location.search).get('t')].name+' · ':'')+(S.name||L.name);
