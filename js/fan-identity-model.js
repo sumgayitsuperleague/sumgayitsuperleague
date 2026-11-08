@@ -28,7 +28,7 @@ export function identityPalette(team,tone='club',custom={}){
  return palette;
 }
 export function identityLink(value,teams,lang='az'){
- const v=normalizeIdentity(value,teams),p=new URLSearchParams({club:v.team}),fragment=new URLSearchParams({fan:v.name,number:v.number,design:v.style,tone:v.tone,poster:v.poster,avatar:v.avatar});for(const [key,field] of [['color','primary'],['accent','secondary'],['ink','lettering']])if(v[field])fragment.set(key,v[field]);if(lang==='en'||lang==='ru')p.set('lang',lang);
+ const v=normalizeIdentity(value,teams),p=new URLSearchParams({club:v.team}),fragment=new URLSearchParams({fan:v.name,number:v.number,design:v.style,tone:v.tone,poster:v.poster,avatar:v.avatar});for(const [key,field] of [['color','primary'],['accent','secondary'],['ink','lettering']])if(v[field])fragment.set(key,v[field]);
  // Personal text stays in the URL fragment, outside HTTP requests and logs.
  return '/azarkes?'+p.toString()+'#kimlik?'+fragment.toString();
 }

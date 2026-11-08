@@ -180,25 +180,49 @@ body.ux-site.ssl-official .ssl-season-hero~.league-entry--official .official-her
 @media(prefers-reduced-motion:reduce){.ssl-season-shortcuts>a{transition:none}}
 
 /* Compact registration and editorial surfaces. */
-.ssl-reg-rules{margin:0 0 12px;border:1px solid #d5e2f5;border-radius:13px;background:#f5f9ff;color:#15335c}
-.ssl-reg-rules>summary{cursor:pointer;padding:13px 16px;min-height:44px;font-weight:800;line-height:1.4}
+.ssl-reg-rules{margin:0 0 20px;border-radius:14px;background:#f1f6ff;color:#15335c;scroll-margin-top:110px}
+.ssl-reg-rules>.ssl-reg-rules-toggle{display:grid;grid-template-columns:36px minmax(0,1fr) 18px;align-items:center;gap:12px;list-style:none;cursor:pointer;padding:10px 14px;min-height:58px;border:1px solid #214ba3;border-radius:14px;background:#214ba3;color:#fff;font-size:1rem;font-weight:800;line-height:1.35}
+.ssl-reg-rules-toggle::-webkit-details-marker{display:none}.ssl-reg-rules-toggle::marker{content:''}
+.ssl-reg-rules>.ssl-reg-rules-toggle:hover{background:#183d8a;border-color:#183d8a}
+.ssl-reg-rules-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:9px;background:#ffffff20;color:#fff}
+.ssl-reg-rules-icon svg{width:20px;height:20px}.ssl-reg-rules[open] .ssl-reg-rules-chevron{transform:rotate(180deg)}
 .ssl-reg-rules>summary:focus-visible,.ssl-reg-retry:focus-visible{outline:2px solid #2449bf;outline-offset:2px}
-.ssl-reg-rules-body{padding:0 16px 15px;line-height:1.6;font-size:.9rem;color:#344f72}
+.ssl-reg-rules-body{padding:15px 16px 16px;line-height:1.6;font-size:.94rem;color:#344f72}
 .ssl-reg-rules-body p{margin:0 0 12px;overflow-wrap:anywhere}.ssl-reg-rules-body p:last-child{margin-bottom:0}
 .ssl-reg-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ssl-reg-fields label[hidden],.ssl-reg-actions [hidden],.ssl-reg-mode-title[hidden]{display:none!important}
 .ssl-reg-mode-title{margin:0 0 12px;color:#183b81;font-size:1rem;font-weight:800}
 .ssl-reg-reference{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px!important}.ssl-reg-reference strong{border-radius:6px;padding:5px 9px;background:#e9f2ff;color:#173d8b;letter-spacing:.045em}
-.ssl-season-honour-wrap{margin-top:14px;margin-bottom:18px}.ssl-season-honour{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border:1px solid #d8e3f6;border-radius:14px;background:linear-gradient(100deg,#f2f7ff,#fff);color:#142e61}
-.ssl-season-honour img{object-fit:contain}.ssl-season-honour div{display:grid;gap:3px}.ssl-season-honour div span{font-size:.72rem;letter-spacing:.035em;color:#53719a}.ssl-season-honour strong{font-size:1.14rem;line-height:1.2}.ssl-season-honour a{font-size:.83rem;color:#20489a;font-weight:750;text-decoration:none}
-.ssl-media-heading.broadcast-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px;padding:18px 22px;border-radius:15px}
-.ssl-media-heading .ssl-media-heading-copy{display:grid;min-width:0;gap:6px}.ssl-media-heading .ssl-media-heading-copy h2{margin:0;line-height:1.16;letter-spacing:-.025em;text-wrap:balance}
-.ssl-media-kicker{font-size:.7rem;font-weight:850;letter-spacing:.13em}
-.ssl-media-heading p.ssl-media-meta{display:flex;flex-wrap:wrap;gap:7px;margin:0;line-height:1.3}
-.ssl-media-meta span{padding:4px 9px;border-radius:20px;background:#eaf2ff;color:#204681;font-size:.73rem;font-weight:750;white-space:nowrap}
-.ssl-media-heading>a{flex:none;min-height:44px}
+.ssl-season-honour-wrap{margin-top:24px;margin-bottom:30px}
+.ssl-season-honour{display:grid;grid-template-columns:116px minmax(0,1fr) auto;align-items:center;gap:clamp(17px,3vw,36px);padding:clamp(18px,3vw,34px);border:1px solid #b9cef3;border-left:5px solid #2654ae;border-radius:20px;background:radial-gradient(ellipse at 8% 0%,#dceaff 0%,transparent 58%),linear-gradient(112deg,#f3f7ff,#fff 75%);color:#112e61;box-shadow:0 12px 28px #2b508614}
+.ssl-season-honour-crest{display:grid;place-items:center;width:116px;height:116px;padding:8px;border:1px solid #cfdef6;border-radius:19px;background:#fff;box-shadow:0 8px 22px #224d8a1a}
+.ssl-season-honour-crest img{display:block;width:100%;height:100%;object-fit:contain}
+.ssl-season-honour-copy{display:grid;gap:8px;min-width:0}
+.ssl-season-honour .ssl-season-honour-label{display:flex;align-items:center;gap:7px;margin:0;color:#2654a2;font-size:.81rem;font-weight:850;line-height:1.25;letter-spacing:.045em}
+.ssl-season-honour-label svg{width:19px;height:19px;flex:none}
+.ssl-season-honour .ssl-season-honour-copy h2{margin:0;font:850 clamp(2rem,4.6vw,3.25rem)/1.04 var(--font,system-ui);color:#122d61;letter-spacing:-.035em;overflow-wrap:anywhere}
+.ssl-season-honour .ssl-season-honour-edition{margin:0;color:#4b6488;font-size:.86rem;font-weight:700;line-height:1.4}
+.ssl-season-honour-link{display:inline-flex;justify-content:center;align-items:center;gap:12px;min-height:44px;padding:9px 13px;border:1px solid #c9d8f2;border-radius:10px;background:#fff;color:#214ba3;font-size:.88rem;font-weight:800;text-decoration:none}
+.ssl-season-honour-link:hover{border-color:#759ad8;background:#f1f6ff}
+.ssl-media-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin:0 0 26px;padding:clamp(18px,3vw,32px);border:1px solid #d4e2f8;border-radius:18px;background:linear-gradient(112deg,#edf4ff,#fbfdff 68%);color:#153363}
+.ssl-media-heading .ssl-media-heading-copy{display:grid;min-width:0;gap:14px}
+.ssl-media-heading .ssl-media-heading-copy h2{margin:0;color:#153363;font:850 clamp(1.85rem,4vw,3rem)/1.16 var(--font,system-ui);letter-spacing:-.026em;text-wrap:balance}
+.ssl-media-kicker{justify-self:start;padding:6px 10px;border:1px solid #cbdcf8;border-radius:7px;background:#fff;color:#214ba3;font-size:.74rem;font-weight:850;letter-spacing:.14em;line-height:1.3}
+.ssl-media-heading p.ssl-media-meta{display:flex;flex-wrap:wrap;gap:8px;margin:0;line-height:1.3}
+.ssl-media-meta span{padding:5px 10px;border-radius:20px;background:#e2edff;color:#204681;font-size:.78rem;font-weight:750;white-space:nowrap}
+.ssl-media-heading .ssl-media-channel{display:inline-flex;align-items:center;justify-content:center;gap:9px;justify-self:start;min-height:44px;padding:9px 13px;border-radius:9px;background:#214ba3;color:#fff;font-size:.86rem;font-weight:800;text-decoration:none}
+.ssl-media-channel:hover{background:#193d85}
 .ssl-media-sources{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:10px 12px;border:1px solid #d9e5f7;border-radius:12px;background:#f7faff;color:#385781}
 .ssl-media-sources>span{margin-right:3px;font-size:.8rem;font-weight:800}.ssl-media-sources>a{padding:7px 10px;border-radius:7px;background:#fff;border:1px solid #dbe7f8;color:#204689;font-size:.8rem;font-weight:750}
-.ssl-social-updates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0 0 15px}
-.ssl-social-updates a{display:grid;align-content:start;gap:7px;min-width:0;padding:11px 12px;border:1px solid #dbe6f6;border-radius:11px;background:#f7faff;text-decoration:none;color:#163568}
-.ssl-social-updates a:hover{border-color:#82a7e8;background:#eef5ff}.ssl-social-source{font-size:.66rem;font-weight:850;letter-spacing:.07em;color:#3d60a3}.ssl-social-updates strong{font-size:.87rem;line-height:1.35;text-wrap:pretty}.ssl-social-updates small{display:flex;justify-content:space-between;font-size:.73rem;color:#536b90}
-@media(max-width:680px){.ssl-media-heading.broadcast-bar{padding:15px;gap:12px}.ssl-media-heading .ssl-media-heading-copy h2{font-size:clamp(1.3rem,6.2vw,1.8rem)}.ssl-social-updates{grid-template-columns:repeat(2,minmax(0,1fr))}.ssl-season-honour{grid-template-columns:38px minmax(0,1fr) auto;gap:9px}.ssl-season-honour img{width:38px;height:38px}}
+.ssl-ig-feed{margin-top:clamp(22px,4vw,46px)}
+.ssl-ig-feed .social-page-heading{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:13px;margin:0 0 20px}
+.ssl-ig-feed .social-page-heading>div{display:grid;gap:8px}
+.ssl-ig-feed .social-page-heading .eyebrow{display:flex;align-items:center;gap:7px;color:#2654a2;font-weight:800;font-size:.75rem;line-height:1.3}
+.ssl-ig-feed .social-page-heading .eyebrow svg{width:17px;height:17px;flex:none}
+.ssl-ig-feed .social-page-heading h2{margin:0;color:#153363;font:850 clamp(1.6rem,3vw,2.45rem)/1.15 var(--font,system-ui);letter-spacing:-.025em}
+body.ux-site.ssl-official .ssl-ig-feed .instagram-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2.2vw,24px)}
+body.ux-site.ssl-official .ssl-ig-feed .instagram-card{border-radius:15px;box-shadow:0 8px 22px #21447c0d}
+body.ux-site.ssl-official .ssl-ig-feed .instagram-art,body.ux-site.ssl-official .ssl-ig-feed .instagram-art>.instagram-post-image{background:#eaf1fc}
+.ssl-ig-feed .instagram-no-cover,.ssl-ig-feed .instagram-no-cover>span{color:#244d90}
+@media(max-width:900px){body.ux-site.ssl-official .ssl-ig-feed .instagram-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.ssl-media-heading{grid-template-columns:minmax(0,1fr);gap:18px}.ssl-media-heading .ssl-media-heading-copy{gap:12px}.ssl-season-honour{grid-template-columns:78px minmax(0,1fr);gap:14px}.ssl-season-honour-crest{width:78px;height:78px;border-radius:12px;padding:5px}.ssl-season-honour-link{grid-column:2;justify-self:start}.ssl-season-honour-wrap{margin-top:17px;margin-bottom:22px}}
+@media(max-width:540px){body.ux-site.ssl-official .ssl-ig-feed .instagram-grid{grid-template-columns:minmax(0,1fr)}.ssl-ig-feed .social-page-heading{align-items:flex-start}}

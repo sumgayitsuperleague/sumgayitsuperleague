@@ -3,13 +3,19 @@ export const isSiteLanguage=value=>['az','en','ru'].includes(value);
 export const siteDefaultLanguage=value=>isSiteLanguage(value)?value:'az';
 export const explicitLanguage=search=>{const value=new URLSearchParams(search).get('lang');return isSiteLanguage(value)?value:null;};
 export const languageFor=(search,fallback='az')=>explicitLanguage(search)||siteDefaultLanguage(fallback);
-let browserDefault='az',cleanAzerbaijaniHome=false;
-export function configureRouteLanguage(value,{cleanHome=false}={}){browserDefault=siteDefaultLanguage(value);cleanAzerbaijaniHome=cleanHome;}
+export const SITE_LANGUAGE_COOKIE='ssl_language';
+export function languageFromCookie(cookies=''){
+ for(const field of String(cookies).split(';')){
+  const [name,value]=field.trim().split('=',2);
+  if(name===SITE_LANGUAGE_COOKIE&&isSiteLanguage(value))return value;
+ }
+ return null;
+}
+export const languageCookie=value=>isSiteLanguage(value)?`${SITE_LANGUAGE_COOKIE}=${value}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`:'';
 let seasonRoutesReady=true;
 export function configureSeasonRoutes(ready){seasonRoutesReady=ready;}
-export function setRouteLanguage(url,lang,primary){
- const cleanHome=primary===undefined&&cleanAzerbaijaniHome&&lang==='az'&&canonicalPath(url.pathname)==='/';
- if(!cleanHome&&isSiteLanguage(lang)&&lang!==siteDefaultLanguage(primary??browserDefault))url.searchParams.set('lang',lang);else url.searchParams.delete('lang');
+export function setRouteLanguage(url){
+ if(url.searchParams.has('lang'))url.searchParams.delete('lang');
  return url;
 }
 // Public routes stay independent of the GitHub Pages file layout.
@@ -42,16 +48,16 @@ function hostRoute(url,clean=true){
  else if(!seasonRoutesReady&&url.pathname==='/movsum')url.pathname='/movsum.html';
  return url;
 }
-export function publicHref(value,lang='az') {
+export function publicHref(value) {
  if(typeof value!=='string'||!value||/^(?:[a-z]+:|\/\/|#)/i.test(value))return value;
  const u=new URL(value.startsWith('/')?value:'/'+value,'https://ssl.invalid');
  hostRoute(u);
- setRouteLanguage(u,lang);
+ setRouteLanguage(u);
  return u.pathname+u.search+u.hash;
 }
-export function languageHref(value,lang,primary) {
+export function languageHref(value) {
  const u=hostRoute(new URL(value,'https://ssl.invalid'));
- setRouteLanguage(u,lang,primary);
+ setRouteLanguage(u);
  return u.pathname+u.search+u.hash;
 }
 // Generated page-file links belong to the site root; fragments belong to this document.
@@ -62,6 +68,6 @@ export function siteAnchor(value,current,lang='az',clean=true){
  const url=new URL(value,relativeFile?new URL('/',base):base);
  if(url.origin!==base.origin)return value;
  hostRoute(url,clean);
- if(!value.startsWith('#'))setRouteLanguage(url,lang);
+ setRouteLanguage(url);
  return url.pathname+url.search+url.hash;
 }

@@ -28,7 +28,7 @@ function fanText(key,lang='az'){return FAN_COPY[key]?.[lang==='en'?0:lang==='ru'
 
 function fanEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
-function fanHref(path,lang,primary='az'){const u=new URL(path,'https://ssl.invalid');if(lang!==primary)u.searchParams.set('lang',lang);else u.searchParams.delete('lang');return u.pathname+u.search+u.hash;}
+function fanHref(path){return path;}
 
 function fanLogo(team){
  const p=String(team?.logo||'');if(/^\/assets\/(?:logo\.png|logos\/[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp))$/.test(p))return p;
@@ -152,7 +152,7 @@ function bindFanLineup(data,settings,lang){
   if(b.hasAttribute('data-fan-clear')){selection[slot]='';drawPitch();drawRoster();}
   if(b.hasAttribute('data-fan-reset')){selection=Array(FAN_LINEUP_SIZE).fill('');slot=0;status.textContent='';drawPitch();drawRoster();}
   if(b.hasAttribute('data-fan-copy')){
-   const url=new URL('/ideal-altiliq',location.origin);if(lang!=='az')url.searchParams.set('lang',lang);url.searchParams.set('formation',formation);url.searchParams.set('name',title.value||t('Mənim ideal altılığım'));selection.forEach((p,i)=>url.searchParams.set('p'+i,p));await fanCopyLink(url.href,status,lang);
+   const url=new URL('/ideal-altiliq',location.origin);url.searchParams.set('formation',formation);url.searchParams.set('name',title.value||t('Mənim ideal altılığım'));selection.forEach((p,i)=>url.searchParams.set('p'+i,p));await fanCopyLink(url.href,status,lang);
   }
   if(b.hasAttribute('data-fan-download')){
    b.disabled=true;status.textContent=t('Şəkil hazırlanır…');

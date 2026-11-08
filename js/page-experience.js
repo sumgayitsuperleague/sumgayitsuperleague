@@ -16,10 +16,11 @@ export function installPageExperience(ctx){
  pageListen(document,'click',async event=>{
   const reset=event.target.closest('[data-reset-preferences]');if(reset){
    for(const key of ['ssl.language.v1','ssl.language.welcome.v1','ssl.language.welcome.v2','ssl.favoriteTeam.v1','ssl.savedVideos.v1'])try{localStorage.removeItem(key);}catch{}
+   UI.resetLanguagePreference();
    window.dispatchEvent(new window.Event('ssl-preferences-reset'));const status=document.querySelector('#preferences-status');if(status)status.textContent=UI.t('Seçimlər sıfırlandı.');return;
   }
   const share=event.target.closest('[data-share-page]');if(!share||document.body.dataset.previewPath)return;
-  const status=share.parentElement.querySelector('[role=status]'),url=new URL(location.href);url.hash='';
+  const status=share.parentElement.querySelector('[role=status]'),url=new URL(location.href);url.hash='';url.searchParams.delete('lang');
   try{if(typeof navigator.share==='function')await navigator.share({title:document.title,url:url.href});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);status.textContent=UI.t('Keçid kopyalandı.');}else{const input=document.createElement('input');input.value=url.href;input.readOnly=true;input.setAttribute('aria-label',UI.t('Keçidi kopyala'));share.parentElement.append(input);input.focus();input.select();}}catch(error){if(error.name!=='AbortError')status.textContent=UI.t('Keçidi kopyala')+': '+url.href;}
  });
  if(P.news){P.news.init=()=>{originalBind?.();if(new URLSearchParams(location.search).get('id')){const article=document.querySelector('.news-article-main')||document.querySelector('#app article');if(article&&!document.body.dataset.previewPath&&!article.querySelector('[data-share-page]'))article.insertAdjacentHTML('beforeend',`<div class="page-share-actions"><button type="button" data-share-page>${UI.t('Paylaş')} ↗</button><span role="status" aria-live="polite"></span></div>`);}};}
