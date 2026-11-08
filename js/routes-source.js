@@ -3,12 +3,13 @@ export const isSiteLanguage=value=>['az','en','ru'].includes(value);
 export const siteDefaultLanguage=value=>isSiteLanguage(value)?value:'az';
 export const explicitLanguage=search=>{const value=new URLSearchParams(search).get('lang');return isSiteLanguage(value)?value:null;};
 export const languageFor=(search,fallback='az')=>explicitLanguage(search)||siteDefaultLanguage(fallback);
-let browserDefault='az';
-export function configureRouteLanguage(value){browserDefault=siteDefaultLanguage(value);}
+let browserDefault='az',cleanAzerbaijaniHome=false;
+export function configureRouteLanguage(value,{cleanHome=false}={}){browserDefault=siteDefaultLanguage(value);cleanAzerbaijaniHome=cleanHome;}
 let seasonRoutesReady=true;
 export function configureSeasonRoutes(ready){seasonRoutesReady=ready;}
-export function setRouteLanguage(url,lang,primary=browserDefault){
- if(isSiteLanguage(lang)&&lang!==siteDefaultLanguage(primary))url.searchParams.set('lang',lang);else url.searchParams.delete('lang');
+export function setRouteLanguage(url,lang,primary){
+ const cleanHome=primary===undefined&&cleanAzerbaijaniHome&&lang==='az'&&canonicalPath(url.pathname)==='/';
+ if(!cleanHome&&isSiteLanguage(lang)&&lang!==siteDefaultLanguage(primary??browserDefault))url.searchParams.set('lang',lang);else url.searchParams.delete('lang');
  return url;
 }
 // Public routes stay independent of the GitHub Pages file layout.
@@ -48,7 +49,7 @@ export function publicHref(value,lang='az') {
  setRouteLanguage(u,lang);
  return u.pathname+u.search+u.hash;
 }
-export function languageHref(value,lang,primary=browserDefault) {
+export function languageHref(value,lang,primary) {
  const u=hostRoute(new URL(value,'https://ssl.invalid'));
  setRouteLanguage(u,lang,primary);
  return u.pathname+u.search+u.hash;

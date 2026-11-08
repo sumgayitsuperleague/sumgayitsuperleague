@@ -4,6 +4,10 @@ export const SEASON_APP_VERSION = '20261108season1';
 export const SEASON_ARCHIVE = '/movsum/arxiv';
 export const REGISTRATION_PATH = '/qeydiyyat';
 export const registrationOpenFromResponse = value => value?.edition === REGISTRATION_EDITION && typeof value.open === 'boolean' ? value.open : null;
+export function completedLeagueSchedule(league) {
+ const matches=(league?.matches||[]).filter(match=>!match.qualificationPending);
+ return (league?.competition?.phase==='completed'||matches.some(match=>match.stage==='final'))&&matches.length>0&&matches.every(match=>match.status==='done');
+}
 export const SEASON_DEFAULTS = Object.freeze({
   registrationOpen: true,
   showHome: true,

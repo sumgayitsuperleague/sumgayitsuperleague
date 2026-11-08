@@ -5,7 +5,7 @@ export const LANGUAGE_WELCOME_SEEN='ssl.language.welcome.v2';
 export const LANGUAGES={az:'Azərbaycanca',en:'English',ru:'Русский'};
 const storageValue=(storage,key)=>{try{return storage?.getItem(key)||null;}catch{return null;}};
 const write=(storage,key,value)=>{try{storage?.setItem(key,value);}catch{}};
-export function languageWelcomeState({href,primary,storage,preview=false}){
+export function languageWelcomeState({href,primary,storage,preview=false,cleanHome=false}){
  if(preview||primary!=='en')return {show:false,redirect:null};
  const url=new URL(href,'https://ssl.invalid');
  const path=canonicalPath(url.pathname),explicit=explicitLanguage(url.search);
@@ -14,7 +14,7 @@ export function languageWelcomeState({href,primary,storage,preview=false}){
  if(storageValue(storage,LANGUAGE_WELCOME_SEEN)!=='1')return {show:!explicit||path==='/',redirect:null};
  if(explicit)return {show:false,redirect:null};
  const chosen=storageValue(storage,LANGUAGE_PREFERENCE);
- if(isSiteLanguage(chosen))return {show:false,redirect:chosen===primary?null:languageHref(url.href,chosen,primary)};
+ if(isSiteLanguage(chosen))return {show:false,redirect:chosen===primary||cleanHome&&path==='/'&&chosen==='az'?null:languageHref(url.href,chosen,primary)};
  return {show:false,redirect:null};
 }
 export function rememberLanguage(storage,lang){
