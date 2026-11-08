@@ -1,6 +1,6 @@
 export const REGISTRATION_EDITION = 'ssl-season-2';
 export const REGISTRATION_API = '/api/season-registration';
-export const SEASON_APP_VERSION = '20261108season1';
+export const SEASON_APP_VERSION = '20261108desk1';
 export const SEASON_ARCHIVE = '/movsum/arxiv';
 export const REGISTRATION_PATH = '/qeydiyyat';
 export const registrationOpenFromResponse = value => value?.edition === REGISTRATION_EDITION && typeof value.open === 'boolean' ? value.open : null;
@@ -10,11 +10,14 @@ export function completedLeagueSchedule(league) {
 }
 export const SEASON_DEFAULTS = Object.freeze({
   registrationOpen: true,
+  inquiryOpen: true,
   showHome: true,
   title: 'Yeni mövsümdə meydan sənin komandanındır.',
   description: 'Komandanın adını və əlaqə məlumatını göndər. Liqa komandası növbəti addımlar üçün səninlə əlaqə saxlayacaq.',
   archiveTitle: 'Sumqayıtın 77 illiyinə həsr olunmuş mövsüm',
-  archiveDescription: 'İlk mövsümün komandaları, yekun nəticələri, cədvəli və oyun videoları.'
+  archiveDescription: 'İlk mövsümün komandaları, yekun nəticələri, cədvəli və oyun videoları.',
+  closedDescription: 'Hazırda komanda qeydiyyatı bağlıdır. Yeni elanları liqanın rəsmi səhifələrindən izləyə bilərsən.',
+  rulesText: ''
 });
 
 const fields = {title:110, description:320, archiveTitle:130, archiveDescription:320};
@@ -23,6 +26,7 @@ const clean = (value, min, max) => typeof value === 'string' && value.length >= 
 export function validateSeasonSettings(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(key => !Object.hasOwn(SEASON_DEFAULTS,key))) return ['Mövsüm ayarları düzgün deyil.'];
   if (!['registrationOpen','showHome'].every(key => typeof value[key] === 'boolean') || !Object.entries(fields).every(([key,max]) => clean(value[key],2,max))) return ['Mövsümün başlığı, mətni və ya qeydiyyat ayarı düzgün deyil.'];
+  if (value.inquiryOpen!==undefined&&typeof value.inquiryOpen!=='boolean'||value.closedDescription!==undefined&&!clean(value.closedDescription,2,320)||value.rulesText!==undefined&&(typeof value.rulesText!=='string'||value.rulesText.length>4000||/[<>\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value.rulesText))) return ['Şərtlər və ya bağlı qeydiyyat mətni düzgün deyil.'];
   return [];
 }
 
@@ -34,6 +38,10 @@ const localized = {
 export function seasonSettings(value, lang = 'az') {
   const settings = {...SEASON_DEFAULTS,...(value || {})};
   for (const key of Object.keys(fields)) if (settings[key] === SEASON_DEFAULTS[key] && localized[lang]) settings[key] = localized[lang][key];
+  if(settings.closedDescription===SEASON_DEFAULTS.closedDescription){
+    if(lang==='en')settings.closedDescription='Team registration is currently closed. Follow the league’s official pages for the next announcement.';
+    if(lang==='ru')settings.closedDescription='Регистрация команд закрыта. Следи за объявлениями на официальных страницах лиги.';
+  }
   return settings;
 }
 
@@ -52,13 +60,15 @@ export function normalizeRegistrationPhone(value) {
 export const registrationSearchKey = value => String(value ?? '').normalize('NFKC').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e').normalize('NFD').replace(/\p{M}/gu,'').replace(/\s+/gu,' ').trim();
 
 export function normalizeRegistration(input) {
-  if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).some(key => !['firstName','lastName','team','phone','website'].includes(key))) return {field:'form'};
+  if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).some(key => !['firstName','lastName','team','phone','website','requestType'].includes(key))) return {field:'form'};
+  const requestType=input.requestType??'application';
+  if(!['application','rules'].includes(requestType))return {field:'form'};
   const simple = key => typeof input[key] === 'string' ? input[key].normalize('NFC').trim().replace(/\s+/gu,' ') : '';
-  const firstName=simple('firstName'),lastName=simple('lastName'),team=simple('team'),phone=normalizeRegistrationPhone(input.phone);
+  const firstName=simple('firstName'),lastName=simple('lastName'),team=requestType==='rules'?'':simple('team'),phone=normalizeRegistrationPhone(input.phone);
   for (const [key,value] of [['firstName',firstName],['lastName',lastName]]) {
     if (!clean(input[key],2,60) || !clean(value,2,60) || !/^[\p{L}\p{M}][\p{L}\p{M} .’'\-]*$/u.test(value)) return {field:key};
   }
-  if (!clean(input.team,2,110) || !clean(team,2,100) || !/[\p{L}\p{N}]/u.test(team)) return {field:'team'};
+  if (requestType==='application'&&(!clean(input.team,2,110) || !clean(team,2,100) || !/[\p{L}\p{N}]/u.test(team))) return {field:'team'};
   if (!phone) return {field:'phone'};
-  return {value:{firstName,lastName,team,phone}};
+  return {value:{firstName,lastName,team,phone,requestType}};
 }

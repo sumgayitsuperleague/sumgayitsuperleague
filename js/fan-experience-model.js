@@ -23,10 +23,14 @@ export function selectWatchMatch(data,config,requested=''){
 export function youtubeEmbedId(value){
  try{const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password||u.port)return '';const host=u.hostname.toLowerCase();let id='';if(host==='youtu.be')id=u.pathname.slice(1);else if(['youtube.com','www.youtube.com','m.youtube.com','www.youtube-nocookie.com'].includes(host))id=u.pathname==='/watch'?u.searchParams.get('v')||'':u.pathname.match(/^\/(?:embed|live|shorts)\/([A-Za-z0-9_-]{11})\/?$/)?.[1]||'';return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';}catch{return '';}
 }
-export function matchBroadcast(data,match){
+export function matchBroadcast(data,match,watchOnly=false){
  if(!match)return null;
- if(match.streamUrl&&youtubeEmbedId(match.streamUrl))return {id:youtubeEmbedId(match.streamUrl),url:match.streamUrl,live:match.status==='live'};
- const video=(data.videos||[]).find(v=>v.published&&v.kind==='match'&&v.match===match.id&&youtubeEmbedId(v.url));return video?{id:youtubeEmbedId(video.url),url:video.url,live:false}:null;
+ const rows=(data.videos||[]).filter(v=>v.published&&v.kind==='match'&&v.match===match.id&&youtubeEmbedId(v.url));
+ const explicit=watchOnly&&rows.find(v=>v.watchTogether===true);
+ if(explicit)return {id:youtubeEmbedId(explicit.url),url:explicit.url,live:match.status==='live'};
+ const streamId=youtubeEmbedId(match.streamUrl);
+ if(streamId&&(!watchOnly||!rows.some(v=>v.watchTogether===false&&youtubeEmbedId(v.url)===streamId)))return {id:streamId,url:match.streamUrl,live:match.status==='live'};
+ const video=rows.find(v=>!watchOnly||v.watchTogether!==false);return video?{id:youtubeEmbedId(video.url),url:video.url,live:match.status==='live'}:null;
 }
 export function broadcastRoundLabel(match,lang='az'){
  const stage=match.stage||(/yarım\s*final/i.test(match.leg||'')?'semifinal':/3-cü|üçüncü/i.test(match.leg||'')?'third-place':/final/i.test(match.leg||'')?'final':'group');
@@ -36,8 +40,14 @@ export function broadcastRoundLabel(match,lang='az'){
 }
 export function watchSources(data,config={showArchive:true},lang='az'){
  const teams=Object.fromEntries((data.league?.teams||[]).map(t=>[t.id,t]));
- return (data.league?.matches||[]).filter(m=>!m.qualificationPending&&(config.showArchive!==false||m.status!=='done')).flatMap(m=>{
-  const v=matchBroadcast(data,m);if(!v)return [];const roundLabel=broadcastRoundLabel(m,lang),home=teams[m.home],away=teams[m.away];if(!home||!away)return [];
+ const matches=(data.league?.matches||[]).filter(m=>!m.qualificationPending&&(config.showArchive!==false||m.status!=='done')).flatMap(m=>{
+  const v=matchBroadcast(data,m,true);if(!v)return [];const roundLabel=broadcastRoundLabel(m,lang),home=teams[m.home],away=teams[m.away];if(!home||!away)return [];
   return [{key:'match:'+m.id,matchId:m.id,id:v.id,url:v.url,title:roundLabel+' · '+home.name+' — '+away.name,teamsTitle:home.name+' — '+away.name,roundLabel,round:m.round,stage:m.stage||'group',date:m.date||'',time:m.time||'',live:m.status==='live',status:m.status,homeLogo:'/assets/logos/'+home.logo,awayLogo:'/assets/logos/'+away.logo}];
- }).sort((a,b)=>{const rank=s=>s.live?0:s.status==='planned'?1:2;return rank(a)-rank(b)||(a.status==='planned'?a.date.localeCompare(b.date):b.date.localeCompare(a.date))||(Number(b.round)||0)-(Number(a.round)||0)||(a.time||'').localeCompare(b.time||'')||a.matchId.localeCompare(b.matchId);});
+ });
+ const seen=new Set(matches.map(s=>s.id)),label={az:'Xüsusi yayımlar',en:'Special broadcasts',ru:'Специальные трансляции'}[lang]||'Xüsusi yayımlar';
+ const extras=config.showArchive===false?[]:(data.videos||[]).flatMap(v=>{
+  const id=youtubeEmbedId(v.url);if(!v.published||v.watchTogether!==true||!id||seen.has(id)||v.kind==='match'&&v.match)return [];
+  seen.add(id);return [{key:'video:'+v.id,videoId:v.id,matchId:'',id,url:v.url,title:v.title,teamsTitle:v.title,roundLabel:v.watchLabel||label,round:0,stage:'program',date:v.date||'',time:'',live:false,status:'done',homeLogo:'/assets/logo.png',awayLogo:''}];
+ });
+ return [...matches,...extras].sort((a,b)=>{const rank=s=>s.live?0:s.status==='planned'?1:2,stage=s=>({final:0,'third-place':1,program:2,semifinal:3,group:4}[s.stage]??4);return rank(a)-rank(b)||(a.status==='planned'?a.date.localeCompare(b.date):b.date.localeCompare(a.date))||stage(a)-stage(b)||(Number(b.round)||0)-(Number(a.round)||0)||(a.time||'').localeCompare(b.time||'')||a.key.localeCompare(b.key);});
 }

@@ -1,6 +1,7 @@
 import {completedLeagueSchedule,normalizeRegistration,registrationOpenFromResponse,REGISTRATION_API,REGISTRATION_PATH,SEASON_ARCHIVE,seasonSettings} from './season-model.js';
 import {onPageCleanup,pageListen} from './page-lifecycle.js';
 import {publicHref} from './routes-source.js';
+import {finalContext} from './fan-zone-model.js';
 
 const words={
  az:{next:'Yeni mövsüm',open:'Qeydiyyat açıqdır',closed:'Qeydiyyat bağlıdır',pending:'Qeydiyyat hazırlanır',pendingBody:'Yeni mövsüm üçün hazırlıq gedir. Qeydiyyat açıldıqda komandan üçün buradan müraciət edə biləcəksən.',apply:'Komandanı qeydiyyata al',archive:'Mövsüm arxivi',archiveAction:'Nəticələrə bax',seasons:'Mövsüm',pick:'Mövsümü seç',intro:'Yeni mövsümə qoşul və ya əvvəlki mövsümün nəticələrinə bax.',formTitle:'Komanda qeydiyyatı',firstName:'Ad',lastName:'Soyad',team:'Komanda adı',phone:'Əlaqə nömrəsi',phoneHint:'Məsələn: +994 50 123 45 67',privacy:'Məlumatları müraciətini nəzərdən keçirmək və səninlə əlaqə saxlamaq üçün istifadə edirik.',privacyLink:'Məxfilik siyasəti',send:'Müraciəti göndər',sending:'Müraciət göndərilir…',sent:'Müraciət qəbul olundu',sentBody:'Liqa komandası qeyd etdiyin nömrə ilə səninlə əlaqə saxlayacaq.',close:'Bağla',back:'Mövsümlərə qayıt',preview:'Bu ön baxışdır. Buradan müraciət göndərilmir.',unavailable:'Müraciət göndərilmədi. Bir qədər sonra yenidən sına.',rate:'Çox sayda cəhd oldu. Bir dəqiqə sonra yenidən sına.',closedBody:'Hazırda yeni müraciət qəbul edilmir.',invalid:'Məlumatı yoxlayıb yenidən daxil et.',seasonPass:'YENİ MÖVSÜM',step:'01 / MÜRACİƏT',yearArchive:'BAŞA ÇATIB',registration:'Qeydiyyat'},
@@ -14,6 +15,12 @@ const detailWords={
  en:{join:'Enter your team in the new season',archiveNote:'Results from the 2026 season',all:'All seasons',links:'Explore the league',teams:'Clubs',teamsNote:'League clubs and squads',media:'Media',mediaNote:'Match videos and news',passLabel:'SEASON II',summary:'What happens next',applyStep:'Send your details',contactStep:'The league team will call you',tryAgain:'Check again'},
  ru:{join:'Заяви команду на новый сезон',archiveNote:'Результаты сезона 2026',all:'Все сезоны',links:'О лиге',teams:'Команды',teamsNote:'Клубы и составы лиги',media:'Медиа',mediaNote:'Видео матчей и новости',passLabel:'II СЕЗОН',summary:'Что дальше',applyStep:'Отправь свои данные',contactStep:'Организаторы свяжутся с тобой',tryAgain:'Проверить ещё раз'}
 };
+const registrationCopy={
+ az:{rules:'Şərtləri öyrən · Reqlament',notPublished:'Yeni mövsümün reqlamenti hələ dərc edilməyib. Şərtlər barədə məlumat üçün liqa ilə əlaqə istəyə bilərsən.',request:'Şərtlər üçün mənimlə əlaqə saxlayın',backToForm:'Komanda qeydiyyatına qayıt',sendInquiry:'Məlumat sorğusunu göndər',inquiry:'Şərtlər barədə məlumat sorğusu',reference:'Müraciət nömrəsi',champion:'Mövsümün çempionu',final:'Finala bax'},
+ en:{rules:'Entry conditions and regulations',notPublished:'The new season’s regulations have not been published yet. You can ask the league for details.',request:'Ask the league to contact me',backToForm:'Back to team registration',sendInquiry:'Send information request',inquiry:'Request about entry conditions',reference:'Application reference',champion:'Season champion',final:'View the final'},
+ ru:{rules:'Условия участия и регламент',notPublished:'Регламент нового сезона ещё не опубликован. Условия можно уточнить у организаторов.',request:'Попросить организаторов связаться со мной',backToForm:'Вернуться к регистрации команды',sendInquiry:'Отправить запрос',inquiry:'Запрос об условиях участия',reference:'Номер заявки',champion:'Чемпион сезона',final:'Посмотреть финал'}
+};
+
 const seasonGlyph={
  archive:'<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4m8-4v4M4 10h16m-11 5h6m-6 3h4"/>',
  teams:'<path d="m12 3 8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6Z"/><path d="m9 12 2 2 4-4"/>',
@@ -24,10 +31,11 @@ const glyph=name=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" s
 
 export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=false}) {
  const c=seasonWords(lang),d=detailWords[lang]||detailWords.az,settings=seasonSettings(CMS.seasons,lang);
- let open=preview?settings.registrationOpen:null;
+ const r=registrationCopy[lang]||registrationCopy.az;
+ let open=preview?settings.registrationOpen:null,inquiry=preview&&settings.inquiryOpen;
  const active=()=>open===true;
  const statusLabel=()=>active()?c.open:open===false?c.closed:c.pending;
- const description=()=>active()?settings.description:open===false?c.closedBody:c.pendingBody;
+ const description=()=>active()?settings.description:open===false?settings.closedDescription:c.pendingBody;
  const archiveName=archiveTitle||settings.archiveTitle,previousSeason={az:'2026 mövsümü',en:'2026 season',ru:'Сезон 2026'}[lang]||'2026 mövsümü';
  const launchOnly=completedLeagueSchedule(L);
  const href=route=>esc(publicHref(route,lang));
@@ -47,7 +55,9 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
   return `<div class="ssl-season-menu${dock?' ssl-season-menu--dock':''}" data-season-menu><button type="button" class="ssl-season-menu-toggle${current?' on':''}" aria-expanded="false" aria-controls="${id}">${tabIcon}<span>${esc(label)}</span>${dock?'':'<svg class="ssl-season-menu-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>'}</button><div class="ssl-season-menu-panel" id="${id}" hidden><div class="ssl-season-menu-caption"><b>SSL</b><span>${c.seasons}</span></div>${shortcut(registrationHref,c.next,c.formTitle,'join')}${shortcut(archiveHref,previousSeason,esc(archiveName),'archive')}<a class="ssl-season-menu-all" href="${seasonsHref}">${d.all}${icon}</a></div></div>`;
  };
  const field=(name,opts={})=>`<label for="ssl-reg-${name}"><span>${c[name]}</span><input id="ssl-reg-${name}" name="${name}" type="${opts.type||'text'}" autocomplete="${opts.autocomplete||'off'}" required maxlength="${opts.max||60}"${opts.type==='tel'?' inputmode="tel" aria-describedby="ssl-reg-phone-hint" placeholder="+994 50 123 45 67"':' minlength="2"'}>${opts.type==='tel'?`<small id="ssl-reg-phone-hint">${c.phoneHint}</small>`:''}</label>`;
- const form=()=>active()?`<form class="ssl-reg-form" action="${REGISTRATION_API}" method="post" data-season-registration><div class="ssl-reg-fields">${field('firstName',{autocomplete:'given-name'})}${field('lastName',{autocomplete:'family-name'})}${field('team',{autocomplete:'organization',max:100})}${field('phone',{type:'tel',autocomplete:'tel',max:32})}</div><div hidden aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div><p class="ssl-reg-privacy">${c.privacy} ${CMS.pages?.some(p=>p.slug==='mexfilik'&&p.published)?`<a href="${href('/sehife/mexfilik')}" target="_blank" rel="noopener noreferrer">${c.privacyLink}</a>`:''}</p><button type="submit" class="ssl-season-button">${c.send}${icon}</button><p class="ssl-reg-message" data-reg-message role="status" aria-live="polite"></p></form><div class="ssl-reg-success" data-reg-success hidden tabindex="-1"><span aria-hidden="true">✓</span><h3>${c.sent}</h3><p>${c.sentBody}</p></div>`:`<div class="ssl-reg-closed"><p>${esc(description())}</p>${open===null?`<button class="ssl-reg-retry" type="button" data-season-retry>${d.tryAgain}</button>`:''}</div>`;
+ const rules=()=>`<details class="ssl-reg-rules" id="reqlament"${typeof location!=='undefined'&&location.hash==='#reqlament'?' open':''}><summary>${r.rules}</summary><div class="ssl-reg-rules-body"><p>${esc(settings.rulesText.trim()||r.notPublished).replace(/\n/g,'<br>')}</p>${inquiry?`<button class="ssl-reg-retry" type="button" data-reg-mode="rules">${r.request}</button>`:''}</div></details>`;
+ const form=()=>`${active()?'':`<div class="ssl-reg-closed"><p>${esc(description())}</p>${open===null?`<button class="ssl-reg-retry" type="button" data-season-retry>${d.tryAgain}</button>`:''}</div>`}${rules()}${active()||inquiry?`<form class="ssl-reg-form" action="${REGISTRATION_API}" method="post" data-season-registration${active()?'':' hidden'}><input type="hidden" name="requestType" value="application"><p class="ssl-reg-mode-title" data-reg-mode-title hidden>${r.inquiry}</p><div class="ssl-reg-fields">${field('firstName',{autocomplete:'given-name'})}${field('lastName',{autocomplete:'family-name'})}${field('team',{autocomplete:'organization',max:100})}${field('phone',{type:'tel',autocomplete:'tel',max:32})}</div><p class="ssl-reg-privacy">${c.privacy}</p><div class="ssl-reg-actions"><button type="submit" class="ssl-season-button"><span data-reg-submit-text>${c.send}</span>${icon}</button>${active()&&inquiry?`<button class="ssl-reg-retry" type="button" data-reg-mode="application" hidden>${r.backToForm}</button>`:''}</div><p class="ssl-reg-message" data-reg-message role="status" aria-live="polite"></p></form><div class="ssl-reg-success" data-reg-success hidden tabindex="-1"><span aria-hidden="true">✓</span><h3>${c.sent}</h3><p>${c.sentBody}</p><p class="ssl-reg-reference"><span>${r.reference}</span><strong data-reg-reference></strong></p></div>`:''}`;
+
  const formPanel=(tag,id)=>`<div class="ssl-reg-panel"><div class="ssl-reg-panel-head"><span class="ssl-season-kicker">${c.step}</span><${tag} id="${id}">${c.formTitle}</${tag}>${slot('status',state())}</div>${slot('form',form())}</div>`;
  const seasonNew=()=>`${state()}<h2>${c.next}</h2><p>${esc(description())}</p>${registrationLink()}`;
  const seasons=()=>`<section class="ssl-season-directory"><div class="wrap"><header class="ssl-season-section-head"><span class="ssl-season-kicker">SSL / ${c.seasons}</span><h1>${c.pick}</h1><p>${c.intro}</p></header><div class="ssl-season-choices"><article class="ssl-season-choice ssl-season-choice-next"><div class="ssl-season-choice-content" data-season-slot="new">${seasonNew()}</div><span class="ssl-season-choice-number" aria-hidden="true">02</span></article><article class="ssl-season-choice ssl-season-choice-archive"><div class="ssl-season-choice-content">${state(previousSeason,true)}<h2>${esc(archiveName)}</h2><p>${esc(settings.archiveDescription)}</p><a class="ssl-season-button is-outline" href="${archiveHref}">${c.archiveAction}${icon}</a></div><span class="ssl-season-choice-number" aria-hidden="true">01</span></article></div></div></section>`;
@@ -60,7 +70,12 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
  }
  P.seasons=seasons;
  P.registration=()=>`<section class="ssl-reg-page"><div class="wrap ssl-reg-page-grid"><div class="ssl-reg-aside"><a class="ssl-reg-back" href="${seasonsHref}">← ${c.back}</a>${ticket()}<div class="ssl-reg-steps"><strong>${d.summary}</strong><ol><li>${d.applyStep}</li><li>${d.contactStep}</li></ol></div></div>${formPanel('h1','ssl-reg-page-title')}</div></section>`;
- P.playoffs=()=>oldArchive().replace(/<h1(\s[^>]*)?>[\s\S]*?<\/h1>/i,(_,attrs='')=>`<h1${attrs}>${esc(archiveName)}</h1>`);
+ const honour=()=>{
+  const final=finalContext({league:L},CMS.fanZone),team=final?.champion;
+  if(!team)return '';
+  return `<div class="wrap ssl-season-honour-wrap"><div class="ssl-season-honour"><img src="/assets/logos/${esc(team.logo)}" alt="" width="48" height="48"><div><span>${r.champion}</span><strong>${esc(team.name)}</strong></div><a href="${href('/final')}">${r.final} ${icon}</a></div></div>`;
+ };
+ P.playoffs=()=>oldArchive().replace(/<h1(\s[^>]*)?>[\s\S]*?<\/h1>/i,(_,attrs='')=>`<h1${attrs}>${esc(archiveName)}</h1>`).replace('</section>','</section>'+honour());
  P.playoffs.init=oldArchive.init;
  return {menu,mount(page){
   bindSeasonMenus();
@@ -71,6 +86,18 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
   const bindForm=formNode=>{
    const message=formNode.querySelector('[data-reg-message]'),button=formNode.querySelector('button[type="submit"]');
    const say=(value,error=false)=>{message.textContent=value;message.classList.toggle('is-error',error);};
+   const panel=formNode.parentElement,mode=formNode.elements.namedItem('requestType'),team=formNode.elements.namedItem('team'),success=formNode.nextElementSibling;
+   pageListen(panel,'click',event=>{
+    const control=event.target.closest('[data-reg-mode]');
+    if(!control||button.disabled)return;
+    const rulesMode=control.dataset.regMode==='rules';
+    if(rulesMode&&!inquiry||!rulesMode&&!active())return;
+    mode.value=rulesMode?'rules':'application';team.disabled=rulesMode;team.closest('label').hidden=rulesMode;
+    formNode.querySelector('[data-reg-mode-title]').hidden=!rulesMode;
+    formNode.querySelector('[data-reg-submit-text]').textContent=rulesMode?r.sendInquiry:c.send;
+    const back=formNode.querySelector('[data-reg-mode="application"]');if(back)back.hidden=!rulesMode;
+    formNode.hidden=false;success.hidden=true;say('');formNode.elements.namedItem('firstName').focus();
+   });
    let responseController=null;
    onPageCleanup(()=>responseController?.abort());
    pageListen(formNode,'input',event=>{event.target.removeAttribute('aria-invalid');formNode.dataset.dirty='true';});
@@ -86,8 +113,8 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
     try{
      const response=await fetch(REGISTRATION_API,{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-SSL-Registration':'1'},body:JSON.stringify({...result.value,website:body.website||''}),signal:responseController.signal});
      const payload=await response.json().catch(()=>null);
-     if(response.status===201&&payload?.ok===true){
-      formNode.reset();formNode.hidden=true;formNode.dataset.dirty='false';const success=formNode.nextElementSibling;success.hidden=false;success.focus();
+     if(response.status===201&&payload?.ok===true&&/^SSL-[0-9A-F]{8}$/.test(payload.reference||'')){
+      success.querySelector('[data-reg-reference]').textContent=payload.reference;formNode.reset();formNode.hidden=true;formNode.dataset.dirty='false';success.hidden=false;success.focus();
      }else if(response.status===409&&payload?.code==='REGISTRATION_CLOSED')say(c.closedBody,true);
      else if(response.status===429)say(c.rate,true);
      else if(payload?.field&&Object.hasOwn(c,payload.field))invalid(payload.field);
@@ -105,9 +132,9 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
    try{
     const response=await fetch(REGISTRATION_API,{credentials:'same-origin',cache:'no-store',signal:request.signal});
     if(!response.ok||!response.headers.get('content-type')?.includes('application/json'))return;
-    const result=registrationOpenFromResponse(await response.json());
-    if(result===null||result===open||availability.signal.aborted)return;
-    open=result;
+    const payload=await response.json(),result=registrationOpenFromResponse(payload),nextInquiry=payload?.inquiryOpen===true;
+    if(result===null||result===open&&nextInquiry===inquiry||availability.signal.aborted)return;
+    open=result;inquiry=nextInquiry;
     const views={status:state,hero:heroCopy,new:seasonNew,form};
     for(const element of document.querySelectorAll('[data-season-slot]'))element.innerHTML=views[element.dataset.seasonSlot]();
     const standalone=document.querySelector('.ssl-reg-page [data-season-registration]');if(standalone)bindForm(standalone);
