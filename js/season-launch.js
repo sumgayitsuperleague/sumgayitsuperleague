@@ -16,9 +16,9 @@ const detailWords={
  ru:{join:'Заяви команду на новый сезон',archiveNote:'Результаты сезона 2026',all:'Все сезоны',links:'О лиге',teams:'Команды',teamsNote:'Клубы и составы лиги',media:'Медиа',mediaNote:'Видео матчей и новости',passLabel:'II СЕЗОН',summary:'Что дальше',applyStep:'Отправь свои данные',contactStep:'Организаторы свяжутся с тобой',tryAgain:'Проверить ещё раз'}
 };
 const registrationCopy={
- az:{rules:'Şərtləri öyrən · Reqlament',notPublished:'Yeni mövsümün reqlamenti hələ dərc edilməyib. Şərtlər barədə məlumat üçün liqa ilə əlaqə istəyə bilərsən.',request:'Şərtlər üçün mənimlə əlaqə saxlayın',backToForm:'Komanda qeydiyyatına qayıt',sendInquiry:'Məlumat sorğusunu göndər',inquiry:'Şərtlər barədə məlumat sorğusu',reference:'Müraciət nömrəsi',champion:'Mövsümün çempionu',final:'Finala bax'},
- en:{rules:'Entry conditions and regulations',notPublished:'The new season’s regulations have not been published yet. You can ask the league for details.',request:'Ask the league to contact me',backToForm:'Back to team registration',sendInquiry:'Send information request',inquiry:'Request about entry conditions',reference:'Application reference',champion:'Season champion',final:'View the final'},
- ru:{rules:'Условия участия и регламент',notPublished:'Регламент нового сезона ещё не опубликован. Условия можно уточнить у организаторов.',request:'Попросить организаторов связаться со мной',backToForm:'Вернуться к регистрации команды',sendInquiry:'Отправить запрос',inquiry:'Запрос об условиях участия',reference:'Номер заявки',champion:'Чемпион сезона',final:'Посмотреть финал'}
+ az:{rules:'Yalnız şərtlər və reqlament barədə məlumat istəyirəm',help:'Komanda adı lazım deyil. Liqa şərtlər barədə səninlə əlaqə saxlayacaq.',read:'Reqlamenti oxu',sendInquiry:'Məlumat sorğusunu göndər',reference:'Müraciət nömrəsi',champion:'Mövsümün çempionu',final:'Finala bax'},
+ en:{rules:'I only want information about the entry rules',help:'No team name is needed. The league will contact you with the entry rules.',read:'Read the regulations',sendInquiry:'Send information request',reference:'Application reference',champion:'Season champion',final:'View the final'},
+ ru:{rules:'Хочу только узнать условия участия и регламент',help:'Название команды не нужно. Организаторы свяжутся с тобой и расскажут об условиях.',read:'Прочитать регламент',sendInquiry:'Отправить запрос',reference:'Номер заявки',champion:'Чемпион сезона',final:'Посмотреть финал'}
 };
 
 const seasonGlyph={
@@ -26,7 +26,6 @@ const seasonGlyph={
  teams:'<path d="m12 3 8 3v6c0 4-3 7-8 9-5-2-8-5-8-9V6Z"/><path d="m9 12 2 2 4-4"/>',
  media:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3Z"/>',
  join:'<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="5"/>',
- rules:'<path d="M8 3h6l4 4v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h4m-9 4h6m-6 4h6"/>',
  trophy:'<path d="M8 3h8v6a4 4 0 1 1-8 0V3Zm0 2H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 2v6m-4 2h8"/>',
 };
 const glyph=name=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${seasonGlyph[name]}</svg>`;
@@ -56,9 +55,14 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
   const id=dock?'ssl-dock-seasons':'ssl-nav-seasons';
   return `<div class="ssl-season-menu${dock?' ssl-season-menu--dock':''}" data-season-menu><button type="button" class="ssl-season-menu-toggle${current?' on':''}" aria-expanded="false" aria-controls="${id}">${tabIcon}<span>${esc(label)}</span>${dock?'':'<svg class="ssl-season-menu-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>'}</button><div class="ssl-season-menu-panel" id="${id}" hidden><div class="ssl-season-menu-caption"><b>SSL</b><span>${c.seasons}</span></div>${shortcut(registrationHref,c.next,c.formTitle,'join')}${shortcut(archiveHref,previousSeason,esc(archiveName),'archive')}<a class="ssl-season-menu-all" href="${seasonsHref}">${d.all}${icon}</a></div></div>`;
  };
- const field=(name,opts={})=>`<label for="ssl-reg-${name}"><span>${c[name]}</span><input id="ssl-reg-${name}" name="${name}" type="${opts.type||'text'}" autocomplete="${opts.autocomplete||'off'}" required maxlength="${opts.max||60}"${opts.type==='tel'?' inputmode="tel" aria-describedby="ssl-reg-phone-hint" placeholder="+994 50 123 45 67"':' minlength="2"'}>${opts.type==='tel'?`<small id="ssl-reg-phone-hint">${c.phoneHint}</small>`:''}</label>`;
- const rules=()=>`<details class="ssl-reg-rules" id="reqlament"${typeof location!=='undefined'&&location.hash==='#reqlament'?' open':''}><summary class="ssl-reg-rules-toggle"><span class="ssl-reg-rules-icon">${glyph('rules')}</span><span>${r.rules}</span><svg class="ssl-reg-rules-chevron" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 7 4 4 4-4"/></svg></summary><div class="ssl-reg-rules-body"><p>${esc(settings.rulesText.trim()||r.notPublished).replace(/\n/g,'<br>')}</p>${inquiry?`<button class="ssl-reg-retry" type="button" data-reg-mode="rules">${r.request}</button>`:''}</div></details>`;
- const form=()=>`${active()?'':`<div class="ssl-reg-closed"><p>${esc(description())}</p>${open===null?`<button class="ssl-reg-retry" type="button" data-season-retry>${d.tryAgain}</button>`:''}</div>`}${rules()}${active()||inquiry?`<form class="ssl-reg-form" action="${REGISTRATION_API}" method="post" data-season-registration${active()?'':' hidden'}><input type="hidden" name="requestType" value="application"><p class="ssl-reg-mode-title" data-reg-mode-title hidden>${r.inquiry}</p><div class="ssl-reg-fields">${field('firstName',{autocomplete:'given-name'})}${field('lastName',{autocomplete:'family-name'})}${field('team',{autocomplete:'organization',max:100})}${field('phone',{type:'tel',autocomplete:'tel',max:32})}</div><p class="ssl-reg-privacy">${c.privacy}</p><div class="ssl-reg-actions"><button type="submit" class="ssl-season-button"><span data-reg-submit-text>${c.send}</span>${icon}</button>${active()&&inquiry?`<button class="ssl-reg-retry" type="button" data-reg-mode="application" hidden>${r.backToForm}</button>`:''}</div><p class="ssl-reg-message" data-reg-message role="status" aria-live="polite"></p></form><div class="ssl-reg-success" data-reg-success hidden tabindex="-1"><span aria-hidden="true">✓</span><h3>${c.sent}</h3><p>${c.sentBody}</p><p class="ssl-reg-reference"><span>${r.reference}</span><strong data-reg-reference></strong></p></div>`:''}`;
+ const field=(name,opts={})=>`<label for="ssl-reg-${name}"${opts.disabled?' hidden':''}><span>${c[name]}</span><input id="ssl-reg-${name}" name="${name}" type="${opts.type||'text'}" autocomplete="${opts.autocomplete||'off'}"${opts.disabled?' disabled':' required'} maxlength="${opts.max||60}"${opts.type==='tel'?' inputmode="tel" aria-describedby="ssl-reg-phone-hint" placeholder="+994 50 123 45 67"':' minlength="2"'}>${opts.type==='tel'?`<small id="ssl-reg-phone-hint">${c.phoneHint}</small>`:''}</label>`;
+ const rules=()=>settings.rulesText.trim()?`<details class="ssl-reg-reading" id="reqlament"${typeof location!=='undefined'&&location.hash==='#reqlament'?' open':''}><summary>${r.read}</summary><p>${esc(settings.rulesText.trim()).replace(/\n/g,'<br>')}</p></details>`:'';
+ const form=()=>{
+  const inquiryOnly=!active()&&inquiry;
+  const closed=active()?'':`<div class="ssl-reg-closed"><p>${esc(description())}</p>${open===null?`<button class="ssl-reg-retry" type="button" data-season-retry>${d.tryAgain}</button>`:''}</div>`;
+  if(!active()&&!inquiry)return closed+rules();
+  return `${closed}<form class="ssl-reg-form" action="${REGISTRATION_API}" method="post" data-season-registration><input type="hidden" name="requestType" value="${inquiryOnly?'rules':'application'}"><div class="ssl-reg-fields">${field('firstName',{autocomplete:'given-name'})}${field('lastName',{autocomplete:'family-name'})}${field('team',{autocomplete:'organization',max:100,disabled:inquiryOnly})}${field('phone',{type:'tel',autocomplete:'tel',max:32})}</div>${inquiry?`<div class="ssl-reg-choice"><label class="ssl-reg-choice-label"><input type="checkbox" data-reg-rules-choice${inquiryOnly?' checked disabled':''}><span class="ssl-reg-checkmark" aria-hidden="true"></span><span>${r.rules}</span></label><small data-reg-mode-help${inquiryOnly?'':' hidden'}>${r.help}</small></div>`:''}<p class="ssl-reg-privacy">${c.privacy}</p><div class="ssl-reg-actions"><button type="submit" class="ssl-season-button"><span data-reg-submit-text>${inquiryOnly?r.sendInquiry:c.send}</span>${icon}</button></div><p class="ssl-reg-message" data-reg-message role="status" aria-live="polite"></p></form><div class="ssl-reg-success" data-reg-success hidden tabindex="-1"><span aria-hidden="true">✓</span><h3>${c.sent}</h3><p>${c.sentBody}</p><p class="ssl-reg-reference"><span>${r.reference}</span><strong data-reg-reference></strong></p></div>${rules()}`;
+ };
 
  const formPanel=(tag,id)=>`<div class="ssl-reg-panel"><div class="ssl-reg-panel-head"><span class="ssl-season-kicker">${c.step}</span><${tag} id="${id}">${c.formTitle}</${tag}>${slot('status',state())}</div>${slot('form',form())}</div>`;
  const seasonNew=()=>`${state()}<h2>${c.next}</h2><p>${esc(description())}</p>${registrationLink()}`;
@@ -88,18 +92,15 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
   const bindForm=formNode=>{
    const message=formNode.querySelector('[data-reg-message]'),button=formNode.querySelector('button[type="submit"]');
    const say=(value,error=false)=>{message.textContent=value;message.classList.toggle('is-error',error);};
-   const panel=formNode.parentElement,mode=formNode.elements.namedItem('requestType'),team=formNode.elements.namedItem('team'),success=formNode.nextElementSibling;
-   pageListen(panel,'click',event=>{
-    const control=event.target.closest('[data-reg-mode]');
-    if(!control||button.disabled)return;
-    const rulesMode=control.dataset.regMode==='rules';
-    if(rulesMode&&!inquiry||!rulesMode&&!active())return;
-    mode.value=rulesMode?'rules':'application';team.disabled=rulesMode;team.closest('label').hidden=rulesMode;
-    formNode.querySelector('[data-reg-mode-title]').hidden=!rulesMode;
-    formNode.querySelector('[data-reg-submit-text]').textContent=rulesMode?r.sendInquiry:c.send;
-    const back=formNode.querySelector('[data-reg-mode="application"]');if(back)back.hidden=!rulesMode;
-    formNode.hidden=false;success.hidden=true;say('');formNode.elements.namedItem('firstName').focus();
-   });
+   const choice=formNode.querySelector('[data-reg-rules-choice]'),mode=formNode.elements.namedItem('requestType'),team=formNode.elements.namedItem('team'),success=formNode.nextElementSibling;
+   const syncMode=()=>{
+    const rulesMode=inquiry&&(!active()||choice?.checked===true);
+    mode.value=rulesMode?'rules':'application';team.disabled=rulesMode;team.required=!rulesMode;team.closest('label').hidden=rulesMode;
+    team.removeAttribute('aria-invalid');formNode.querySelector('[data-reg-submit-text]').textContent=rulesMode?r.sendInquiry:c.send;
+    const help=formNode.querySelector('[data-reg-mode-help]');if(help)help.hidden=!rulesMode;
+   };
+   syncMode();
+   if(choice)pageListen(choice,'change',()=>{syncMode();formNode.dataset.dirty='true';say('');});
    let responseController=null;
    onPageCleanup(()=>responseController?.abort());
    pageListen(formNode,'input',event=>{event.target.removeAttribute('aria-invalid');formNode.dataset.dirty='true';});
@@ -110,7 +111,7 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
     const invalid=fieldName=>{const input=formNode.elements.namedItem(fieldName);if(input?.focus){input.setAttribute('aria-invalid','true');input.focus();}say((c[fieldName]?c[fieldName]+': ':'')+c.invalid,true);};
     if(result.field){invalid(result.field);return;}
     responseController=new AbortController();
-    button.disabled=true;formNode.dataset.dirty='true';formNode.setAttribute('aria-busy','true');say(c.sending);
+    button.disabled=true;if(choice)choice.disabled=true;formNode.dataset.dirty='true';formNode.setAttribute('aria-busy','true');say(c.sending);
     const timeout=setTimeout(()=>responseController.abort('timeout'),12000);
     try{
      const response=await fetch(REGISTRATION_API,{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','X-SSL-Registration':'1'},body:JSON.stringify({...result.value,website:body.website||''}),signal:responseController.signal});
@@ -122,7 +123,7 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
      else if(payload?.field&&Object.hasOwn(c,payload.field))invalid(payload.field);
      else say(c.unavailable,true);
     }catch{if(!responseController.signal.aborted||responseController.signal.reason==='timeout')say(c.unavailable,true);}
-    finally{clearTimeout(timeout);formNode.removeAttribute('aria-busy');button.disabled=false;}
+    finally{clearTimeout(timeout);formNode.removeAttribute('aria-busy');button.disabled=false;if(choice)choice.disabled=!active();}
    });
   };
   const checkAvailability=async()=>{
