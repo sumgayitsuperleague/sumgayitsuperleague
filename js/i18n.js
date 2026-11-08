@@ -14,7 +14,7 @@ import {FAN_COPY} from './fan-copy.js';
 import {REFINEMENT_COPY} from './refinement-copy.js';
 import {GUIDE_TRANSLATIONS} from './guide-source.js';
 import {localizedContent} from './localization-source.js';
-import {canonicalPath,languageHref,siteAnchor,explicitLanguage,languageFor,configureRouteLanguage,isSiteLanguage} from './routes-source.js';
+import {canonicalPath,languageHref,siteAnchor,explicitLanguage,isSiteLanguage,siteDefaultLanguage,languageFromCookie,languageCookie,SITE_LANGUAGE_COOKIE} from './routes-source.js';
 import {LANGUAGE_PREFERENCE,languageWelcomeState,rememberLanguage,renderLanguageWelcome} from './language-welcome.js';
 export const LANGUAGE_NAMES={az:'Azərbaycan dili',ru:'Русский',en:'English'};
 const safeLanguageStorage=()=>{try{return typeof localStorage==='undefined'?null:localStorage;}catch{return null;}};
@@ -22,23 +22,22 @@ const savedLanguage=storage=>{try{const saved=storage?.getItem(LANGUAGE_PREFEREN
 export function languageFrom(search,storage){return explicitLanguage(search)||savedLanguage(storage)||'az';}
 export let LANG=languageFrom(location.search,safeLanguageStorage());
 let tabLanguage=null;
-const welcomeContext=()=>({href:location.href,primary:document.body.dataset.siteDefaultLanguage,storage:safeLanguageStorage(),preview:!!document.body.dataset.previewPath,cleanHome:true});
-export function restoreLanguagePreference(){
- const {redirect}=languageWelcomeState(welcomeContext());
- if(!redirect)return false;
- location.replace(redirect);return true;
+const cookieLanguage=()=>{try{return languageFromCookie(document.cookie);}catch{return null;}};
+const writeLanguageCookie=language=>{try{const value=languageCookie(language);if(value)document.cookie=value;}catch{}};
+export function resetLanguagePreference(){
+ tabLanguage=null;
+ try{document.cookie=`${SITE_LANGUAGE_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax; Secure`;}catch{}
 }
+const welcomeContext=()=>({href:location.href,primary:document.body.dataset.siteDefaultLanguage,storage:safeLanguageStorage(),preview:!!document.body.dataset.previewPath,preference:tabLanguage||cookieLanguage()});
 export function configureLanguage(){
  const {primary,storage,preview,href}=welcomeContext(),url=new URL(href||(location.pathname||'/')+(location.search||''),'https://sumgayitsuperleague.com'),explicit=explicitLanguage(url.search);
- const home=!preview&&canonicalPath(url.pathname)==='/';
- configureRouteLanguage(primary,{cleanHome:!preview});
- if(explicit&&!preview)tabLanguage=explicit;
- if(home&&explicit==='az'){
-  rememberLanguage(storage,'az');
-  url.pathname='/';url.searchParams.delete('lang');
-  try{history.replaceState(history.state,'',url.pathname+url.search+url.hash);}catch{}
- }
- LANG=explicit||(home&&(tabLanguage||savedLanguage(storage))==='az'?'az':primary?languageFor(url.search,primary):languageFrom(url.search,storage));
+ if(preview){LANG=tabLanguage||explicit||siteDefaultLanguage(primary);document.documentElement.lang=LANG;return;}
+ const fromCookie=cookieLanguage(),saved=savedLanguage(storage);
+ if(explicit){tabLanguage=explicit;rememberLanguage(storage,explicit);writeLanguageCookie(explicit);}
+ else if(fromCookie&&fromCookie!==saved)rememberLanguage(storage,fromCookie);
+ else if(!fromCookie&&saved&&languageWelcomeState(welcomeContext()).show===false)writeLanguageCookie(saved);
+ if(url.searchParams.has('lang'))try{history.replaceState(history.state,'',languageHref(url.href));}catch{}
+ LANG=explicit||tabLanguage||fromCookie||saved||siteDefaultLanguage(primary);
  document.documentElement.lang=LANG;
 }
 export const searchKey=value=>String(value||'').normalize('NFKD').replace(/\p{M}/gu,'').toLocaleLowerCase('az').replace(/ı/g,'i').replace(/ə/g,'e');
@@ -118,9 +117,11 @@ export function installLanguage(){
   const button=event.target.closest('[data-language]');if(!button)return;
   const language=button.dataset.language;if(!isSiteLanguage(language))return;
   if(canReopen&&!dialog&&button.closest('.language-picker')&&language===LANG){openWelcome();return;}
-  tabLanguage=language;rememberLanguage(storage,language);closeWelcome();if(language===LANG)return;
-  const href=languageHref(location.href,language);
-  if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href);else location.href=href;
+  tabLanguage=language;closeWelcome();
+  if(welcome.preview){if(language!==LANG)window.SSL_SITE?.refreshLocal();return;}
+  rememberLanguage(storage,language);writeLanguageCookie(language);if(language===LANG)return;
+  const href=languageHref(location.href);
+  if(window.SSL_SITE?.enabled)window.SSL_SITE.navigate(href,{replace:true,scroll:[window.scrollX||0,window.scrollY||0]});else location.href=href;
  });
  if(typeof MutationObserver!=='undefined'){let pending=false;const observer=new MutationObserver(records=>{if(pending||!records.some(r=>r.addedNodes.length||r.type==='characterData'))return;pending=true;queueMicrotask(()=>{pending=false;enhanceRoot();});});observer.observe(document.body,{childList:true,subtree:true,characterData:true});onPageCleanup(()=>observer.disconnect());}
  document.title=t(document.title);

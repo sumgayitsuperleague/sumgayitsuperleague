@@ -204,7 +204,5 @@ mountVenue({PAGE,L,CMS,lang:UI.LANG});
 onPageCleanup(installSiteMotion(CMS.stadium?.motion));
 onPageCleanup(installConsistentIcons(document));
 }
-if(!UI.restoreLanguagePreference()){
- installSiteNavigation(mountSite);
- installTraffic();
-}
+installSiteNavigation(mountSite);
+installTraffic();

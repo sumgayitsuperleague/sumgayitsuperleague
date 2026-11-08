@@ -23,16 +23,15 @@ export function communityHome(ctx){
 }
 export const leagueEntrance=renderLeagueEntrance;
 export const bindLeagueEntrance=bindMatchCenter;
-function recentLeagueVideos(ctx){
- const rows=(ctx.VIDEOS||[]).filter(v=>v.date&&v.url).slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
- if(!rows.length)return '';
- return `<div class="ssl-social-updates">${rows.map(v=>`<a href="${ctx.esc(v.url)}" target="_blank" rel="noopener noreferrer"><span class="ssl-social-source">SSL TV · YouTube</span><strong>${ctx.esc(v.title)}</strong><small>${ctx.esc(ctx.fmtShort(v.date))} <span aria-hidden="true">↗</span></small></a>`).join('')}</div>`;
+function instagramFeed(ctx,community){
+ const {esc}=ctx,profile=esc(ctx.S.instagram),posts=community.posts.filter(p=>p.published&&instagramEmbedURL(p.url)).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+ return `<section class="ssl-ig-feed" aria-labelledby="ssl-instagram-title"><header class="social-page-heading"><div><span class="eyebrow">${instagramIcon} @sumqayitsuperliqa</span><h2 id="ssl-instagram-title">${esc(community.title)}</h2></div><a href="${profile}" target="_blank" rel="noopener noreferrer">Instagram-da izlə ↗</a></header>${posts.length?`<div class="instagram-grid">${posts.map(p=>socialCard(p,ctx)).join('')}</div>`:''}</section>`;
 }
 export function installFanCentre(ctx){
  const {P,CMS,L,DONE,T,esc,ball}=ctx;
  P.fans=()=>{const c=CMS.community,f=fanZoneSettings(CMS.fanZone).center,round=c.poll.round,played=DONE.filter(m=>m.round===round),best=played.slice().sort((a,b)=>(b.hs+b.as)-(a.hs+a.as))[0],total=played.reduce((n,m)=>n+m.hs+m.as,0);
  const facts=f.showRoundStats?`<aside class="fan-round-facts"><span class="eyebrow">${ordinal(round)} TUR</span><h2>Turun rəqəmləri</h2><div class="fan-fact-numbers"><div><b>${played.length}</b><span>Tamamlanmış oyun</span></div><div><b>${total}</b><span>Vurulan qol</span></div></div>${best?`<a href="matc.html?id=${best.id}"><span>Ən məhsuldar oyun</span><div>${ball(best.home,'sm')}<b>${esc(T[best.home].code)} ${best.hs}:${best.as} ${esc(T[best.away].code)}</b>${ball(best.away,'sm')}</div></a>`:''}</aside>`:'';
- return renderFanCenter({league:L,site:ctx.S,cms:CMS},UI.LANG)+`<section class="sec fx-centre-secondary"><div class="wrap">${f.showPoll||facts?`<div class="fan-centre-top">${f.showPoll?pollCard(ctx):''}${facts}</div>`:''}${f.showSocial&&c.enabled?`<div class="social-page-heading"><div><span class="eyebrow">@SUMQAYITSUPERLIQA</span><h2>${esc(c.title)}</h2></div><a href="${esc(ctx.S.instagram)}" target="_blank" rel="noopener noreferrer">Instagram-da izlə ↗</a></div>${recentLeagueVideos(ctx)}<div class="instagram-grid">${c.posts.filter(p=>p.published).slice().sort((a,b)=>b.date.localeCompare(a.date)).map(p=>socialCard(p,ctx)).join('')}</div>`:''}</div></section>`;
+ return renderFanCenter({league:L,site:ctx.S,cms:CMS},UI.LANG)+`<section class="sec fx-centre-secondary"><div class="wrap">${f.showPoll||facts?`<div class="fan-centre-top">${f.showPoll?pollCard(ctx):''}${facts}</div>`:''}${f.showSocial&&c.enabled?instagramFeed(ctx,c):''}</div></section>`;
  };
 }
 

@@ -23,7 +23,7 @@ export function installPlayerDuel({P,L,esc,ball,head,playerLink,$},teamPage,team
    const a=roster.find(r=>r.key===first.value),b=roster.find(r=>r.key===second.value);notice.textContent='';$('.duel-link').hidden=true;
    const same=!a||!b||a.key===b.key;$('#duel-copy').disabled=same;
    if(same){content.innerHTML='<p class="empty">'+esc(UI.t('Müqayisə üçün iki fərqli futbolçu seç.'))+'</p>';return;}
-   const url=new URL('/muqayise',location.href);url.searchParams.set('view','players');if(UI.LANG!=='az')url.searchParams.set('lang',UI.LANG);
+   const url=new URL('/muqayise',location.href);url.searchParams.set('view','players');
    for(const [i,row] of [[1,a],[2,b]]){url.searchParams.set('t'+i,row.team.id);url.searchParams.set('p'+i,row.player.name);}shareUrl=url.href;
    try{if(typeof history!=='undefined')history.replaceState(null,'',url.pathname+url.search);}catch{}
    const identity=row=>`<a class="duel-identity" href="${esc(playerLink(row.team.id,row.player.name))}"><span class="duel-shirt" aria-hidden="true">${esc(row.player.n||'—')}</span>${ball(row.team.id,'sm')}<h2 translate="no">${esc(playerName(row.player.name))}</h2><span translate="no">${esc(row.team.name)}</span></a>`;

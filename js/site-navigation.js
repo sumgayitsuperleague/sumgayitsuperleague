@@ -31,7 +31,7 @@ export function installSiteNavigation(mount){
   if(target)target.scrollIntoView({block:'start'});else scrollTo({left:scroll?.[0]||0,top:scroll?.[1]||0,behavior:'instant'});
   const heading=document.querySelector('#app h1')||document.querySelector('#app');if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
  };
- const navigate=async(href,{pop=false,scroll}={})=>{
+ const navigate=async(href,{pop=false,replace=false,scroll}={})=>{
   let url=new URL(href,location.href);if(url.origin!==location.origin)return false;
   controller?.abort();controller=new AbortController();const ticket=++request;
   document.documentElement.classList.add('site-navigating');document.querySelector('#app')?.setAttribute('aria-busy','true');
@@ -43,7 +43,7 @@ export function installSiteNavigation(mount){
    if(!page||!next.querySelector('#app')||!script||current&&script.getAttribute('src')!==current.getAttribute('src'))throw Error('Page version changed');
    if(ticket!==request)return false;
    if(response.redirected){const finalURL=new URL(response.url);if(finalURL.origin!==url.origin)throw Error('External redirect');finalURL.hash||=url.hash;url=finalURL;}
-   if(!pop){saveScroll();history.pushState({ssl:true,scroll:[0,0]},'',url.href);}else if(url.href!==location.href)history.replaceState(history.state,'',url.href);
+   if(!pop&&!replace){saveScroll();history.pushState({ssl:true,scroll:[0,0]},'',url.href);}else if(url.href!==location.href)history.replaceState(history.state,'',url.href);
    const attributes=Object.fromEntries([...next.body.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value]));
    // Keep the script markers in the head for later version checks.
    document.title=next.title||document.title;resetBody(page,attributes);applyData(data);metadata(next);render();
