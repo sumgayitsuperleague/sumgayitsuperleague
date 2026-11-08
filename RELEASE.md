@@ -1,3 +1,12 @@
+# Yeni mövsüm · Komanda qeydiyyatı
+
+- Ana səhifədə yeni mövsüm təqdim olunur. Mövsüm mərkəzində qeydiyyat və Sumqayıtın 77 illiyinə həsr olunmuş 2026 mövsümünün arxivi ayrıdır.
+- Xəbər siyahısı Media daxilindədir. Köhnə xəbər keçidləri və oyun nəticələri qorunur.
+- Komanda kartında sıralama və xal forma göstəricisindən ayrı göstərilir. Five Star loqosu dairəvi çərçivəyə tam sığır.
+- Qeydiyyat müraciətləri qorunan admin panelində idarə olunur.
+
+---
+
 # SSL Arena 3D · SSL Kuboku və Liqa
 
 22 oktyabr 2026.
