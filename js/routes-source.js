@@ -11,13 +11,13 @@ export function setRouteLanguage(url,lang,primary=browserDefault){
 }
 // Public routes stay independent of the GitHub Pages file layout.
 export const PAGE_ROUTES = Object.freeze({
- '/mekan':'mekan.html','/ssenari':'ssenari.html',
+ '/mekan':'mekan.html','/qeydiyyat':'qeydiyyat.html',
  '/birlikde-izle':'birlikde-izle.html','/penalti-arenasi':'penalti-arenasi.html','/final':'final.html','/ideal-altiliq':'ideal-altiliq.html','/viktorina':'viktorina.html',
  '/':'index.html','/oyunlar':'oyunlar.html','/cedvel':'cedvel.html',
  '/komandalar':'komandalar.html','/komanda':'komanda.html','/matc':'matc.html','/futbolcular':'futbolcular.html',
  '/futbolcu':'futbolcu.html','/bombardirler':'bombardirler.html','/statistika':'statistika.html',
  '/media':'media.html','/xeberler':'xeberler.html','/haqqimizda':'haqqimizda.html','/sponsorlar':'sponsorlar.html',
- '/movsum':'merhele.html','/muqayise':'muqayise.html','/minifutbol':'minifutbol.html','/elaqe':'elaqe.html','/azarkes':'azarkes.html','/admin':'admin.html','/404':'404.html'
+ '/movsum':'movsum.html','/movsum/arxiv':'merhele.html','/muqayise':'muqayise.html','/minifutbol':'minifutbol.html','/elaqe':'elaqe.html','/azarkes':'azarkes.html','/admin':'admin.html','/404':'404.html'
 });
 export function canonicalPath(path) {
  if(['/son-30-saniye','/son-30-saniye/','/son-30-saniye.html'].includes(path))return '/azarkes';
@@ -25,7 +25,8 @@ export function canonicalPath(path) {
  if(['/zaman-tuneli','/zaman-tuneli/','/zaman-tuneli.html'].includes(path))return '/penalti-arenasi';
  if(['/ideal-beslik','/ideal-beslik/','/ideal-beslik.html'].includes(path))return '/ideal-altiliq';
  if(path==='/index.html'||path==='/index'||path==='/index/')return '/';
- if(path==='/merhele'||path==='/merhele/'||path==='/merhele.html')return '/movsum';
+ if(['/ssenari','/ssenari/','/ssenari.html'].includes(path))return '/movsum';
+ if(path==='/merhele'||path==='/merhele/'||path==='/merhele.html')return '/movsum/arxiv';
  for(const [route,file] of Object.entries(PAGE_ROUTES))if(path==='/'+file||route!=='/'&&path===route+'/')return route;
  return path;
 }
