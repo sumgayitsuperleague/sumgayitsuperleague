@@ -32,7 +32,7 @@ export function installSiteNavigation(mount){
   const heading=document.querySelector('#app h1')||document.querySelector('#app');if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
  };
  const navigate=async(href,{pop=false,scroll}={})=>{
-  const url=new URL(href,location.href);if(url.origin!==location.origin)return false;
+  let url=new URL(href,location.href);if(url.origin!==location.origin)return false;
   controller?.abort();controller=new AbortController();const ticket=++request;
   document.documentElement.classList.add('site-navigating');document.querySelector('#app')?.setAttribute('aria-busy','true');
   try{
@@ -42,6 +42,7 @@ export function installSiteNavigation(mount){
    const script=next.querySelector('script[src*="/js/app.js"]'),current=document.querySelector('script[src*="/js/app.js"]');
    if(!page||!next.querySelector('#app')||!script||current&&script.getAttribute('src')!==current.getAttribute('src'))throw Error('Page version changed');
    if(ticket!==request)return false;
+   if(response.redirected){const finalURL=new URL(response.url);if(finalURL.origin!==url.origin)throw Error('External redirect');finalURL.hash||=url.hash;url=finalURL;}
    if(!pop){saveScroll();history.pushState({ssl:true,scroll:[0,0]},'',url.href);}else if(url.href!==location.href)history.replaceState(history.state,'',url.href);
    const attributes=Object.fromEntries([...next.body.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value]));
    // Keep the script markers in the head for later version checks.
@@ -51,7 +52,7 @@ export function installSiteNavigation(mount){
   }catch(error){if(error.name!=='AbortError'&&ticket===request)location.assign(url.href);return false;}
   finally{if(ticket===request){document.documentElement.classList.remove('site-navigating');document.querySelector('#app')?.removeAttribute('aria-busy');}}
  };
- const refreshLocal=()=>{const fields=[...document.querySelectorAll('#app input[id],#app select[id]')].filter(e=>!['file','password','checkbox','radio'].includes(e.type)).map(e=>[e.id,e.value]);const page=document.body.dataset.page,attributes=Object.fromEntries([...document.body.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])),scroll=[window.scrollX||0,window.scrollY||0];resetBody(page,attributes);render();for(const [id,value] of fields){const field=document.getElementById(id);if(field){field.value=value;field.dispatchEvent(new window.Event(field.tagName==='SELECT'?'change':'input',{bubbles:true}));}}scrollTo({left:scroll[0],top:scroll[1],behavior:'instant'});};
+ const refreshLocal=()=>{if(document.querySelector('[data-season-registration][data-dirty="true"],.ssl-reg-dialog[open]'))return;const fields=[...document.querySelectorAll('#app input[id],#app select[id]')].filter(e=>!['file','password','checkbox','radio'].includes(e.type)).map(e=>[e.id,e.value]);const page=document.body.dataset.page,attributes=Object.fromEntries([...document.body.attributes].filter(a=>a.name.startsWith('data-')).map(a=>[a.name,a.value])),scroll=[window.scrollX||0,window.scrollY||0];resetBody(page,attributes);render();for(const [id,value] of fields){const field=document.getElementById(id);if(field){field.value=value;field.dispatchEvent(new window.Event(field.tagName==='SELECT'?'change':'input',{bubbles:true}));}}scrollTo({left:scroll[0],top:scroll[1],behavior:'instant'});};
  const refresh=async()=>{const data=await snapshot();if(applyData(data)&&!window.SSL_FAN_QUIZ?.receive(data))refreshLocal();return data;};
  window.SSL_SITE={enabled:false,navigate,refresh,refreshLocal};
  render();

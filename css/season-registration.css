@@ -1,0 +1,107 @@
+/* Season launch: SSL cobalt, white controls and a lightweight stadium pass. */
+.ssl-season-hero,.ssl-reg-page{--season-ink:#081734;--season-blue:#123487;--season-ice:#eaf3ff;color:#fff;background:#0a1c45;position:relative;isolation:isolate;overflow:hidden}
+.ssl-season-hero::before,.ssl-reg-page::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(103deg,#07142ff5 6%,#0a2358e8 48%,#122f6895 85%),url("/assets/editorial/matchnight-field.webp") center 55%/cover no-repeat}
+.ssl-season-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 74% 20%,#69a9ff55,transparent 48%)}
+.ssl-season-hero-inner{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);align-items:center;gap:clamp(24px,5vw,80px);padding-block:clamp(46px,7vw,105px);min-height:clamp(440px,47vw,650px)}
+.ssl-season-lead{position:relative;z-index:1;min-width:0}
+.ssl-season-overline{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;margin:0 0 20px;color:#c9ddff}
+.ssl-season-overline>span:first-child,.ssl-season-kicker,.ssl-season-ticket-top{font-size:.74rem;letter-spacing:.15em;font-weight:800;text-transform:uppercase}
+.ssl-season-lead h1,.ssl-season-section-head h1,.ssl-reg-panel h1,.ssl-reg-panel h2{font-family:var(--display,system-ui,sans-serif);font-weight:850;letter-spacing:-.045em;line-height:1.04;margin:0}
+.ssl-season-lead h1{max-width:16ch;font-size:clamp(2.45rem,5.6vw,5.55rem);color:#fff;text-wrap:balance}
+.ssl-season-lead p{max-width:48ch;margin:20px 0 0;color:#e0ebff;line-height:1.6;font-size:clamp(1rem,1.4vw,1.16rem)}
+.ssl-season-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ssl-season-status{display:inline-flex;align-items:center;gap:8px;min-height:26px;padding:4px 9px;border:1px solid #9dd2f861;border-radius:100px;color:#ebf5ff;background:#152e62b3;font-weight:740;font-size:.77rem;line-height:1.25;letter-spacing:0;text-transform:none}
+.ssl-season-status i{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#71eac0;box-shadow:0 0 0 3px #6aebbe25}
+.ssl-season-status.is-closed i{background:#a5bad7;box-shadow:none}
+.ssl-season-button{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:13px;min-height:48px;max-width:100%;padding:10px 17px;border:1px solid transparent;border-radius:12px;background:#edf5ff;color:#0c2661;font:inherit;font-size:.95rem;font-weight:800;line-height:1.25;text-align:center;text-decoration:none;cursor:pointer;transition:background-color .18s,box-shadow .18s}
+.ssl-season-button:hover{background:#d9eaff;color:#081c52;box-shadow:0 10px 20px #081c5229}
+.ssl-season-button:focus-visible,.ssl-reg-dialog-close:focus-visible,.ssl-reg-back:focus-visible,.ssl-media-tabs a:focus-visible,.ssl-season-archive-strip a:focus-visible{outline:3px solid #7ab9ff;outline-offset:4px}
+.ssl-season-button.is-outline{color:#fff;background:#112e6860;border-color:#b0cff47a}
+.ssl-season-button.is-outline:hover{background:#244783}
+.ssl-season-button:disabled{opacity:.64;cursor:wait}
+.ssl-season-arrow{flex:none;font-weight:800}
+.ssl-season-ticket-stage{width:min(100%,450px);min-width:0;justify-self:center;perspective:950px;padding:18px 12px}
+.ssl-season-ticket{--rx:6deg;--ry:-12deg;position:relative;min-height:245px;aspect-ratio:1.38;border:1px solid #b7d8ff92;border-radius:27px;display:grid;grid-template-rows:auto 1fr auto;align-items:start;padding:20px;background:linear-gradient(140deg,#477ddd30,transparent 62%),linear-gradient(145deg,#153b82,#0b2359 70%,#144aab);transform-style:preserve-3d;transform:rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(-4deg);box-shadow:8px 10px 0 #081a43,10px 13px 0 #88b4ff52,0 32px 50px #01081999;transition:transform .25s ease-out}
+.ssl-season-ticket::after{content:"";position:absolute;inset:7px;border:1px solid #bbdcff3f;border-radius:20px;pointer-events:none}
+.ssl-season-ticket-top,.ssl-season-ticket-bottom{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#e2efff;transform:translateZ(13px)}
+.ssl-season-ticket-bottom{align-self:end;font-size:.98rem;letter-spacing:.12em}
+.ssl-season-ticket-bottom>span{color:#add5ff;font-size:1.25rem;font-weight:820}
+.ssl-season-pitch{position:absolute;inset:18% 6%;width:88%;height:64%;stroke:#c4e1ff54;stroke-width:1.6;transform:translateZ(2px)}
+.ssl-season-ticket-crest{position:absolute;inset:50% auto auto 50%;transform:translate3d(-50%,-50%,34px);width:clamp(80px,13vw,130px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;border:1px solid #a5ceffb5;background:radial-gradient(circle at 36% 25%,#3473d6,#0d2860 73%);box-shadow:0 13px 24px #020c2a9e,inset 0 0 0 5px #b2d8ff22}
+.ssl-season-ticket-crest img{width:69%;height:69%;object-fit:contain}
+.ssl-season-archive-strip{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;padding-block:21px;border-bottom:1px solid #d4dff2}
+.ssl-season-archive-strip>div{display:grid;gap:4px}
+.ssl-season-archive-strip strong{font-size:clamp(.94rem,1.6vw,1.14rem);line-height:1.35}
+.ssl-season-archive-strip a{font-weight:800;color:#123589;white-space:nowrap}
+.ssl-season-kicker{color:#31598f}
+.ssl-season-directory{padding-block:clamp(38px,6vw,80px);background:linear-gradient(140deg,#f0f6ff,#f8faff)}
+.ssl-season-section-head{max-width:720px;margin-bottom:30px}
+.ssl-season-section-head h1{font-size:clamp(2.35rem,5vw,4.65rem);margin-top:10px;color:#101f40}
+.ssl-season-section-head p{margin:13px 0 0;color:#49617d;font-size:1.06rem;line-height:1.55}
+.ssl-season-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.ssl-season-choice{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;min-height:330px;padding:clamp(22px,4vw,45px);border-radius:22px;color:#fff;background:linear-gradient(126deg,#0a1c44,#124d9d);box-shadow:0 16px 36px #14327219}
+.ssl-season-choice-archive{background:linear-gradient(123deg,#132541f5,#28476ecf),url("/assets/editorial/news-season-draw.webp") center/cover}
+.ssl-season-choice-content{position:relative;z-index:1;min-width:0}
+.ssl-season-choice h2{font-weight:830;font-size:clamp(1.45rem,3vw,2.5rem);line-height:1.12;letter-spacing:-.025em;color:#fff;margin:15px 0 9px}
+.ssl-season-choice p{max-width:37ch;color:#e2edff;margin:0 0 20px;line-height:1.5}
+.ssl-season-choice-number{position:absolute;z-index:0;inset:auto -8px -47px auto;font-size:clamp(9rem,21vw,20rem);line-height:1;color:#bedbff17;font-weight:900;transform:skew(-12deg);pointer-events:none}
+.ssl-reg-page{padding-block:clamp(22px,5vw,72px)}
+.ssl-reg-page-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;gap:clamp(20px,5vw,72px);max-width:1100px}
+.ssl-reg-aside{display:grid;justify-items:start;gap:16px}
+.ssl-reg-back{color:#e5f0ff;font-weight:780}
+.ssl-reg-dialog{color:#122341;background:#fff;border:1px solid #ccdbf6;border-radius:22px;padding:0;max-height:calc(100dvh - 28px);width:min(620px,calc(100% - 26px));max-width:none;box-shadow:0 28px 95px #020917aa;overscroll-behavior:contain}
+.ssl-reg-dialog::backdrop{background:#061125b8;backdrop-filter:blur(5px)}
+.ssl-reg-dialog-inner{position:relative}
+.ssl-reg-dialog-close{position:absolute;top:13px;right:13px;display:grid;place-items:center;width:43px;height:43px;border:1px solid #cddaf0;border-radius:12px;background:#fff;color:#183362;cursor:pointer;font-size:1.7rem;line-height:1;z-index:2}
+.ssl-reg-panel{color:#132542;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 18px 40px #06133321}
+.ssl-reg-panel-head{padding:23px clamp(18px,4vw,34px) 19px;background:linear-gradient(150deg,#f3f8ff,#edf4ff);border-bottom:1px solid #dbe7f7}
+.ssl-reg-dialog .ssl-reg-panel-head{padding-right:57px}
+.ssl-reg-panel h1,.ssl-reg-panel h2{font-size:clamp(1.7rem,3.2vw,2.65rem);color:#12284d;margin:8px 0}
+.ssl-reg-panel-head p{margin:0;color:#395476;line-height:1.5;font-size:.94rem}
+.ssl-reg-form,.ssl-reg-success,.ssl-reg-closed{padding:21px clamp(18px,4vw,34px) 22px;margin:0}
+.ssl-reg-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.ssl-reg-fields label{display:grid;align-content:start;gap:7px;min-width:0;font-size:.9rem;color:#142952;font-weight:780}
+.ssl-reg-fields label small{font-weight:560;color:#4c6483;font-size:.77rem;line-height:1.4}
+.ssl-reg-fields input{width:100%;min-width:0;height:46px;border:1px solid #9fb2d0;border-radius:10px;padding:0 11px;background:#fbfdff;color:#0c1d39;font:inherit;font-size:16px;font-weight:550;box-sizing:border-box}
+.ssl-reg-fields input:focus{outline:2px solid #467ad0;outline-offset:1px}
+.ssl-reg-fields input[aria-invalid=true]{border-color:#b33337}
+.ssl-reg-privacy{margin:16px 0 14px;color:#49617b;font-size:.8rem;line-height:1.5}
+.ssl-reg-privacy a{color:#194390;text-decoration:underline}
+.ssl-reg-form .ssl-season-button{color:#fff;background:#1943a3}
+.ssl-reg-form .ssl-season-button:hover{background:#143780}
+.ssl-reg-message{font-size:.88rem;line-height:1.42;color:#31598f;margin:10px 0 0}
+.ssl-reg-message:empty{display:none}
+.ssl-reg-message.is-error{color:#a12232}
+.ssl-reg-success{outline:none}
+.ssl-reg-success>span{display:grid;place-items:center;width:42px;height:42px;background:#e6f8f1;border-radius:100%;color:#135f42;font-weight:900;font-size:1.2rem}
+.ssl-reg-success h3{margin:11px 0 4px;color:#0c3145;font-size:1.25rem}
+.ssl-reg-success p{margin:0;line-height:1.5;color:#365772}
+.ssl-media-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.ssl-media-tabs a{display:flex;align-items:center;min-height:43px;padding:8px 14px;border:1px solid #c2d3ed;border-radius:11px;background:#fff;color:#18366f;font-weight:780}
+.ssl-media-tabs a[aria-current=page]{background:#163f9c;color:#fff;border-color:#163f9c}
+.arena-site .club-card .club-status{width:100%;display:grid;justify-items:center;gap:9px;margin:4px 0 14px}
+.arena-site .club-card .club-status .club-position{display:block;margin:0;text-align:center;line-height:1.4;font-size:.87rem;font-weight:750;color:#274a82}
+.arena-site .club-card .club-status .fm{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin:0;padding:0}
+.arena-site .ball.five-star-crest{display:inline-flex;align-items:center;justify-content:center;padding:0!important;border-radius:50%;overflow:hidden;box-sizing:border-box;border:1px solid #b1894e!important;background:radial-gradient(circle at 37% 25%,#1f3c69,#0a1734 76%)!important;box-shadow:inset 0 0 0 2px #6c91bc2b}
+.arena-site .ball.five-star-crest img{display:block;width:80%!important;height:80%!important;max-width:none;max-height:none;object-fit:contain;object-position:center;border:0;border-radius:0;padding:0!important;transform:none;background:transparent!important;box-shadow:none}
+@media(max-width:760px){
+ .ssl-season-hero-inner{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:40px 34px}
+ .ssl-season-ticket-stage{width:min(73%,345px);padding:8px 8px 14px}
+ .ssl-season-ticket{min-height:190px;padding:14px;border-radius:20px}
+ .ssl-season-ticket::after{border-radius:15px}
+ .ssl-season-ticket-crest{width:83px}
+ .ssl-season-choices,.ssl-reg-page-grid{grid-template-columns:minmax(0,1fr)}
+ .ssl-reg-aside [data-season-tilt]{display:none}
+ .ssl-season-choice{min-height:260px}
+}
+@media(max-width:410px){
+ .ssl-reg-fields{grid-template-columns:minmax(0,1fr);gap:10px}
+ .ssl-reg-panel-head{padding-block:18px 13px}
+ .ssl-reg-form{padding-block:15px 17px}
+ .ssl-season-archive-strip{align-items:flex-start;flex-direction:column}
+ .ssl-season-hero-inner{padding-block:34px 27px}
+ .ssl-season-ticket-stage{width:78%}
+ .ssl-season-ticket{min-height:162px}
+ .ssl-season-lead h1{font-size:clamp(2.1rem,9vw,2.6rem)}
+}
+@media(prefers-reduced-motion:reduce){.ssl-season-ticket,.ssl-season-button{transition:none}.ssl-season-ticket{transform:rotateZ(-3deg)}}

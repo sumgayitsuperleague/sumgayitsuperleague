@@ -5,19 +5,21 @@ export const explicitLanguage=search=>{const value=new URLSearchParams(search).g
 export const languageFor=(search,fallback='az')=>explicitLanguage(search)||siteDefaultLanguage(fallback);
 let browserDefault='az';
 export function configureRouteLanguage(value){browserDefault=siteDefaultLanguage(value);}
+let seasonRoutesReady=true;
+export function configureSeasonRoutes(ready){seasonRoutesReady=ready;}
 export function setRouteLanguage(url,lang,primary=browserDefault){
  if(isSiteLanguage(lang)&&lang!==siteDefaultLanguage(primary))url.searchParams.set('lang',lang);else url.searchParams.delete('lang');
  return url;
 }
 // Public routes stay independent of the GitHub Pages file layout.
 export const PAGE_ROUTES = Object.freeze({
- '/mekan':'mekan.html','/ssenari':'ssenari.html',
+ '/mekan':'mekan.html','/qeydiyyat':'qeydiyyat.html',
  '/birlikde-izle':'birlikde-izle.html','/penalti-arenasi':'penalti-arenasi.html','/final':'final.html','/ideal-altiliq':'ideal-altiliq.html','/viktorina':'viktorina.html',
  '/':'index.html','/oyunlar':'oyunlar.html','/cedvel':'cedvel.html',
  '/komandalar':'komandalar.html','/komanda':'komanda.html','/matc':'matc.html','/futbolcular':'futbolcular.html',
  '/futbolcu':'futbolcu.html','/bombardirler':'bombardirler.html','/statistika':'statistika.html',
  '/media':'media.html','/xeberler':'xeberler.html','/haqqimizda':'haqqimizda.html','/sponsorlar':'sponsorlar.html',
- '/movsum':'merhele.html','/muqayise':'muqayise.html','/minifutbol':'minifutbol.html','/elaqe':'elaqe.html','/azarkes':'azarkes.html','/admin':'admin.html','/404':'404.html'
+ '/movsum':'movsum.html','/movsum/arxiv':'merhele.html','/muqayise':'muqayise.html','/minifutbol':'minifutbol.html','/elaqe':'elaqe.html','/azarkes':'azarkes.html','/admin':'admin.html','/404':'404.html'
 });
 export function canonicalPath(path) {
  if(['/son-30-saniye','/son-30-saniye/','/son-30-saniye.html'].includes(path))return '/azarkes';
@@ -25,19 +27,29 @@ export function canonicalPath(path) {
  if(['/zaman-tuneli','/zaman-tuneli/','/zaman-tuneli.html'].includes(path))return '/penalti-arenasi';
  if(['/ideal-beslik','/ideal-beslik/','/ideal-beslik.html'].includes(path))return '/ideal-altiliq';
  if(path==='/index.html'||path==='/index'||path==='/index/')return '/';
- if(path==='/merhele'||path==='/merhele/'||path==='/merhele.html')return '/movsum';
+ if(['/ssenari','/ssenari/','/ssenari.html'].includes(path))return '/movsum';
+ if(path==='/merhele'||path==='/merhele/'||path==='/merhele.html')return '/movsum/arxiv';
  for(const [route,file] of Object.entries(PAGE_ROUTES))if(path==='/'+file||route!=='/'&&path===route+'/')return route;
  return path;
+}
+function hostRoute(url,clean=true){
+ const canonical=canonicalPath(url.pathname);
+ if(!seasonRoutesReady&&canonical==='/movsum/arxiv'){
+  url.pathname=clean?'/movsum':'/merhele.html';
+  url.searchParams.set('arxiv','2026');
+ }else if(clean)url.pathname=canonical;
+ else if(!seasonRoutesReady&&url.pathname==='/movsum')url.pathname='/movsum.html';
+ return url;
 }
 export function publicHref(value,lang='az') {
  if(typeof value!=='string'||!value||/^(?:[a-z]+:|\/\/|#)/i.test(value))return value;
  const u=new URL(value.startsWith('/')?value:'/'+value,'https://ssl.invalid');
- u.pathname=canonicalPath(u.pathname);
+ hostRoute(u);
  setRouteLanguage(u,lang);
  return u.pathname+u.search+u.hash;
 }
 export function languageHref(value,lang,primary=browserDefault) {
- const u=new URL(value,'https://ssl.invalid');u.pathname=canonicalPath(u.pathname);
+ const u=hostRoute(new URL(value,'https://ssl.invalid'));
  setRouteLanguage(u,lang,primary);
  return u.pathname+u.search+u.hash;
 }
@@ -48,7 +60,7 @@ export function siteAnchor(value,current,lang='az',clean=true){
  const relativeFile=!/^(?:[a-z]+:|\/\/|\/|\?|#)/i.test(value);
  const url=new URL(value,relativeFile?new URL('/',base):base);
  if(url.origin!==base.origin)return value;
- const path=clean?canonicalPath(url.pathname):url.pathname;
+ hostRoute(url,clean);
  if(!value.startsWith('#'))setRouteLanguage(url,lang);
- return path+url.search+url.hash;
+ return url.pathname+url.search+url.hash;
 }
