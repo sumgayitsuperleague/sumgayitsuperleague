@@ -180,17 +180,20 @@ body.ux-site.ssl-official .ssl-season-hero~.league-entry--official .official-her
 @media(prefers-reduced-motion:reduce){.ssl-season-shortcuts>a{transition:none}}
 
 /* Compact registration and editorial surfaces. */
-.ssl-reg-rules{margin:0 0 20px;border-radius:14px;background:#f1f6ff;color:#15335c;scroll-margin-top:110px}
-.ssl-reg-rules>.ssl-reg-rules-toggle{display:grid;grid-template-columns:36px minmax(0,1fr) 18px;align-items:center;gap:12px;list-style:none;cursor:pointer;padding:10px 14px;min-height:58px;border:1px solid #214ba3;border-radius:14px;background:#214ba3;color:#fff;font-size:1rem;font-weight:800;line-height:1.35}
-.ssl-reg-rules-toggle::-webkit-details-marker{display:none}.ssl-reg-rules-toggle::marker{content:''}
-.ssl-reg-rules>.ssl-reg-rules-toggle:hover{background:#183d8a;border-color:#183d8a}
-.ssl-reg-rules-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:9px;background:#ffffff20;color:#fff}
-.ssl-reg-rules-icon svg{width:20px;height:20px}.ssl-reg-rules[open] .ssl-reg-rules-chevron{transform:rotate(180deg)}
-.ssl-reg-rules>summary:focus-visible,.ssl-reg-retry:focus-visible{outline:2px solid #2449bf;outline-offset:2px}
-.ssl-reg-rules-body{padding:15px 16px 16px;line-height:1.6;font-size:.94rem;color:#344f72}
-.ssl-reg-rules-body p{margin:0 0 12px;overflow-wrap:anywhere}.ssl-reg-rules-body p:last-child{margin-bottom:0}
-.ssl-reg-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ssl-reg-fields label[hidden],.ssl-reg-actions [hidden],.ssl-reg-mode-title[hidden]{display:none!important}
-.ssl-reg-mode-title{margin:0 0 12px;color:#183b81;font-size:1rem;font-weight:800}
+.ssl-reg-choice{margin:14px 0 10px;padding-top:10px;border-top:1px solid #e4eaf3;color:#243d61}
+.ssl-reg-choice .ssl-reg-choice-label{position:relative;display:flex;align-items:flex-start;gap:10px;margin:0;min-height:44px;padding:11px 0;cursor:pointer;font-size:.92rem;font-weight:750;line-height:1.45}
+.ssl-reg-choice-label input[type=checkbox]{position:absolute;inset:0 auto auto 0;width:1px;height:1px;min-height:0;margin:0;padding:0;opacity:0}
+.ssl-reg-checkmark{display:grid;place-items:center;flex:none;width:22px;height:22px;border:1px solid #9baec8;border-radius:5px;background:#fff;color:transparent;font:850 16px/1 system-ui}
+.ssl-reg-checkmark::before{content:'✓'}
+.ssl-reg-choice-label input:checked+.ssl-reg-checkmark{color:#214ba3;border-color:#214ba3}
+.ssl-reg-choice-label input:focus-visible+.ssl-reg-checkmark{outline:2px solid #214ba3;outline-offset:3px}
+.ssl-reg-choice-label:has(input:disabled){cursor:default}
+.ssl-reg-choice>small{display:block;margin:-2px 0 8px 32px;color:#526983;font-size:.84rem;line-height:1.45}
+.ssl-reg-reading{margin:13px 0 0;color:#2b4e84;font-size:.91rem;scroll-margin-top:105px}
+.ssl-reg-reading>summary{width:fit-content;padding:7px 0;cursor:pointer;font-weight:750}
+.ssl-reg-reading p{margin:7px 0 0;color:#455a76;line-height:1.6;overflow-wrap:anywhere}
+.ssl-reg-reading>summary:focus-visible,.ssl-reg-retry:focus-visible{outline:2px solid #2449bf;outline-offset:2px}
+.ssl-reg-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ssl-reg-fields label[hidden],.ssl-reg-choice>[hidden]{display:none!important}
 .ssl-reg-reference{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px!important}.ssl-reg-reference strong{border-radius:6px;padding:5px 9px;background:#e9f2ff;color:#173d8b;letter-spacing:.045em}
 .ssl-season-honour-wrap{margin-top:24px;margin-bottom:30px}
 .ssl-season-honour{display:grid;grid-template-columns:116px minmax(0,1fr) auto;align-items:center;gap:clamp(17px,3vw,36px);padding:clamp(18px,3vw,34px);border:1px solid #b9cef3;border-left:5px solid #2654ae;border-radius:20px;background:radial-gradient(ellipse at 8% 0%,#dceaff 0%,transparent 58%),linear-gradient(112deg,#f3f7ff,#fff 75%);color:#112e61;box-shadow:0 12px 28px #2b508614}

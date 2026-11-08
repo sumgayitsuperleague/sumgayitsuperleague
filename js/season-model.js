@@ -1,6 +1,6 @@
 export const REGISTRATION_EDITION = 'ssl-season-2';
 export const REGISTRATION_API = '/api/season-registration';
-export const SEASON_APP_VERSION = '20261108polish1';
+export const SEASON_APP_VERSION = '20261108desk2';
 export const SEASON_ARCHIVE = '/movsum/arxiv';
 export const REGISTRATION_PATH = '/qeydiyyat';
 export const registrationOpenFromResponse = value => value?.edition === REGISTRATION_EDITION && typeof value.open === 'boolean' ? value.open : null;
