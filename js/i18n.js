@@ -28,7 +28,10 @@ export function resetLanguagePreference(){
  tabLanguage=null;
  try{document.cookie=`${SITE_LANGUAGE_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax; Secure`;}catch{}
 }
-const welcomeContext=()=>({href:location.href,primary:document.body.dataset.siteDefaultLanguage,storage:safeLanguageStorage(),preview:!!document.body.dataset.previewPath,preference:tabLanguage||cookieLanguage()});
+const welcomeContext=()=>{
+ const preview=!!document.body.dataset.previewPath;
+ return {href:location.href,primary:preview?document.body.dataset.siteDefaultLanguage:'az',storage:safeLanguageStorage(),preview,preference:tabLanguage||cookieLanguage()};
+};
 export function configureLanguage(){
  const {primary,storage,preview,href}=welcomeContext(),url=new URL(href||(location.pathname||'/')+(location.search||''),'https://sumgayitsuperleague.com'),explicit=explicitLanguage(url.search);
  if(preview){LANG=tabLanguage||explicit||siteDefaultLanguage(primary);document.documentElement.lang=LANG;return;}
@@ -94,6 +97,8 @@ export function enhanceRoot(root=document.body,force=false){
  for(const anchor of root.querySelectorAll('a[href]')){const value=anchor.getAttribute('href');if(anchor.hasAttribute('download')||/^(?:blob|data):/i.test(value||''))continue;try{const href=siteAnchor(value,base.href,LANG,document.body.dataset.cleanRoutes==='1');if(value!==href)anchor.setAttribute('href',href);}catch{}}
 }
 export function installLanguage(){
+ const skipLink=document.querySelector('a.skip-link');
+ if(skipLink)skipLink.textContent='Əsas məzmuna keç';
  document.documentElement.lang=LANG;enhanceRoot();
  const storage=safeLanguageStorage();
  let dialog;

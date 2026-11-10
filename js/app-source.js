@@ -187,7 +187,18 @@ ctx.seasonMenu=seasons.menu;
 chrome();installMatchLive({P,M,T,ball,fd,videoForMatch,playerLink,$,$$,mcard,CMS});installVenue({P,L,CMS,lang:UI.LANG});const fn=P[PAGE];if(fn){$('#app').innerHTML=fn();if(fn.init)fn.init()}seasons.mount(PAGE);arena.bind();pageEnd();
 const titleLabels={venue:'Oyuna gəlmək üçün məlumat',seasons:seasonWords(UI.LANG).seasons,registration:seasonWords(UI.LANG).registration,sponsors:'Sponsorlar və tərəfdaşlar',fans:'Azarkeş mərkəzi',guide:'Minifutbol bələdçisi',contact:'Əlaqə',home:'',playoffs:'Mövsüm mərkəzi',compare:'Komandaları müqayisə et',table:'Turnir cədvəli',games:'Oyunlar və nəticələr',teams:'Komandalar',scorers:'Bombardirlər',stats:'Statistika',news:'Xəbər mərkəzi',media:'SSL TV',about:'Haqqımızda',players:'Futbolçular',player:'Futbolçu',match:'Matç mərkəzi'};
 document.title=(titleLabels[PAGE]?UI.t(titleLabels[PAGE])+' · ':'')+(PAGE==='team'&&T[new URLSearchParams(location.search).get('t')]?T[new URLSearchParams(location.search).get('t')].name+' · ':'')+(S.name||L.name);
-if(PAGE==='home'&&CMS.seo?.title)document.title=CMS.seo.title;
+if(PAGE==='home'){
+ const {title,description}=CMS.seo||{};
+ if(title)document.title=title;
+ if(UI.LANG==='az'&&description&&!previewPath){
+  for(const selector of ['meta[name="description"]','meta[property="og:description"]','meta[name="twitter:description"]']){
+   const meta=$(selector);
+   if(meta)meta.content=description;
+  }
+  const locale=$('meta[property="og:locale"]');
+  if(locale)locale.content='az_AZ';
+ }
+}
 if(PAGE==='compare'&&new URLSearchParams(location.search).get('view')==='players')document.title=UI.t('Futbolçular üz-üzə')+' · '+(S.name||L.name);
 if(PAGE==='about')document.title=(CMS.about?.title||UI.t('Haqqımızda'))+' · '+(S.name||L.name);
 if(PAGE==='news'){const n=NEWS.find(n=>n.id===new URLSearchParams(location.search).get('id'));if(n)document.title=n.title+' · '+S.name;}
