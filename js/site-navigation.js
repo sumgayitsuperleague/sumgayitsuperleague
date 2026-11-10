@@ -1,5 +1,5 @@
 import {createPageScope} from './page-lifecycle.js';
-import {canonicalPath} from './routes-source.js';
+import {canonicalPath,preserveSeason,publicSeason,seasonEndpoint,SEASON_QUERY} from './routes-source.js';
 
 export function installSiteNavigation(mount){
  if(!document.querySelector('base')){const base=document.createElement('base');base.href='/';document.head.prepend(base);}
@@ -18,7 +18,7 @@ export function installSiteNavigation(mount){
   const app=document.createElement('main');app.id='app';document.body.append(skip,app);
  };
  const applyData=snapshot=>{if(!snapshot?.data?.league)return false;window.CONTENT=snapshot.data;window.LEAGUE=snapshot.data.league;window.SITE=snapshot.data.site;if(Number.isFinite(snapshot.serverNow))window.__sslServerOffset=snapshot.serverNow-Date.now();return true;};
- const snapshot=async(signal)=>{const r=await fetch('/api/site-content',{cache:'no-store',credentials:'omit',signal});if(!r.ok)throw Error('Content unavailable');return r.json();};
+ const snapshot=async(signal)=>{const r=await fetch(seasonEndpoint('/api/site-content'),{cache:'no-store',credentials:'omit',signal});if(!r.ok)throw Error('Content unavailable');return r.json();};
  const metadata=next=>{
   for(const selector of ['meta[name="description"]','meta[name="theme-color"]','link[rel="canonical"]','meta[property^="og:"]','meta[name^="twitter:"]','link[rel="alternate"][hreflang]','script[type="application/ld+json"]']){
    for(const el of document.head.querySelectorAll(selector))el.remove();
@@ -33,6 +33,9 @@ export function installSiteNavigation(mount){
  };
  const navigate=async(href,{pop=false,replace=false,scroll}={})=>{
   let url=new URL(href,location.href);if(url.origin!==location.origin)return false;
+  preserveSeason(url);
+  const view=publicSeason(),target=url.searchParams.get(SEASON_QUERY);
+  if(view&&target&&target!==view.selected){location.assign(url.href);return false;}
   controller?.abort();controller=new AbortController();const ticket=++request;
   document.documentElement.classList.add('site-navigating');document.querySelector('#app')?.setAttribute('aria-busy','true');
   try{
@@ -61,7 +64,7 @@ export function installSiteNavigation(mount){
  window.SSL_SITE.enabled=true;history.scrollRestoration='manual';saveScroll();
  let scrollTimer;window.addEventListener('scroll',()=>{clearTimeout(scrollTimer);scrollTimer=setTimeout(saveScroll,120);},{passive:true});
  document.addEventListener('click',event=>{
-  const anchor=event.target.closest?.('a[href]');if(!anchor||event.defaultPrevented||event.button>0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||anchor.hasAttribute('download')||anchor.target&&anchor.target!=='_self'||anchor.closest('[data-no-router]'))return;
+  const anchor=event.target.closest?.('a[href]');if(!anchor||event.defaultPrevented||event.button>0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||anchor.hasAttribute('download')||anchor.target&&anchor.target!=='_self'||anchor.closest('[data-no-router],[data-season-link]'))return;
   const url=new URL(anchor.href,location.href);if(url.origin!==location.origin||!/^https?:$/.test(url.protocol)||/^\/(?:admin|api|assets|cdn-cgi)(?:\/|$)/.test(url.pathname)||/\.[a-z0-9]+$/i.test(url.pathname)&&!url.pathname.endsWith('.html'))return;
   if(url.pathname===location.pathname&&url.search===location.search&&url.hash)return;
   event.preventDefault();url.pathname=canonicalPath(url.pathname);navigate(url.href);

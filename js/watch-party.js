@@ -1,3 +1,4 @@
+import {seasonEndpoint} from './routes-source.js';
 import {pageListen,pageInterval,onPageCleanup,pageScope} from './page-lifecycle.js';
 import {watchSources} from './fan-experience-model.js';
 import {fanZoneSettings} from './fan-zone-model.js';
@@ -40,7 +41,7 @@ export function bindWatchParty(data,lang='az',{onVideo=()=>{}}={}){
  const isHost=()=>!!state?.self?.host;
  const inScope=fn=>scope&&!scope.disposed?scope.run(fn):fn();
  const later=(fn,ms)=>{const id=setTimeout(()=>{if(!disposed)inScope(fn);},ms);onPageCleanup(()=>clearTimeout(id),scope);return id;};
- const api=async(path='',body)=>{const r=await fetch('/api/watch-rooms'+path,{method:body===undefined?'GET':'POST',credentials:'same-origin',headers:body===undefined?{}:{'Content-Type':'application/json','X-SSL-Room':'1'},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal});const b=await r.json();if(!r.ok){const error=new Error(b.error||t('error'));error.status=r.status;throw error;}return b;};
+ const api=async(path='',body)=>{const r=await fetch(seasonEndpoint('/api/watch-rooms'+path),{method:body===undefined?'GET':'POST',credentials:'same-origin',headers:body===undefined?{}:{'Content-Type':'application/json','X-SSL-Room':'1'},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal});const b=await r.json();if(!r.ok){const error=new Error(b.error||t('error'));error.status=r.status;throw error;}return b;};
  const sourceBody=form=>{const key=String(new FormData(form).get('source')||'');return key.startsWith('video:')?{videoId:key.slice(6)}:{matchId:key.replace(/^match:/,'')};};
  const send=body=>{if(!connected||socket?.readyState!==1){status(t('offline'),true);return false;}socket.send(JSON.stringify(body));return true;};
  const connection=value=>{connected=value;q('[data-wp-connection]').textContent=t(value?'online':'offline');q('[data-wp-connection]').classList.toggle('is-online',value);q('[data-wp-toggle]').disabled=!value||!isHost()||!ready||!activated;if(value&&hostDirty)publish();updateChat();};
@@ -62,7 +63,7 @@ export function bindWatchParty(data,lang='az',{onVideo=()=>{}}={}){
   if(next.closed){terminal(next.closeReason||t('closed'));return;}
   if(!state.self)return;
   q('[data-wp-lobby]').hidden=true;q('[data-wp-session]').hidden=false;q('[data-wp-title]').textContent=state.title;const broadcast=watchSources(data,fanZoneSettings(data.cms?.fanZone).watch,lang).find(v=>v.id===state.video.id);q('[data-wp-video-title]').textContent=broadcast?.title||state.video.title;q('[data-wp-round]').textContent=broadcast?.roundLabel||state.video.roundLabel||'';q('[data-wp-teams]').textContent=broadcast?.teamsTitle||state.video.title;
-  const link=new URL('/birlikde-izle',location.origin);link.searchParams.set('room',state.code);q('[data-wp-link]').value=link.href;
+  const link=new URL(seasonEndpoint('/birlikde-izle'),location.origin);link.searchParams.set('room',state.code);q('[data-wp-link]').value=link.href;
   
   const members=state.members||[];q('[data-wp-count]').textContent=members.length+' / '+state.maxMembers;q('[data-wp-member-count]').textContent=members.length;
   const memberSignature=JSON.stringify([members,isHost()]);if(memberSignature!==lastMembers){lastMembers=memberSignature;q('[data-wp-members]').innerHTML=members.map(m=>`<div class="wp-member"><span class="wp-avatar">${esc(m.name.slice(0,1).toLocaleUpperCase())}</span><span><b>${esc(m.name)}${m.id===state.self.id?' · '+t('you'):''}</b><small>${t(m.host?'host':'guest')}${m.muted?' · ◌':''}</small></span>${isHost()&&!m.host?`<details class="wp-member-tools"><summary aria-label="${t('manage')}">•••</summary><button type="button" data-wp-transfer="${m.id}">${t('transfer')}</button><button type="button" data-wp-mute="${m.id}">${t('mute')}</button><button type="button" data-wp-kick="${m.id}">${t('kick')}</button></details>`:''}</div>`).join('');}
@@ -75,7 +76,7 @@ export function bindWatchParty(data,lang='az',{onVideo=()=>{}}={}){
   if(ready&&activated&&!isHost())align();else if(ready&&Date.now()-lastPublish>2200&&!hostDirty)align();
  }
  function terminal(message){clearTimeout(retryTimer);connected=false;socket?.close(1000);socket=null;player?.destroy();player=null;ready=false;state=null;root.dataset.playing='false';q('[data-wp-session]').hidden=true;q('[data-wp-lobby]').hidden=false;q('[data-wp-create-fields]').hidden=true;q('[data-wp-submit]').disabled=true;formStatus(message);const a=document.createElement('a');a.className='btn pri';a.href='/birlikde-izle';a.textContent=t('newRoom');q('[data-wp-form-status]').append(document.createElement('br'),a);}
- function connect(){if(disposed||!state?.self)return;clearTimeout(retryTimer);connection(false);const url=new URL('/api/watch-rooms/'+code+'/connect',location.origin);url.protocol=location.protocol==='https:'?'wss:':'ws:';const own=new WebSocket(url);socket=own;
+ function connect(){if(disposed||!state?.self)return;clearTimeout(retryTimer);connection(false);const url=new URL(seasonEndpoint('/api/watch-rooms/'+code+'/connect'),location.origin);url.protocol=location.protocol==='https:'?'wss:':'ws:';const own=new WebSocket(url);socket=own;
   own.addEventListener('open',()=>{if(disposed||socket!==own){own.close();return;}retry=0;connection(true);send({type:'sync'});status('');for(const item of pending.values())deliverPending(item);});
   own.addEventListener('message',event=>{if(disposed||socket!==own)return;let b;try{b=JSON.parse(event.data);}catch{return;}if(b.type==='state')draw(b);else if(b.type==='ack')acknowledged(b.message,b.clientId);else if(b.type==='error')status(b.error,true);else if(b.type==='removed')terminal(t('removed'));else if(b.type==='reaction'){const el=q('[data-wp-reaction]');if(el){el.textContent=b.emoji+' '+b.name;later(()=>el.textContent='',2500);}}});
   own.addEventListener('close',()=>{if(disposed||socket!==own||!state)return;connection(false);retryTimer=later(async()=>{try{const latest=await api('/'+code);if(!latest.self){terminal(t('closed'));return;}draw(latest);connect();}catch(error){if(!disposed){if([403,404,410].includes(error.status)){terminal(error.message);return;}status(error.message,true);retryTimer=later(connect,retryDelay(retry++));}}},retryDelay(retry++));});

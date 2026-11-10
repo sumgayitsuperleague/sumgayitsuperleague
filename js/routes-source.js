@@ -4,6 +4,26 @@ export const siteDefaultLanguage=value=>isSiteLanguage(value)?value:'az';
 export const explicitLanguage=search=>{const value=new URLSearchParams(search).get('lang');return isSiteLanguage(value)?value:null;};
 export const languageFor=(search,fallback='az')=>explicitLanguage(search)||siteDefaultLanguage(fallback);
 export const SITE_LANGUAGE_COOKIE='ssl_language';
+export const SEASON_QUERY='sezon';
+export const validSeason=id=>id==='1'||id==='2';
+export function publicSeason(){
+ const dataset=typeof document==='undefined'?null:document.body?.dataset;
+ const selected=dataset?.siteSeason,active=dataset?.siteActiveSeason;
+ return validSeason(selected)&&validSeason(active)?{selected,active}:null;
+}
+export function seasonEndpoint(path,selected=publicSeason()?.selected){
+ if(!validSeason(selected))return path;
+ const url=new URL(path,'https://ssl.invalid');
+ url.searchParams.set(SEASON_QUERY,selected);
+ return url.pathname+url.search+url.hash;
+}
+export function preserveSeason(url){
+ const view=publicSeason(),path=canonicalPath(url.pathname);
+ if(view&&view.selected!==view.active&&!url.searchParams.has(SEASON_QUERY)&&path!=='/admin'&&(Object.hasOwn(PAGE_ROUTES,path)||path.startsWith('/sehife/'))){
+  url.searchParams.set(SEASON_QUERY,view.selected);
+ }
+ return url;
+}
 export function languageFromCookie(cookies=''){
  for(const field of String(cookies).split(';')){
   const [name,value]=field.trim().split('=',2);
@@ -53,6 +73,7 @@ export function publicHref(value) {
  const u=new URL(value.startsWith('/')?value:'/'+value,'https://ssl.invalid');
  hostRoute(u);
  setRouteLanguage(u);
+ preserveSeason(u);
  return u.pathname+u.search+u.hash;
 }
 export function languageHref(value) {
@@ -69,5 +90,6 @@ export function siteAnchor(value,current,lang='az',clean=true){
  if(url.origin!==base.origin)return value;
  hostRoute(url,clean);
  setRouteLanguage(url);
+  if(!value.startsWith('#'))preserveSeason(url);
  return url.pathname+url.search+url.hash;
 }

@@ -229,3 +229,10 @@ body.ux-site.ssl-official .ssl-ig-feed .instagram-art,body.ux-site.ssl-official 
 @media(max-width:900px){body.ux-site.ssl-official .ssl-ig-feed .instagram-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.ssl-media-heading{grid-template-columns:minmax(0,1fr);gap:18px}.ssl-media-heading .ssl-media-heading-copy{gap:12px}.ssl-season-honour{grid-template-columns:78px minmax(0,1fr);gap:14px}.ssl-season-honour-crest{width:78px;height:78px;border-radius:12px;padding:5px}.ssl-season-honour-link{grid-column:2;justify-self:start}.ssl-season-honour-wrap{margin-top:17px;margin-bottom:22px}}
 @media(max-width:540px){body.ux-site.ssl-official .ssl-ig-feed .instagram-grid{grid-template-columns:minmax(0,1fr)}.ssl-ig-feed .social-page-heading{align-items:flex-start}}
+
+.ssl-season-switch{display:flex;gap:4px;align-items:center}
+.ssl-season-switch a{white-space:nowrap;border:1px solid #ffffff55;border-radius:999px;padding:3px 7px;font-size:.7rem;line-height:1.2;color:inherit;text-decoration:none}
+.ssl-season-switch a[aria-current]{background:#fff;color:#1c44be;border-color:#fff;font-weight:800}
+.ssl-season-switch a:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.ssl-season-workspace-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.ssl-season-workspace-links a{font-weight:700;text-decoration:underline;text-underline-offset:3px}

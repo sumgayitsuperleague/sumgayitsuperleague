@@ -1,6 +1,7 @@
+import {seasonDirectory} from './season-views.js';
 import {completedLeagueSchedule,normalizeRegistration,registrationOpenFromResponse,REGISTRATION_API,REGISTRATION_PATH,SEASON_ARCHIVE,seasonSettings} from './season-model.js';
 import {onPageCleanup,pageListen} from './page-lifecycle.js';
-import {publicHref} from './routes-source.js';
+import {publicHref,publicSeason} from './routes-source.js';
 import {finalContext} from './fan-zone-model.js';
 
 const words={
@@ -38,7 +39,8 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
  const statusLabel=()=>active()?c.open:open===false?c.closed:c.pending;
  const description=()=>active()?settings.description:open===false?settings.closedDescription:c.pendingBody;
  const archiveName=archiveTitle||settings.archiveTitle,previousSeason={az:'2026 mövsümü',en:'2026 season',ru:'Сезон 2026'}[lang]||'2026 mövsümü';
- const launchOnly=completedLeagueSchedule(L);
+ const publishedView=publicSeason();
+ const launchOnly=!publishedView&&completedLeagueSchedule(L);
  const href=route=>esc(publicHref(route,lang));
  const archiveHref=href(SEASON_ARCHIVE),registrationHref=href(REGISTRATION_PATH),seasonsHref=href('/movsum');
  const icon='<span class="ssl-season-arrow" aria-hidden="true">↗</span>';
@@ -52,6 +54,7 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
  const shortcut=(url,title,sub,key)=>`<a href="${url}"><span class="ssl-season-shortcut-icon">${glyph(key)}</span><span><strong>${title}</strong><small>${sub}</small></span>${icon}</a>`;
  const shortcuts=()=>`<nav class="ssl-season-shortcuts wrap" aria-label="${d.links}">${shortcut(registrationHref,c.registration,d.join,'join')}${shortcut(href('/komandalar'),d.teams,d.teamsNote,'teams')}${shortcut(href('/media'),d.media,d.mediaNote,'media')}</nav>`;
  const menu=({label=c.seasons,dock=false,current=false,icon:tabIcon=''})=>{
+  if(publishedView)return `<a class="ssl-season-menu-toggle${current?' on':''}" href="${seasonsHref}">${tabIcon}<span>${esc(label)}</span></a>`;
   const id=dock?'ssl-dock-seasons':'ssl-nav-seasons';
   return `<div class="ssl-season-menu${dock?' ssl-season-menu--dock':''}" data-season-menu><button type="button" class="ssl-season-menu-toggle${current?' on':''}" aria-expanded="false" aria-controls="${id}">${tabIcon}<span>${esc(label)}</span>${dock?'':'<svg class="ssl-season-menu-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>'}</button><div class="ssl-season-menu-panel" id="${id}" hidden><div class="ssl-season-menu-caption"><b>SSL</b><span>${c.seasons}</span></div>${shortcut(registrationHref,c.next,c.formTitle,'join')}${shortcut(archiveHref,previousSeason,esc(archiveName),'archive')}<a class="ssl-season-menu-all" href="${seasonsHref}">${d.all}${icon}</a></div></div>`;
  };
@@ -70,18 +73,18 @@ export function installSeasonLaunch({P,CMS,L,lang,esc,logo,archiveTitle,preview=
  const oldHome=P.home,oldArchive=P.playoffs;
  if(launchOnly){
   P.home=()=> (settings.showHome?hero():`<section class="phead"><div class="wrap"><h1>${c.next}</h1><p>${esc(description())}</p></div></section>`)+shortcuts();
- }else if(settings.showHome){
+ }else if(settings.showHome&&!publishedView){
   P.home=()=>hero()+shortcuts()+oldHome().replace(/<h1(\s[^>]*)?>([\s\S]*?)<\/h1>/i,(_,attrs='',copy)=>`<h2${attrs}>${copy}</h2>`);
   P.home.init=oldHome.init;
  }
- P.seasons=seasons;
- P.registration=()=>`<section class="ssl-reg-page"><div class="wrap ssl-reg-page-grid"><div class="ssl-reg-aside"><a class="ssl-reg-back" href="${seasonsHref}">← ${c.back}</a>${ticket()}<div class="ssl-reg-steps"><strong>${d.summary}</strong><ol><li>${d.applyStep}</li><li>${d.contactStep}</li></ol></div></div>${formPanel('h1','ssl-reg-page-title')}</div></section>`;
+ P.seasons=publishedView?()=>seasonDirectory(lang,esc):seasons;
+ P.registration=publishedView&&publishedView.selected!==publishedView.active?()=>seasonDirectory(lang,esc):()=>`<section class="ssl-reg-page"><div class="wrap ssl-reg-page-grid"><div class="ssl-reg-aside"><a class="ssl-reg-back" href="${seasonsHref}">← ${c.back}</a>${ticket()}<div class="ssl-reg-steps"><strong>${d.summary}</strong><ol><li>${d.applyStep}</li><li>${d.contactStep}</li></ol></div></div>${formPanel('h1','ssl-reg-page-title')}</div></section>`;
  const honour=()=>{
   const final=finalContext({league:L},CMS.fanZone),team=final?.champion;
   if(!team)return '';
   return `<section class="wrap ssl-season-honour-wrap" aria-labelledby="ssl-season-champion"><article class="ssl-season-honour"><div class="ssl-season-honour-crest"><img src="/assets/logos/${esc(team.logo)}" alt="" width="100" height="100"></div><div class="ssl-season-honour-copy"><p class="ssl-season-honour-label">${glyph('trophy')} ${r.champion}</p><h2 id="ssl-season-champion">${esc(team.name)}</h2><p class="ssl-season-honour-edition">${esc(previousSeason)}</p></div><a class="ssl-season-honour-link" href="${href('/final')}">${r.final} ${icon}</a></article></section>`;
  };
- P.playoffs=()=>oldArchive().replace(/<h1(\s[^>]*)?>[\s\S]*?<\/h1>/i,(_,attrs='')=>`<h1${attrs}>${esc(archiveName)}</h1>`).replace('</section>','</section>'+honour());
+ P.playoffs=publishedView?oldArchive:()=>oldArchive().replace(/<h1(\s[^>]*)?>[\s\S]*?<\/h1>/i,(_,attrs='')=>`<h1${attrs}>${esc(archiveName)}</h1>`).replace('</section>','</section>'+honour());
  P.playoffs.init=oldArchive.init;
  return {menu,mount(page){
   bindSeasonMenus();
