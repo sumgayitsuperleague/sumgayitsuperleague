@@ -1,3 +1,4 @@
+import {seasonEndpoint} from './routes-source.js';
 import {renderSeasonHonours} from './season-honours.js';
 import {renderWatchPage,bindWatch} from './fan-experience.js';
 import {leagueDate} from './league-date.js';
@@ -184,7 +185,7 @@ function bindFanQuiz(data,settings,lang){
    // unsaved organizer edits. Public attempts always read the no-store endpoint.
    if(!document.body.dataset.previewPath){
     controller=new AbortController();timer=setTimeout(()=>controller.abort(),8000);
-    const response=await fetch('/api/site-content',{cache:'no-store',credentials:'omit',signal:controller.signal});
+    const response=await fetch(seasonEndpoint('/api/site-content'),{cache:'no-store',credentials:'omit',signal:controller.signal});
     if(!response.ok)throw Error('Quiz data unavailable');const snapshot=await response.json();
     if(!Array.isArray(snapshot.data?.league?.teams)||!Array.isArray(snapshot.data?.league?.matches))throw Error('Invalid quiz data');
     latest=snapshot.data;currentSettings=localizedFanZone(latest.cms?.fanZone,latest.locales,lang);c=currentSettings.quiz;

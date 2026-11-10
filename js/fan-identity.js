@@ -10,8 +10,9 @@ export function renderFanIdentity(data,config,lang='az'){
 export function bindFanIdentity(data,lang='az'){
  const root=document.querySelector('[data-fi-studio]');if(!root||!data.league?.teams?.length)return;
  const teams=data.league.teams,details=root.querySelector('details'),t=k=>identityText(k,lang),scope=pageScope(),season=data.league.season;
+ const identityStorage=IDENTITY_STORAGE+(data.league.edition>1?':'+data.league.edition:'');
  const fields={team:root.querySelector('#fi-team'),name:root.querySelector('#fi-name'),number:root.querySelector('#fi-number')},status=root.querySelector('.fi-status');
- let saved={};try{saved=JSON.parse(localStorage.getItem(IDENTITY_STORAGE)||'{}');}catch{}
+ let saved={};try{saved=JSON.parse(localStorage.getItem(identityStorage)||'{}');}catch{}
  const params=new URLSearchParams(location.search);if(location.hash.startsWith('#kimlik?'))for(const [key,value] of new URLSearchParams(location.hash.slice(8)))params.set(key,value);
  let state=identityFromParams(params,teams,saved),product='kit',busy=false,disposed=false,generation=0;
  let viewer=null,viewerHost=null,wants3D=true,viewerTicket=0,viewerTimer=0,modelPending=false,viewerTextures=[],runtimePromise,artTicket=0,artTimer=0,fontURI='';const atlasCache=new Map(),artCache=new Map();
@@ -19,7 +20,7 @@ export function bindFanIdentity(data,lang='az'){
  const syncFields=()=>{for(const [key,el] of Object.entries(fields))el.value=state[key];};
  const selectedTeam=()=>teams.find(a=>a.id===state.team)||teams[0];
  const clearReady=()=>{const a=root.querySelector('[data-fi-file]');if(a){URL.revokeObjectURL(a.href);urls.delete(a.href);a.remove();}};
- const remember=()=>{try{localStorage.setItem(IDENTITY_STORAGE,JSON.stringify(state));}catch{}};
+ const remember=()=>{try{localStorage.setItem(identityStorage,JSON.stringify(state));}catch{}};
  const drawCover=()=>{for(const kind of ['kit','wallpaper']){const el=root.querySelector('.fi-cover-'+kind);if(el)el.innerHTML=identityArtwork(kind,selectedTeam(),state,{lang,season,prefix:'fi-cover-'+kind,preview:true});}};
  const draw=()=>{
   const team=selectedTeam(),palette=identityPalette(team,state.tone,state),main=root.querySelector('#fi-canvas'),size=IDENTITY_PRODUCTS[product];
@@ -149,7 +150,7 @@ export function bindFanIdentity(data,lang='az'){
   finally{if(valid())main.classList.remove('fi-art-loading');}
  }
  pageListen(root,'focusout',event=>{if(event.target.hasAttribute?.('data-fi-hex')){const key=event.target.dataset.fiHex,palette=identityPalette(selectedTeam(),state.tone,state);event.target.value=palette[{primary:'main',secondary:'accent',lettering:'ink'}[key]].toUpperCase();}});
- pageListen(window,'ssl-preferences-reset',()=>{try{localStorage.removeItem(IDENTITY_STORAGE);}catch{}generation++;state=normalizeIdentity({},teams);syncFields();draw();});
+ pageListen(window,'ssl-preferences-reset',()=>{try{localStorage.removeItem(identityStorage);}catch{}generation++;state=normalizeIdentity({},teams);syncFields();draw();});
  onPageCleanup(()=>{disposed=true;artTicket++;if(artTimer)clearTimeout(artTimer);dispose360();atlasCache.clear();artCache.clear();runtimePromise?.then(runtime=>runtime.releaseStudioPreviews?.()).catch(()=>{});controller?.abort();for(const url of urls)URL.revokeObjectURL(url);urls.clear();logos.clear();});
  const openFromLocation=()=>{
   if(!alive()||!location.hash.startsWith('#kimlik'))return;
